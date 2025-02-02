@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/02 16:11:34 by kbaridon         ###   ########.fr       */
+/*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
+/*   Updated: 2025/02/02 15:46:31 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "libft.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-void	nothing(void)
-{
-	return ;
-}
+void	nothing(void);
 
-int	main(void)
-{
-	return (0);
-}
+#endif
