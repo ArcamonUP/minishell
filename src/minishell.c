@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 16:23:58 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:43:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,10 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 	char	*line;
 
-	((void)ac, (void)av);
-	data.envp = envp;
+	//cat sans rien puis ctrl c = affiche 2 fois minishell$ 
+	data = init(ac, av, envp, &line);
 	if (!data.envp)
 		return (1);
-	line = NULL;
-	rl_catch_signals = 0;
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		if (line)
