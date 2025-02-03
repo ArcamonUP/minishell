@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 11:20:07 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:42:48 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,25 +121,25 @@ static int	do_cmd(t_data data)
 	return (y);
 }
 
-int	pipex(int ac, char **av, char **envp)
+int	pipex(t_pipe pipe)
 {
 	t_data	data;
 
-	data.envp = envp;
-	data.ac = ac;
-	if (!pipex_init(ac, av, &data.cmd))
+	data.envp = pipe.envp;
+	data.ac = pipe.ac;
+	if (!pipex_init(pipe.ac, pipe, &data.cmd))
 		return (1);
-	if (ft_strncmp(av[1], "here_doc", 8) == 0)
+	if (ft_strncmp(pipe.infile, "here_doc", 8) == 0)
 	{
-		data.fd[1] = open(av[ac - 1], O_WRONLY | O_APPEND | O_CREAT, 0644);
+		data.fd[1] = open(pipe.outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
 		data.fd[0] = -1;
 		if (data.fd[1] == -1 || !exec_bonus(data))
 			return (pipex_end(data, 1), 1);
 	}
 	else
 	{
-		data.fd[0] = open(av[1], O_RDONLY);
-		data.fd[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		data.fd[0] = open(pipe.infile, O_RDONLY);
+		data.fd[1] = open(pipe.outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 		if (data.fd[0] == -1 || data.fd[1] == -1)
 			return (pipex_end(data, 0), 1);
 		dup2(data.fd[0], STDIN_FILENO);
