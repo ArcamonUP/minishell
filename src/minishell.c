@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 12:22:16 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:43:07 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		free(line);
-		line = readline(NULL);
+		line = readline("minishell$ ");
 		if (!line)
 			return (1);
 		if (ft_strncmp(line, "exit", 0) == 0)
 			break ;
-		ft_printf("salut\n");
 	}
 	free(line);
 	return (0);
