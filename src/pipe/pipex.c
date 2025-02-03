@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 11:42:48 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:50:49 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-static void	exec(char *cmd, t_data data, int fd[2], int i)
+static void	exec(char *cmd, t_pipex_data data, int fd[2], int i)
 {
 	char	**args;
 	char	*path;
@@ -46,7 +46,7 @@ static void	exec(char *cmd, t_data data, int fd[2], int i)
 	exit(EXIT_FAILURE);
 }
 
-static pid_t	pre_exec(char *cmd, t_data data)
+static pid_t	pre_exec(char *cmd, t_pipex_data data)
 {
 	pid_t	p;
 	int		fd[2];
@@ -71,7 +71,7 @@ static pid_t	pre_exec(char *cmd, t_data data)
 	return (p);
 }
 
-static int	last_exec(t_data data, int fd)
+static int	last_exec(t_pipex_data data, int fd)
 {
 	pid_t	p;
 	int		i;
@@ -93,7 +93,7 @@ static int	last_exec(t_data data, int fd)
 	return (0);
 }
 
-static int	do_cmd(t_data data)
+static int	do_cmd(t_pipex_data data)
 {
 	int	i;
 	int	x;
@@ -123,7 +123,7 @@ static int	do_cmd(t_data data)
 
 int	pipex(t_pipe pipe)
 {
-	t_data	data;
+	t_pipex_data	data;
 
 	data.envp = pipe.envp;
 	data.ac = pipe.ac;

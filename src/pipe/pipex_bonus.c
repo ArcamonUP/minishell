@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:33 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 11:20:57 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:51:12 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	write_lines(int fd[2], char *limiter, char **cmd)
 	pipex_free(cmd);
 }
 
-int	exec_bonus(t_data data)
+int	exec_bonus(t_pipex_data data)
 {
 	char	*limiter;
 	__pid_t	p;
