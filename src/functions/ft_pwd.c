@@ -6,12 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:32 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 15:33:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 16:20:24 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//Fait par Adrien
 void	ft_pwd(void)
 {
 	return ;
