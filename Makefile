@@ -6,7 +6,7 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/03 15:42:44 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/03 17:03:30 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h
 
 SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
-		utils.c \
+		utils.c init.c \
 		minishell.c
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
