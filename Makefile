@@ -6,7 +6,7 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/03 12:20:51 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/03 15:42:44 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,11 @@ SRCDIR = src
 LIBFT = libft
 INCDIR = includes
 NAME = minishell
-HEADERS = $(INCDIR)/minishell.h $(INCDIR)/pipex.h $(LIBFT)/libft.h
+HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h
 
-SRC =	pipe/pipex.c pipe/pipex_init.c pipe/pipex_utils.c pipe/pipex_bonus.c	\
+SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
+		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
+		utils.c \
 		minishell.c
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))

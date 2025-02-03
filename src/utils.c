@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 11:51:02 by kbaridon         ###   ########.fr       */
+/*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
+/*   Updated: 2025/02/03 15:39:50 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+#include "minishell.h"
 #include "libft.h"
-#include "pipex.h"
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-void	error(char *msg)
+void	ctrl_c(int sig)
 {
-	ft_putstr_fd(msg, 2);
-	perror("Error");
+	(void)sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-void	pipex_end(t_pipex_data data, int i)
-{
-	if (data.fd[1] != -1)
-		close(data.fd[1]);
-	if (!i)
-	{
-		if (data.fd[0] != -1)
-			close(data.fd[0]);
-	}
-	pipex_free(data.cmd);
-	error("Unable to open the files\n");
-}
-
-void	pipex_free(char **tab)
+void	free_tab(char **tab)
 {
 	int	i;
 
@@ -70,29 +59,37 @@ char	*get_path(char *cmd, char **envp)
 		free(temp);
 		if (access(result, F_OK) == 0)
 		{
-			pipex_free(path);
+			free_tab(path);
 			return (result);
 		}
 		(free(result), i++);
 	}
-	return (pipex_free(path), NULL);
+	return (free_tab(path), NULL);
 }
 
-void	wait_children(t_pipex_data data, pid_t p)
+__pid_t	ft_exec(char *cmd, t_data data)
 {
-	int	i;
-	int	ac;
+	char	**args;
+	char	*path;
+	__pid_t	p;
 
-	ac = data.ac - 4;
-	if (data.fd[0] == -1)
-		ac--;
-	i = 0;
-	while (i < ac)
+	p = fork();
+	if (p == -1)
+		return (-1);
+	if (p == 0)
 	{
-		if (data.pid_tab[i] != -1)
-			waitpid(data.pid_tab[i], NULL, 0);
-		i++;
+		path = NULL;
+		args = ft_split(cmd, ' ');
+		if (args)
+			path = get_path(args[0], data.envp);
+		if (!args || !path)
+		{
+			//gestion d'erreurs avec free...
+			exit(0);
+		}
+		execve(path, args, data.envp);
+		//gestion d'erreurs avec free...
+		exit(0);
 	}
-	free(data.pid_tab);
-	waitpid(p, NULL, 0);
+	return (p);
 }
