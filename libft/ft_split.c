@@ -6,13 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:53:45 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/01/24 15:28:11 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:21:39 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	count_words(const char *str, char sep)
+static int	count_words(const char *str, char sep)
 {
 	int	i;
 	int	result;
@@ -31,7 +31,7 @@ int	count_words(const char *str, char sep)
 	return (result);
 }
 
-void	free_tab(char **tab, int nb)
+static void	free_tab(char **tab, int nb)
 {
 	int	i;
 
@@ -41,7 +41,7 @@ void	free_tab(char **tab, int nb)
 	free(tab);
 }
 
-char	*get_word(const char *str, char sep)
+static char	*get_word(const char *str, char sep)
 {
 	char	*result;
 	int		i;
@@ -63,7 +63,7 @@ char	*get_word(const char *str, char sep)
 	return (result);
 }
 
-char	**get_tab(char **result, const char *str, char sep)
+static char	**get_tab(char **result, const char *str, char sep)
 {
 	int	i;
 	int	id;

@@ -6,19 +6,20 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/02 16:11:34 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:14:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-void	nothing(void)
+int	main(int ac, char **envp)
 {
-	return ;
-}
+	t_data	data;
 
-int	main(void)
-{
+	(void)ac;
+	if (!envp)
+		return (1);
+	data.envp = envp;
 	return (0);
 }
