@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 15:39:53 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/03 16:23:58 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	dispatch(char *line, t_data data)
 {
 	__pid_t	p;
 
-	if (ft_strncmp(line, "echo -n", 7) == 0)
+	if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line);
 	else if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd();
