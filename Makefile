@@ -6,7 +6,7 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/03 11:34:56 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/03 12:20:51 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ GREEN=\033[0;32m
 ORANGE=\033[38;5;214m
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+OTHERFLAGS = -lreadline
 SRCDIR = src
 LIBFT = libft
 INCDIR = includes
@@ -30,7 +31,7 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	@$(MAKE) --no-print-directory -C $(LIBFT)
 	@echo "$(ORANGE)Compiling libft..."
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT)/libft.a -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(OTHERFLAGS) $(LIBFT)/libft.a -o $(NAME)
 	@echo "$(ORANGE)Compiling minishell..."
 	@echo "$(GREEN)Compilation completed !"
 
