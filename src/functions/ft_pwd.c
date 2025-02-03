@@ -3,17 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/03 15:32:32 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 16:20:24 by kbaridon         ###   ########.fr       */
+/*   Created: 2025/02/03 13:36:32 by achu              #+#    #+#             */
+/*   Updated: 2025/02/03 17:55:46 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 
-//Fait par Adrien
-void	ft_pwd(void)
+void    ft_pwd(void)
 {
-	return ;
+    char    *buf;
+    char    *pwd;
+
+    buf = NULL;
+    pwd = getcwd(buf, 42);
+    ft_printf("%s\n", pwd);
+    free(pwd);
+    free(buf);
 }
