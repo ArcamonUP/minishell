@@ -6,7 +6,7 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/03 17:03:30 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/04 14:19:30 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,11 @@ SRCDIR = src
 LIBFT = libft
 INCDIR = includes
 NAME = minishell
-HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h
+HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 
 SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
+		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_heredoc.c \
 		utils.c init.c \
 		minishell.c
 
@@ -31,8 +32,10 @@ OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-	@$(MAKE) --no-print-directory -C $(LIBFT)
-	@echo "$(ORANGE)Compiling libft..."
+	@if [ ! -f $(LIBFT)/libft.a ]; then \
+	echo "$(ORANGE)Compiling libft..."; \
+	$(MAKE) --no-print-directory -C $(LIBFT); \
+	fi
 	@$(CC) $(CFLAGS) $(OBJS) $(OTHERFLAGS) $(LIBFT)/libft.a -o $(NAME)
 	@echo "$(ORANGE)Compiling minishell..."
 	@echo "$(GREEN)Compilation completed !"
@@ -46,7 +49,7 @@ clean:
 	@$(MAKE) --no-print-directory clean -C $(LIBFT)
 	@echo "$(ORANGE)Cleaning libft..."
 	@rm -rf $(OBJS)
-	@echo "$(ORANGE)Cleaning minishell's objects..."
+	@echo "$(ORANGE)Cleaning minishell..."
 	@echo "$(GREEN)Cleaning of objects completed !"
 
 fclean:	clean

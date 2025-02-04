@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 17:43:22 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:40:54 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ void	ctrl_c(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+void	parent_ctrl_c(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
 }
 
 void	free_tab(char **tab)
@@ -77,6 +83,8 @@ __pid_t	ft_exec(char *cmd, t_data data)
 	p = fork();
 	if (p == -1)
 		return (-1);
+	if (p != 0)
+		signal(SIGINT, parent_ctrl_c);
 	if (p == 0)
 	{
 		path = NULL;
