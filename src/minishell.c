@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 17:43:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:39:10 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ void	dispatch(char *line, t_data data)
 	{
 		p = ft_exec(line, data);
 		waitpid(p, NULL, 0);
+		signal(SIGINT, ctrl_c);
 	}
 }
 
+//peut etre faire main(void) car on a acces a la fonction getenv() : Mieux
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
@@ -64,3 +66,21 @@ int	main(int ac, char **av, char **envp)
 	rl_clear_history();
 	return (exit(0), 0);
 }
+
+/*
+//Pour appeller pipex:
+int	main(int ac, char **av, char **envp)
+{
+	t_pipex_data	data;
+
+	(void)ac;
+	(void)av;
+	data.infile = "Makefile";
+	data.outfile = "outfile";
+	data.limiter = NULL;
+	data.cmd = ft_split("ls wc", ' ');
+	data.envp = envp;
+	pipex(data);
+	return (0);
+}
+*/
