@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/04 14:08:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:54:58 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 	char	**args;
 	char	*path;
 
+	dispatch_pipex(cmd, data, fd);
 	path = NULL;
 	args = ft_split(cmd, ' ');
 	if (args)

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:33:04 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/03 16:23:29 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:22:10 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 //A faire
 //unset sans rien, et unset avec des arguments
-void	ft_unset(char *line, t_data data)
+void	ft_unset(char *line, char **envp)
 {
 	(void)line;
-	(void)data;
+	(void)envp;
 	return ;
 }
