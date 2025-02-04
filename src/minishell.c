@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/04 14:39:10 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:58:38 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,37 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-void	dispatch(char *line, t_data data)
+int	dispatch(char *line, char **envp, int i)
 {
 	__pid_t	p;
 
 	if (ft_strncmp(line, "echo", 4) == 0)
-		ft_echo(line);
-	else if (ft_strncmp(line, "pwd", 3) == 0)
-		ft_pwd();
-	else if (ft_strncmp(line, "cd", 2) == 0)
-		ft_cd(line, data);
-	else if (ft_strncmp(line, "export", 6) == 0)
-		ft_export(line, data);
-	else if (ft_strncmp(line, "unset", 5) == 0)
-		ft_unset(line, data);
-	else if (ft_strncmp(line, "env", 3) == 0)
-		ft_env(data);
-	else
+		return (ft_echo(line), 1);
+	if (ft_strncmp(line, "pwd", 3) == 0)
+		return (ft_pwd(), 1);
+	if (ft_strncmp(line, "cd", 2) == 0)
+		return (ft_cd(line, envp), 1);
+	if (ft_strncmp(line, "export", 6) == 0)
+		return (ft_export(line, envp), 1);
+	if (ft_strncmp(line, "unset", 5) == 0)
+		return (ft_unset(line, envp), 1);
+	if (ft_strncmp(line, "env", 3) == 0)
+		return (ft_env(envp), 1);
+	if (i == 0)
 	{
-		p = ft_exec(line, data);
+		p = ft_exec(line, envp);
 		waitpid(p, NULL, 0);
 		signal(SIGINT, ctrl_c);
+		return (1);
 	}
+	return (0);
 }
 
-//peut etre faire main(void) car on a acces a la fonction getenv() : Mieux
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
 	char	*line;
 
-	//cat sans rien puis ctrl c = affiche 2 fois minishell$ 
 	data = init(ac, av, envp, &line);
 	if (!data.envp)
 		return (1);
@@ -60,7 +60,7 @@ int	main(int ac, char **av, char **envp)
 		if (!line || ft_strncmp(line, "exit", 0) == 0)
 			break ;
 		add_history(line);
-		dispatch(line, data);
+		dispatch(line, data.envp, 0);
 	}
 	free(line);
 	rl_clear_history();
@@ -78,7 +78,7 @@ int	main(int ac, char **av, char **envp)
 	data.infile = "Makefile";
 	data.outfile = "outfile";
 	data.limiter = NULL;
-	data.cmd = ft_split("ls wc", ' ');
+	data.cmd = ft_split("env*ls", '*');
 	data.envp = envp;
 	pipex(data);
 	return (0);

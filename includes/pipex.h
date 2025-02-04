@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:56 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/04 13:53:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:55:11 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*get_path(char *cmd, char **envp);
 //utils
 void	error(char *msg, char *other);
 void	end(t_pipex_data data, int i);
+void	dispatch_pipex(char *line, t_pipex_data data, int fd[2]);
 
 void	wait_children(t_pipex_data data, pid_t p);
 
