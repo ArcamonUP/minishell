@@ -57,6 +57,7 @@ int	main(int ac, char **av, char **envp)
 		line = readline("minishell$ ");
 		if (!line || ft_strncmp(line, "exit", 0) == 0)
 			break ;
+		ft_split_shell(line);
 		add_history(line);
 		dispatch(line, data);
 	}

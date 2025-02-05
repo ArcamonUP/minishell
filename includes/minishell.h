@@ -22,6 +22,7 @@ typedef struct t_data
 
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
+char	***ft_split_shell(const char *line);
 
 //functions
 void	ft_cd(char *line, t_data data);
