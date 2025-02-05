@@ -18,6 +18,7 @@
 typedef struct t_data
 {
 	char	**envp;
+	char	***shell;
 }	t_data;
 
 //init

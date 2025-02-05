@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	is_operator(char c)
+#include <stdlib.h>
+
+int	is_operator(const char c)
 {
 	if (c == '<')
 		return (1);
@@ -51,13 +53,13 @@ int	ft_countcmd(const char *line)
 
 	i = 0;
 	count = 0;
-	while (line[i] || !is_operator(line[i]))
+	while (line[i] && !is_operator(line[i]))
 	{
-		while (line[i] && line[i] == ' ')
+		while (line[i] && line[i] == ' ' && !is_operator(line[i]))
 			i++;
-		if (line[i])
+		if (line[i] && !is_operator(line[i]))
 			count++;
-		while (line[i] &&  line[i] != ' ')
+		while (line[i] &&  line[i] != ' ' && !is_operator(line[i]))
 			i++;
 	}
 	return (count);

@@ -63,7 +63,7 @@ static char	*ft_cmdalloc(const char *line)
 
 	i = 0;
 	len = 0;
-	while (line[len] && (!is_operator(line[len]) || line[len] != ' '))
+	while (line[len] && line[len] != ' ' && !is_operator(line[len]))
 		len++;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
@@ -86,18 +86,18 @@ static char	**ft_split_cmd(const char *line)
 	cmds = (char **)ft_calloc(ft_countcmd(line) + 1, sizeof(char *));
 	if (!cmds)
 		return (NULL);
-	while (line || !is_operator(line))
+	while (*line && !is_operator(*line))
 	{
-		while (*line && *line == ' ')
+		while (*line && *line == ' ' && !is_operator(*line))
 			line++;
-		if (*line)
+		if (*line && !is_operator(*line))
 		{
 			cmds[count] = ft_cmdalloc(line);
 			if (!cmds[count])
 				return (clear_double(cmds), NULL);
 			count++;
 		}
-		while (*line && *line != ' ')
+		while (*line && *line != ' ' && !is_operator(*line))
 			line++;
 	}
 	cmds[count] = 0;
@@ -126,7 +126,7 @@ char	***ft_split_shell(const char *line)
 			line++;
 		if (*line)
 		{
-			shell[count] = ft_split(line, ' ');
+			shell[count] = ft_split_cmd(line);
 			if (!shell[count])
 				return (clear_triple(shell), NULL);
 			count++;
@@ -135,5 +135,5 @@ char	***ft_split_shell(const char *line)
 			line++;
 	}
 	shell[count] = 0;
-	return (NULL);
+	return (shell);
 }
