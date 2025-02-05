@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/04 15:54:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:15:48 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,17 @@ void	wait_children(t_pipex_data data, pid_t p)
 
 void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 {
+	//ft_split temporaire en attendant le parsing
 	if (ft_strncmp(line, "echo", 4) == 0)
-		ft_echo(line);
+		ft_echo(ft_split(line, ' '));
 	else if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd();
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		ft_cd(line, data.envp);
+		ft_cd(ft_split(line, ' '));
 	else if (ft_strncmp(line, "export", 6) == 0)
-		ft_export(line, data.envp);
+		ft_export(ft_split(line, ' '), data.envp);
 	else if (ft_strncmp(line, "unset", 5) == 0)
-		ft_unset(line, data.envp);
+		ft_unset(ft_split(line, ' '), data.envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
 		ft_env(data.envp);
 	else
