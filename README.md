@@ -8,6 +8,8 @@ Done:
 - pwd
 - env
 - exit
+- echo with option -n
+- cd (absolute or relative path)
 
 To do:
 - Handle single quote
@@ -16,8 +18,6 @@ To do:
 - Implement pipes (a adapter par rapport a ce qu'on a)
 - Handle environment variables
 - Handle $?
-- echo with option -n
-- cd (absolute or relative path)
 - export
 - unset
 
