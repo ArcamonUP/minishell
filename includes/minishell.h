@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/05 11:07:25 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:31:23 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct t_data
 {
 	char	**envp;
 }	t_data;
+
 
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
