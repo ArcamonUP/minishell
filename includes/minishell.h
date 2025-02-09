@@ -18,12 +18,30 @@
 typedef struct t_data
 {
 	char	**envp;
-	char	***shell;
+	char	**shell;
 }	t_data;
+
+typedef enum
+{
+	SUB,
+	PIPE,
+	AND,
+	OR,
+	CMD,
+}	e_type;
+
+typedef struct s_node
+{
+	e_type	type;
+	char	*str;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_node;
+
 
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
-char	***ft_split_shell(const char *line);
+char	**ft_token_shell(const char *line);
 
 //functions
 void	ft_cd(char *line, t_data data);

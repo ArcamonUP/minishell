@@ -57,9 +57,13 @@ int	main(int ac, char **av, char **envp)
 		line = readline("minishell$ ");
 		if (!line || ft_strncmp(line, "exit", 0) == 0)
 			break ;
-		data.shell = ft_split_shell(line);
+		data.shell = ft_token_shell(line);
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
+		for (size_t i = 0; data.shell[i]; i++)
+		{
+			ft_printf("%s\n", data.shell[i]);
+		}
 		add_history(line);
 		dispatch(line, data);
 	}

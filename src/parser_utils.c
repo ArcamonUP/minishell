@@ -22,45 +22,71 @@ int	is_operator(const char c)
 		return (1);
 	else if (c == '&')
 		return (1);
+	else if (c == '(')
+		return (1);
+	else if (c == ')')
+		return (1);
 	return (0);
 }
 
-int	ft_countshell(const char *line)
+int	is_space(const char c)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (line[i])
-	{
-		if (is_operator(line[i]))
-			count++;
-		while (line[i] != '\0' && is_operator(line[i]))
-			i++;
-		if (line[i] != '\0')
-			count++;
-		while (line[i] != '\0' && !is_operator(line[i]))
-			i++;
-	}
-	return (count);
+	if (c == ' ')
+		return (1);
+	else if (c == '\n')
+		return (1);
+	else if (c == '\t')
+		return (1);
+	else if (c == '\v')
+		return (1);
+	else if (c == '\f')
+		return (1);
+	else if (c == '\r')
+		return (1);
+	return (0);
 }
 
-int	ft_countcmd(const char *line)
+char	*ft_strndup(char *src, int len)
 {
-	int	i;
-	int	count;
+	int		i;
+	char	*dest;
 
 	i = 0;
-	count = 0;
-	while (line[i] && !is_operator(line[i]))
+	if (len < 0)
+		return (NULL);
+	dest = malloc((len + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (src[i] && i < len)
 	{
-		while (line[i] && line[i] == ' ' && !is_operator(line[i]))
-			i++;
-		if (line[i] && !is_operator(line[i]))
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+int	ft_token_count(const char *line)
+{
+	int	count;
+
+	count = 0;
+	while (*line)
+	{
+		if (*line && is_operator(*line))
+		{
 			count++;
-		while (line[i] &&  line[i] != ' ' && !is_operator(line[i]))
-			i++;
+			while (*line && is_operator(*line))
+				line++;
+		}
+		else if (*line && !is_operator(*line))
+		{
+			count++;
+			while (*line && !is_operator(*line))
+				line++;
+		}
+		while (*line && is_space(*line))
+			line++;
 	}
 	return (count);
 }
@@ -74,28 +100,6 @@ void	clear_double(char **ptr)
 		return ;
 	while (ptr[i])
 	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-}
-
-void	clear_triple(char ***ptr)
-{
-	int	i;
-	int	j;
-
-	if (!ptr)
-		return ;
-	i = 0;
-	while (ptr[i])
-	{
-		j = 0;
-		while (ptr[i][j])
-		{
-			free(ptr[i][j]);
-			j++;
-		}
 		free(ptr[i]);
 		i++;
 	}

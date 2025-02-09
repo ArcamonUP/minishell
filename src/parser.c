@@ -14,12 +14,11 @@
 #include "libft.h"
 
 int		is_operator(char c);
-int		ft_countshell(const char *line);
-int		ft_countcmd(const char *line);
+int		is_space(char c);
+int		ft_token_count(const char *line);
 void	clear_double(char **ptr);
-void	clear_triple(char ***ptr);
 
-static char	*ft_opalloc(const char *line)
+static char	*ft_token_op(const char *line)
 {
 	int		i;
 	int		len;
@@ -41,29 +40,16 @@ static char	*ft_opalloc(const char *line)
 	return (str);
 }
 
-static char	**ft_split_operator(const char *line)
-{
-	char	**op;
-
-	op = (char **)ft_calloc(2, sizeof(char *));
-	if (!op)
-		return (NULL);
-	op[0] = ft_opalloc(line);
-	if (!op[0])
-		return (clear_double(op), NULL);
-	op[1] = 0;
-	return (op);
-}
-
-static char	*ft_cmdalloc(const char *line)
+static char	*ft_token_cmd(const char *line)
 {
 	int		i;
 	int		len;
 	char	*str;
+	char	*trim;
 
 	i = 0;
 	len = 0;
-	while (line[len] && line[len] != ' ' && !is_operator(line[len]))
+	while (line[len] && !is_operator(line[len]))
 		len++;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
@@ -74,64 +60,43 @@ static char	*ft_cmdalloc(const char *line)
 		i++;
 	}
 	str[i] = 0;
-	return (str);
-}
-
-static char	**ft_split_cmd(const char *line)
-{
-	int		count;
-	char	**cmds;
-
-	count = 0;
-	cmds = (char **)ft_calloc(ft_countcmd(line) + 1, sizeof(char *));
-	if (!cmds)
+	trim = ft_strtrim(str, " ");
+	free(str);
+	if (!trim)
 		return (NULL);
-	while (*line && !is_operator(*line))
-	{
-		while (*line && *line == ' ' && !is_operator(*line))
-			line++;
-		if (*line && !is_operator(*line))
-		{
-			cmds[count] = ft_cmdalloc(line);
-			if (!cmds[count])
-				return (clear_double(cmds), NULL);
-			count++;
-		}
-		while (*line && *line != ' ' && !is_operator(*line))
-			line++;
-	}
-	cmds[count] = 0;
-	return (cmds);
+	return (trim);
 }
 
-char	***ft_split_shell(const char *line)
+char	**ft_token_shell(const char *line)
 {
 	int		count;
-	char	***shell;
+	char	**shell;
 
 	count = 0;
-	shell = (char ***)ft_calloc(ft_countshell(line) + 1, sizeof(char **));
+	shell = (char **)ft_calloc(ft_token_count(line) + 1, sizeof(char *));
 	if (!shell)
 		return (NULL);
 	while (*line)
 	{
-		if (is_operator(*line))
+		if (*line && is_operator(*line))
 		{
-			shell[count] = ft_split_operator(line);
+			shell[count] = ft_token_op(line);
 			if (!shell[count])
-				return (clear_triple(shell), NULL);
+				return (clear_double(shell), NULL);
 			count++;
+			while (*line && is_operator(*line))
+				line++;
 		}
-		while (*line && is_operator(*line))
-			line++;
-		if (*line)
+		else if (*line && !is_operator(*line))
 		{
-			shell[count] = ft_split_cmd(line);
+			shell[count] = ft_token_cmd(line);
 			if (!shell[count])
-				return (clear_triple(shell), NULL);
+				return (clear_double(shell), NULL);
 			count++;
+			while (*line && !is_operator(*line))
+				line++;
 		}
-		while (*line && !is_operator(*line))
+		while (*line && is_space(*line))
 			line++;
 	}
 	shell[count] = 0;
