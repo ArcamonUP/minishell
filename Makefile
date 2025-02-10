@@ -24,6 +24,7 @@ HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
 		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_heredoc.c \
+		tokenize.c tokenize_utils.c \
 		parser.c parser_utils.c \
 		utils.c init.c \
 		minishell.c

@@ -10,40 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include <stdlib.h>
 
-int	is_operator(const char c)
+int is_space(const char c)
 {
-	if (c == '<')
-		return (1);
-	else if (c == '>')
-		return (1);
-	else if (c == '|')
-		return (1);
-	else if (c == '&')
-		return (1);
-	else if (c == '(')
-		return (1);
-	else if (c == ')')
-		return (1);
-	return (0);
+	return (c == '\n' || c == '\t' || c == '\v' || \
+			c == '\f' || c == '\r' || c == ' ');
 }
 
-int	is_space(const char c)
+int is_operator(const char c)
 {
-	if (c == ' ')
-		return (1);
-	else if (c == '\n')
-		return (1);
-	else if (c == '\t')
-		return (1);
-	else if (c == '\v')
-		return (1);
-	else if (c == '\f')
-		return (1);
-	else if (c == '\r')
-		return (1);
-	return (0);
+	return (c == '<' || c == '>' || c == '|' || \
+			c == '(' || c == ')' || c == '&');
 }
 
 char	*ft_strndup(char *src, int len)

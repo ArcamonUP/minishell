@@ -17,14 +17,14 @@
 //unset sans rien, et unset avec des arguments
 void	ft_unset(char **line, char **envp)
 {
-	int	i;
+	//int	i;
 
 	if (!line[1])
 	{
 		ft_printf("unset: not enough arguments\n");
 		return ;
 	}
-	i = 1;
+	//i = 1;
 	(void)envp;
 	return ;
 }

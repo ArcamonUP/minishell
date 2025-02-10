@@ -32,7 +32,7 @@ void	ft_echo(char **line)
 	i = 1;
 	while (line[i])
 	{
-		ft_printf("%s", line[i]);
+		//ft_printf("%s", line[i]);
 		if (line[i + 1])
 			write(1, " ", 1);
 		i++;

@@ -13,8 +13,8 @@
 #include "minishell.h"
 #include "libft.h"
 
-int		is_operator(char c);
 int		is_space(char c);
+int		is_operator(char c);
 int		ft_token_count(const char *line);
 void	clear_double(char **ptr);
 

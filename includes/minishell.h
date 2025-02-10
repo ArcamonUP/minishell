@@ -13,6 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <unistd.h>
+# include <stdlib.h>
 # include <sys/types.h>
 # include "pipex.h"
 
@@ -28,6 +30,8 @@ typedef enum
 	PIPE,
 	AND,
 	OR,
+	INPUT,
+	OUTPUT,
 	CMD,
 }	e_type;
 
@@ -39,14 +43,13 @@ typedef struct s_node
 	struct s_node	*right;
 }	t_node;
 
-
-
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
 
 //minishell
 int		dispatch(char *line, char **envp, int i);
-char	**ft_token_shell(const char *line);
+char	**ft_tokenize(const char *line);
+t_node  *ft_parse(char **token);
 
 //functions
 void	ft_cd(char **line);
