@@ -67,7 +67,7 @@ static char	*ft_token_cmd(const char *line)
 	return (trim);
 }
 
-char	**ft_token_shell(const char *line)
+char	**ft_tokenize(const char *line)
 {
 	int		count;
 	char	**shell;

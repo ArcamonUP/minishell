@@ -49,7 +49,6 @@ t_data	init(int ac, char **av, char **envp, char **line);
 //minishell
 int		dispatch(char *line, char **envp, int i);
 char	**ft_tokenize(const char *line);
-t_node  *ft_parse(char **token);
 
 //functions
 void	ft_cd(char **line);

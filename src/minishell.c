@@ -18,6 +18,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 
+void	ft_printtree(t_node *tree);
+t_node	*ft_parse_and_or(char ***token);
+
 int	dispatch(char *line, char **envp, int i)
 {
 	__pid_t	p;
@@ -63,7 +66,8 @@ int	main(int ac, char **av, char **envp)
 		data.shell = ft_tokenize(line);
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
-		ft_parse(data.shell);
+		t_node *test = ft_parse_and_or(&data.shell);
+		ft_printtree(test);
 		add_history(line);
 		dispatch(line, data.envp, 0);
 	}
