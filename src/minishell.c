@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/06 15:36:51 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:46:15 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,31 @@ int	dispatch(char *line, char **envp, int i)
 	return (0);
 }
 
+char	*check_and_parse(char *line)
+{
+	t_data	data;
+	char	*result;
+
+	data.shell = ft_token_shell(line);
+	if (!data.shell)
+		return (free(line), rl_clear_history(), exit(0), NULL);
+	/*
+	ft_printf("----\n");
+	for (size_t i = 0; data.shell[i]; i++)
+	{
+		ft_printf("%s\n", data.shell[i]);
+	}
+	ft_printf("----\n");
+	*/
+	result = checker(data.shell);
+	if (!result)
+		return (ft_printf("\nCa fonctionne pas\n"), NULL);
+	if (ft_strncmp(result, "ok\0", 3) != 0)
+		return (check_and_parse(result));
+	else
+		return (line);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
@@ -60,15 +85,12 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\033[37mminishell$ ");
 		if (!line || ft_strncmp(line, "exit", 0) == 0)
 			break ;
-		data.shell = ft_token_shell(line);
-		if (!data.shell)
-			return (free(line), rl_clear_history(), exit(0), 0);
-		for (size_t i = 0; data.shell[i]; i++)
-		{
-			ft_printf("%s\n", data.shell[i]);
-		}
+		line = check_and_parse(line);
+		if (!line)
+			break ;
 		add_history(line);
-		dispatch(line, data.envp, 0);
+		ft_printf("%s\n", line);
+		//dispatch(line, data.envp, 0);
 	}
 	free(line);
 	rl_clear_history();
