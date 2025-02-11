@@ -8,7 +8,7 @@ Done:
 - pwd
 - env
 - exit
-- echo with option -n
+- echo with option -n (and $VAR)
 - cd (absolute or relative path)
 - Checker before parsing
 
