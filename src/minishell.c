@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:07:51 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:35:57 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	dispatch(char *line, char **envp, int i)
 
 	//ICI les ft_split sont temporaires, en attendant le parsing.
 	if (ft_strncmp(line, "echo", 4) == 0)
-		return (ft_echo(ft_split(line, ' ')), 1);
+		return (ft_echo(ft_split(line, ' '), envp), 1);
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		return (ft_pwd(), 1);
 	if (ft_strncmp(line, "cd", 2) == 0)

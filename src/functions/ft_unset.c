@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:33:04 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:12:42 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:35:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_unset(char **cmd, char **envp)
 
 	if (!cmd[1])
 	{
-		ft_printf("unset: not enough arguments\n");
+		ft_putstr_fd("unset: not enough arguments\n", STDERR_FILENO);
 		exit(1);
 	}
 	i = 1;
