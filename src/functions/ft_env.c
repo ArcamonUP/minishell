@@ -6,12 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:02 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 13:21:34 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:11:19 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 //Affiche l'environnement de l'utilisateur
 void	ft_env(char **envp)

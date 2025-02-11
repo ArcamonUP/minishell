@@ -6,13 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:16 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 13:20:05 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:11:25 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 //A test apres parsing
 void	ft_cd(char **cmd)

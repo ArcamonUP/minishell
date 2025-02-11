@@ -6,13 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:20 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:06:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:12:31 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 void	print_sorted_env(char **envp)
 {
@@ -52,13 +53,13 @@ char	**add_env(char *arg, char **envp)
 		{
 			free(envp[i]);
 			envp[i] = ft_strdup(arg);
-			return ;
+			return (envp);
 		}
 		i++;
 	}
 	temp = ft_calloc(i + 2, sizeof(char *));
 	if (!temp)
-		return ;
+		return (free(envp), NULL);
 	i = 0;
 	while (envp[i])
 	{

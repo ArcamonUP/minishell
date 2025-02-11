@@ -6,16 +6,16 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:33:04 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 13:36:53 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:12:42 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include <stdlib.h>
 
 int	unset(char *arg, char **envp)
 {
-	char	*path;
 	char	*temp;
 	int		i;
 

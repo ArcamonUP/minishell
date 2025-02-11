@@ -6,12 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:36:32 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 13:22:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:11:49 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include <stdlib.h>
 
 void	ft_pwd(void)
 {
