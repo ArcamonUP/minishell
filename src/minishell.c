@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/06 15:36:51 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:48:07 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-void	ft_printtree(t_node *tree);
+void	ft_printtree(t_node *tree, int depth);
 t_node	*ft_parse_and_or(char ***token);
 
 int	dispatch(char *line, char **envp, int i)
@@ -67,9 +67,11 @@ int	main(int ac, char **av, char **envp)
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
 		t_node *test = ft_parse_and_or(&data.shell);
-		ft_printtree(test);
+		// (void)test;
+		int i = 0;
+		ft_printtree(test, i);
 		add_history(line);
-		dispatch(line, data.envp, 0);
+		//dispatch(line, data.envp, 0);
 	}
 	free(line);
 	rl_clear_history();

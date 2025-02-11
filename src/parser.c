@@ -5,100 +5,106 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/05 01:17:32 by achu             ###   ########.fr       */
+/*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
+/*   Updated: 2025/02/11 17:48:01 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int		is_space(char c);
-int		is_operator(char c);
-int		ft_token_count(const char *line);
-void	clear_double(char **ptr);
+e_type	ft_opcmp(char *shell);
+int		is_redir(char *str);
+t_node	*ft_node_new(char *str, e_type type);
 
-static char	*ft_token_op(const char *line)
+static t_node	*ft_parse_cmd(char ***token)
 {
-	int		i;
-	int		len;
-	char	*str;
+	t_node	*node;
+	t_node	*parent;
+	t_node	*right;
+	char	*op;
+	char	*file;
 
-	i = 0;
-	len = 0;
-	while (line[len] && is_operator(line[len]))
-		len++;
-	str = malloc((len + 1) * sizeof(char));
-	if (!str)
+	node = ft_node_new(**token, CMD);
+	if (!node)
 		return (NULL);
-	while (i < len)
+	(*token)++;
+	while (**token && is_redir(**token))
 	{
-		str[i] = line[i];
-		i++;
+		op = **token;
+		(*token)++;
+		file = **token;
+		(*token)++;
+		right = ft_node_new(file, ft_opcmp(op));
+		if (!right)
+			return (NULL);
+		parent = (t_node *)malloc(sizeof(t_node));
+		if (!parent)
+			return (NULL);
+		parent->str = op;
+		parent->type = ft_opcmp(op);
+		parent->left = node;
+		parent->right = right;
+		node = parent;
 	}
-	str[i] = 0;
-	return (str);
+	return (node);
 }
 
-static char	*ft_token_cmd(const char *line)
+static t_node	*ft_parse_pipe(char ***token)
 {
-	int		i;
-	int		len;
-	char	*str;
-	char	*trim;
+	t_node	*node;
+	t_node	*parent;
+	t_node	*right;
+	char	*op;
 
-	i = 0;
-	len = 0;
-	while (line[len] && !is_operator(line[len]))
-		len++;
-	str = malloc((len + 1) * sizeof(char));
-	if (!str)
+	node = ft_parse_cmd(token);
+	if (!node)
 		return (NULL);
-	while (i < len)
+	while (**token && (ft_strncmp(**token, "|", 0) == 0))
 	{
-		str[i] = line[i];
-		i++;
+		op = **token;
+		(*token)++;
+		right = ft_parse_cmd(token);
+		if (!right)
+			return (NULL);
+		parent = (t_node *)malloc(sizeof(t_node));
+		if (!parent)
+			return (NULL);
+		parent->str = op;
+		parent->type = ft_opcmp(op);
+		parent->left = node;
+		parent->right = right;
+		node = parent;
 	}
-	str[i] = 0;
-	trim = ft_strtrim(str, " ");
-	free(str);
-	if (!trim)
-		return (NULL);
-	return (trim);
+	return (node);
 }
 
-char	**ft_tokenize(const char *line)
+t_node	*ft_parse_and_or(char ***token)
 {
-	int		count;
-	char	**shell;
+	//echo number1 && echo hello || echo salut
+	t_node	*node;
+	t_node	*parent;
+	t_node	*right;
+	char	*op;
 
-	count = 0;
-	shell = (char **)ft_calloc(ft_token_count(line) + 1, sizeof(char *));
-	if (!shell)
+	node = ft_parse_pipe(token);
+	if (!node)
 		return (NULL);
-	while (*line)
+	while (**token && (ft_opcmp(**token) == OR || ft_opcmp(**token) == AND))
 	{
-		if (*line && is_operator(*line))
-		{
-			shell[count] = ft_token_op(line);
-			if (!shell[count])
-				return (clear_double(shell), NULL);
-			count++;
-			while (*line && is_operator(*line))
-				line++;
-		}
-		else if (*line && !is_operator(*line))
-		{
-			shell[count] = ft_token_cmd(line);
-			if (!shell[count])
-				return (clear_double(shell), NULL);
-			count++;
-			while (*line && !is_operator(*line))
-				line++;
-		}
-		while (*line && is_space(*line))
-			line++;
+		op = **token;
+		(*token)++;
+		right = ft_parse_pipe(token);
+		if (!right)
+			return (NULL);
+		parent = (t_node *)malloc(sizeof(t_node));
+		if (!parent)
+			return (NULL);
+		parent->str = op;
+		parent->type = ft_opcmp(op);
+		parent->left = node;
+		parent->right = right;
+		node = parent;
 	}
-	shell[count] = 0;
-	return (shell);
+	return (node);
 }

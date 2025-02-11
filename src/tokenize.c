@@ -1,62 +1,104 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
+/*   Updated: 2025/02/11 15:03:28 by achu             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "libft.h"
 
-t_node	*ft_new_cmd(char *str);
-e_type	ft_optcmp(char *shell);
+int		is_space(char c);
+int		is_operator(char c);
+int		ft_token_count(const char *line);
+void	clear_double(char **ptr);
 
-t_node	*ft_new_op(char *token, e_type op)
+static char	*ft_token_op(const char *line)
 {
-	t_node	*new;
-
-	new = (t_node *)malloc(sizeof(t_node));
-	new->type = op;
-	new->str = token;
-	new->left = NULL;
-	new->right = NULL;
-	return (new);
-}
-
-t_node	*ft_parse_cmd(char ***token)
-{
-	t_node	*node;
-
-	node = (t_node *)malloc(sizeof(t_node));
-	if (!node)
-		return (NULL);
-	node->str = **token;
-	node->type = AND;
-	node->left = NULL;
-	node->right = NULL;
-	(*token)++;
-	return (node);
-}
-
-t_node	*ft_parse_and_or(char ***token)
-{
-	//echo number1 && echo hello || echo salut
-	t_node	*previous;
-	t_node	*current;
-	t_node	*right;
+	int		i;
+	int		len;
 	char	*str;
 
-	previous = ft_parse_cmd(token);
-	if (!previous)
+	i = 0;
+	len = 0;
+	while (line[len] && is_operator(line[len]))
+		len++;
+	str = malloc((len + 1) * sizeof(char));
+	if (!str)
 		return (NULL);
-	while (**token && (ft_optcmp(**token) == AND || ft_optcmp(**token) == OR))
+	while (i < len)
 	{
-		str = **token;
-		(*token)++;
-		right = ft_parse_cmd(token);
-		if (!right)
-			return (NULL);
-		current = (t_node *)malloc(sizeof(t_node));
-		if (!current)
-			return (NULL);
-		current->str = str;
-		current->type = ft_optcmp(str);
-		current->left = previous;
-		current->right = right;
-		previous = current;
+		str[i] = line[i];
+		i++;
 	}
-	return (previous);
+	str[i] = 0;
+	return (str);
+}
+
+static char	*ft_token_cmd(const char *line)
+{
+	int		i;
+	int		len;
+	char	*str;
+	char	*trim;
+
+	i = 0;
+	len = 0;
+	while (line[len] && !is_operator(line[len]))
+		len++;
+	str = malloc((len + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = line[i];
+		i++;
+	}
+	str[i] = 0;
+	trim = ft_strtrim(str, " ");
+	free(str);
+	if (!trim)
+		return (NULL);
+	return (trim);
+}
+
+char	**ft_tokenize(const char *line)
+{
+	int		count;
+	char	**shell;
+
+	count = 0;
+	shell = (char **)ft_calloc(ft_token_count(line) + 1, sizeof(char *));
+	if (!shell)
+		return (NULL);
+	while (*line)
+	{
+		if (*line && is_operator(*line))
+		{
+			shell[count] = ft_token_op(line);
+			if (!shell[count])
+				return (clear_double(shell), NULL);
+			count++;
+			while (*line && is_operator(*line))
+				line++;
+		}
+		else if (*line && !is_operator(*line))
+		{
+			shell[count] = ft_token_cmd(line);
+			if (!shell[count])
+				return (clear_double(shell), NULL);
+			count++;
+			while (*line && !is_operator(*line))
+				line++;
+		}
+		while (*line && is_space(*line))
+			line++;
+	}
+	shell[count] = 0;
+	return (shell);
 }

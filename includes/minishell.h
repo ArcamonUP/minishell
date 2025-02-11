@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/06 15:31:23 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:37:33 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ typedef enum
 	PIPE,
 	AND,
 	OR,
-	INPUT,
-	OUTPUT,
+	IN,
+	OUT,
+	APPEND,
+	HERE_DOC,
 	CMD,
 }	e_type;
 

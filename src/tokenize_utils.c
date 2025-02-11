@@ -1,47 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
+/*   Updated: 2025/02/11 15:03:24 by achu             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include "libft.h"
+#include <stdlib.h>
 
-e_type	ft_optcmp(char *str)
+int is_space(const char c)
 {
-	if (ft_strncmp(str, "(", 1) == 0)
-		return (SUB);
-	else if (ft_strncmp(str, ")", 1) == 0)
-		return (SUB);
-	else if (ft_strncmp(str, "&&", 2) == 0)
-		return (AND);
-	else if (ft_strncmp(str, "||", 2) == 0)
-		return (OR);
-	else if (ft_strncmp(str, "|", 1) == 0)
-		return (PIPE);
-	else if (ft_strncmp(str, "<", 1) == 0)
-		return (INPUT);
-	else if (ft_strncmp(str, "<<", 2) == 0)
-		return (INPUT);
-	else if (ft_strncmp(str, ">", 1) == 0)
-		return (OUTPUT);
-	else if (ft_strncmp(str, ">>", 2) == 0)
-		return (OUTPUT);
-	else
-		return (CMD);
+	return (c == '\n' || c == '\t' || c == '\v' || \
+			c == '\f' || c == '\r' || c == ' ');
 }
 
-t_node	*ft_new_cmd(char *str)
+int is_operator(const char c)
 {
-	t_node	*new;
-
-	new = (t_node *)malloc(sizeof(t_node));
-	new->str = str;
-	new->type = CMD;
-	new->left = NULL;
-	new->right = NULL;
-	return (new);
+	return (c == '<' || c == '>' || c == '|' || \
+			c == '(' || c == ')' || c == '&');
 }
 
-void	ft_printtree(t_node *tree)
+char	*ft_strndup(char *src, int len)
 {
-	if (!tree)
-		return;
-	ft_printtree(tree->left);
-	ft_printf("%s\n", tree->str);
-	ft_printtree(tree->right);
+	int		i;
+	char	*dest;
+
+	i = 0;
+	if (len < 0)
+		return (NULL);
+	dest = malloc((len + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	while (src[i] && i < len)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+int	ft_token_count(const char *line)
+{
+	int	count;
+
+	count = 0;
+	while (*line)
+	{
+		if (*line && is_operator(*line))
+		{
+			count++;
+			while (*line && is_operator(*line))
+				line++;
+		}
+		else if (*line && !is_operator(*line))
+		{
+			count++;
+			while (*line && !is_operator(*line))
+				line++;
+		}
+		while (*line && is_space(*line))
+			line++;
+	}
+	return (count);
+}
+
+void	clear_double(char **ptr)
+{
+	int	i;
+
+	i = 0;
+	if (!ptr)
+		return ;
+	while (ptr[i])
+	{
+		free(ptr[i]);
+		i++;
+	}
+	free(ptr);
 }

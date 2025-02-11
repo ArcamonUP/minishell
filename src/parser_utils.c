@@ -5,82 +5,99 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/05 01:14:54 by achu             ###   ########.fr       */
+/*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
+/*   Updated: 2025/02/11 17:47:27 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
+#include "libft.h"
 
-int is_space(const char c)
+e_type	ft_opcmp(char *str)
 {
-	return (c == '\n' || c == '\t' || c == '\v' || \
-			c == '\f' || c == '\r' || c == ' ');
+	if (ft_strncmp(str, "(", 0) == 0)
+		return (SUB);
+	else if (ft_strncmp(str, ")", 0) == 0)
+		return (SUB);
+	else if (ft_strncmp(str, "&&", 0) == 0)
+		return (AND);
+	else if (ft_strncmp(str, "||", 0) == 0)
+		return (OR);
+	else if (ft_strncmp(str, "|", 0) == 0)
+		return (PIPE);
+	else if (ft_strncmp(str, "<", 0) == 0)
+		return (IN);
+	else if (ft_strncmp(str, "<<", 0) == 0)
+		return (HERE_DOC);
+	else if (ft_strncmp(str, ">", 0) == 0)
+		return (OUT);
+	else if (ft_strncmp(str, ">>", 0) == 0)
+		return (APPEND);
+	return (CMD);
 }
 
-int is_operator(const char c)
+int	is_redir(char *str)
 {
-	return (c == '<' || c == '>' || c == '|' || \
-			c == '(' || c == ')' || c == '&');
+	if (ft_strncmp(str, "<<", 0) == 0)
+		return (1);
+	if (ft_strncmp(str, ">>", 0) == 0)
+		return (1);
+	if (ft_strncmp(str, "<", 0) == 0)
+		return (1);
+	if (ft_strncmp(str, ">", 0) == 0)
+		return (1);
+	return (0);
 }
 
-char	*ft_strndup(char *src, int len)
+t_node	*ft_node_new(char *str, e_type type)
 {
-	int		i;
-	char	*dest;
+	t_node	*node;
 
-	i = 0;
-	if (len < 0)
-		return (NULL);
-	dest = malloc((len + 1) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	while (src[i] && i < len)
+	node = (t_node *)malloc(sizeof(t_node));
+	if (!node)
+		return 	(NULL);
+	node->str = str;
+	node->type = type;
+	node->left = NULL;
+	node->right = NULL;
+	return (node);
+}
+
+void	ft_printtree(t_node *tree, int depth)
+{
+	if (!tree)
+		return;
+	for (int i = 0; i < depth; i++)
+		ft_printf("    ");
+	switch (tree->type)
 	{
-		dest[i] = src[i];
-		i++;
+		case PIPE:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case AND:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case OR:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case IN:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case OUT:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case APPEND:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case HERE_DOC:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case CMD:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case SUB:
+			break ;
 	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-int	ft_token_count(const char *line)
-{
-	int	count;
-
-	count = 0;
-	while (*line)
-	{
-		if (*line && is_operator(*line))
-		{
-			count++;
-			while (*line && is_operator(*line))
-				line++;
-		}
-		else if (*line && !is_operator(*line))
-		{
-			count++;
-			while (*line && !is_operator(*line))
-				line++;
-		}
-		while (*line && is_space(*line))
-			line++;
-	}
-	return (count);
-}
-
-void	clear_double(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (!ptr)
-		return ;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
+	ft_printtree(tree->left, depth + 1);
+	ft_printtree(tree->right, depth + 1);
 }
