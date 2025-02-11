@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/05 11:15:48 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:36:22 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 {
 	//ft_split temporaire en attendant le parsing
 	if (ft_strncmp(line, "echo", 4) == 0)
-		ft_echo(ft_split(line, ' '));
+		ft_echo(ft_split(line, ' '), data.envp);
 	else if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd();
 	else if (ft_strncmp(line, "cd", 2) == 0)

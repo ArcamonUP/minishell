@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/10 16:15:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:29:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ char	*add_space(char *str);
 char	*checker(char **line);
 
 //functions
-void	ft_cd(char **line);
-void	ft_echo(char **line);
+void	ft_cd(char **cmd);
+void	ft_echo(char **cmd, char **envp);
 void	ft_env(char **envp);
-void	ft_export(char **line, char **envp);
+void	ft_export(char **cmd, char **envp);
 void	ft_pwd(void);
-void	ft_unset(char **line, char **envp);
+void	ft_unset(char **cmd, char **envp);
 
 //pipex
 int		pipex(t_pipex_data data);

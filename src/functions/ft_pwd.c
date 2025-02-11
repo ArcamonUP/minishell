@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:36:32 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 14:11:49 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:35:21 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	ft_pwd(void)
 
 	buf = NULL;
 	pwd = getcwd(buf, 42);
-	ft_printf("%s\n", pwd);
+	ft_putstr_fd(pwd, STDOUT_FILENO);
+	write(1, "\n", STDOUT_FILENO);
 	free(pwd);
 	free(buf);
 	exit(0);
