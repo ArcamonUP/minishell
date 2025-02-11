@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:36:32 by achu              #+#    #+#             */
-/*   Updated: 2025/02/04 15:56:12 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:22:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ void	ft_pwd(void)
 	ft_printf("%s\n", pwd);
 	free(pwd);
 	free(buf);
+	exit(0);
 }
