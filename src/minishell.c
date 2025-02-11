@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:35:57 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:58:33 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ char	*check_and_parse(char *line)
 	ft_printf("----\n");
 	*/
 	result = checker(data.shell);
+	free_tab(data.shell);
 	if (!result)
-		return (ft_printf("\nCa fonctionne pas\n"), NULL);
+		return (ft_printf("\nCa fonctionne pas\n"), free(line), NULL);
 	if (ft_strncmp(result, "ok\0", 3) != 0)
 		return (check_and_parse(result));
 	else
