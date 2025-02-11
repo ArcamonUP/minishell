@@ -8,8 +8,13 @@ Done:
 - pwd
 - env
 - exit
-- echo with option -n
+- echo with option -n (and $VAR)
 - cd (absolute or relative path)
+- Checker before parsing
+
+To test:
+- unset
+- export
 
 To do:
 - Handle single quote
@@ -19,7 +24,6 @@ To do:
 - Handle environment variables
 - Handle $?
 - export
-- unset
 
 To-do Bonus :
 - Implement wildcard (*) as working directory

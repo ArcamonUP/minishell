@@ -27,7 +27,7 @@ int	dispatch(char *line, char **envp, int i)
 
 	//ICI les ft_split sont temporaires, en attendant le parsing.
 	if (ft_strncmp(line, "echo", 4) == 0)
-		return (ft_echo(ft_split(line, ' ')), 1);
+		return (ft_echo(ft_split(line, ' '), envp), 1);
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		return (ft_pwd(), 1);
 	if (ft_strncmp(line, "cd", 2) == 0)
@@ -48,6 +48,32 @@ int	dispatch(char *line, char **envp, int i)
 	return (0);
 }
 
+char	*check_and_parse(char *line)
+{
+	t_data	data;
+	char	*result;
+
+	data.shell = ft_token_shell(line);
+	if (!data.shell)
+		return (free(line), rl_clear_history(), exit(0), NULL);
+	/*
+	ft_printf("----\n");
+	for (size_t i = 0; data.shell[i]; i++)
+	{
+		ft_printf("%s\n", data.shell[i]);
+	}
+	ft_printf("----\n");
+	*/
+	result = checker(data.shell);
+	free_tab(data.shell);
+	if (!result)
+		return (ft_printf("\nCa fonctionne pas\n"), free(line), NULL);
+	if (ft_strncmp(result, "ok\0", 3) != 0)
+		return (check_and_parse(result));
+	else
+		return (line);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
@@ -66,14 +92,15 @@ int	main(int ac, char **av, char **envp)
 		data.shell = ft_tokenize(line);
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
-		// for (size_t i = 0; data.shell[i]; i++)
-		// 	ft_printf("%s\n", data.shell[i]);
+		line = check_and_parse(line);
+		if (!line)
+			break ;
 		t_node *test = ft_parse_and_or(&data.shell);
-		// (void)test;
 		int i = 0;
 		ft_printtree(test, i);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
+		ft_printf("%s\n", line);
 	}
 	free(line);
 	rl_clear_history();
