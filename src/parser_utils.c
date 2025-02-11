@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 17:47:27 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/11 18:37:46 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 e_type	ft_opcmp(char *str)
 {
-	if (ft_strncmp(str, "(", 0) == 0)
+	if (ft_strncmp(str, "(", 1) == 0)
 		return (SUB);
-	else if (ft_strncmp(str, ")", 0) == 0)
+	else if (ft_strncmp(str, ")", 1) == 0)
 		return (SUB);
 	else if (ft_strncmp(str, "&&", 0) == 0)
 		return (AND);

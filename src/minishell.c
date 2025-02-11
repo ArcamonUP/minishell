@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 17:48:07 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/11 19:06:41 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	main(int ac, char **av, char **envp)
 		data.shell = ft_tokenize(line);
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
+		// for (size_t i = 0; data.shell[i]; i++)
+		// 	ft_printf("%s\n", data.shell[i]);
 		t_node *test = ft_parse_and_or(&data.shell);
 		// (void)test;
 		int i = 0;
