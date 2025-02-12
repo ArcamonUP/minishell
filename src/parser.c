@@ -14,10 +14,11 @@
 #include "libft.h"
 #include <stdio.h>
 
-int		is_redir(char *str);
-e_type	ft_opcmp(char *shell);
-t_node	*ft_node_new(char *str, e_type type);
-t_node	*ft_parse_and_or(char ***token);
+int				is_redir(char *str);
+e_type			get_optype(char *shell);
+t_node			*ft_node_new(char *str, e_type type);
+t_node			*ft_node_parent(char *str, t_node *left, t_node *right);
+static t_node	*ft_parse_and_or(char ***token);
 
 static t_node	*ft_parse_cmd(char ***token)
 {
@@ -27,7 +28,7 @@ static t_node	*ft_parse_cmd(char ***token)
 	{
 		(*token)++;
 		node = ft_parse_and_or(token);
-		if (node && (ft_strncmp(")", **token, 0) == 0))
+		if (**token && (ft_strncmp(")", **token, 0) == 0))
 			(*token)++;
 		else
 			return (NULL);
@@ -60,16 +61,12 @@ static t_node	*ft_parse_redir(char ***token)
 		(*token)++;
 		file = **token;
 		(*token)++;
-		right = ft_node_new(file, ft_opcmp(op));
+		right = ft_node_new(file, FILENAME);
 		if (!right)
 			return (NULL);
-		parent = (t_node *)malloc(sizeof(t_node));
+		parent = ft_node_parent(op, node, right);
 		if (!parent)
 			return (NULL);
-		parent->str = op;
-		parent->type = ft_opcmp(op);
-		parent->left = node;
-		parent->right = right;
 		node = parent;
 	}
 	return (node);
@@ -92,21 +89,16 @@ static t_node	*ft_parse_pipe(char ***token)
 		right = ft_parse_redir(token);
 		if (!right)
 			return (NULL);
-		parent = (t_node *)malloc(sizeof(t_node));
+		parent = ft_node_parent(op, node, right);
 		if (!parent)
 			return (NULL);
-		parent->str = op;
-		parent->type = ft_opcmp(op);
-		parent->left = node;
-		parent->right = right;
 		node = parent;
 	}
 	return (node);
 }
 
-t_node	*ft_parse_and_or(char ***token)
+static t_node	*ft_parse_and_or(char ***token)
 {
-	//echo number1 && echo hello || echo salut
 	t_node	*node;
 	t_node	*parent;
 	t_node	*right;
@@ -122,14 +114,20 @@ t_node	*ft_parse_and_or(char ***token)
 		right = ft_parse_pipe(token);
 		if (!right)
 			return (NULL);
-		parent = (t_node *)malloc(sizeof(t_node));
+		parent = ft_node_parent(op, node, right);
 		if (!parent)
 			return (NULL);
-		parent->str = op;
-		parent->type = ft_opcmp(op);
-		parent->left = node;
-		parent->right = right;
 		node = parent;
 	}
+	return (node);
+}
+
+t_node	*ft_parse_shell(char **token)
+{
+	t_node	*node;
+
+	node = ft_parse_and_or(&token);
+	if (!node)
+		return (NULL);
 	return (node);
 }

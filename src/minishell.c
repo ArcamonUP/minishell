@@ -18,7 +18,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-void	ft_printtree(t_node *tree, int depth);
+void	ft_print_tree(t_node *tree, int depth);
 t_node	*ft_parse_and_or(char ***token);
 
 int	dispatch(char *line, char **envp, int i)
@@ -95,9 +95,9 @@ int	main(int ac, char **av, char **envp)
 		// line = check_and_parse(line);
 		// if (!line)
 		// 	break ;
-		t_node *test = ft_parse_and_or(&data.shell);
+		t_node *test = ft_parse_shell(data.shell);
 		int i = 0;
-		ft_printtree(test, i);
+		ft_print_tree(test, i);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
 		ft_printf("%s\n", line);

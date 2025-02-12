@@ -40,6 +40,7 @@ typedef enum
 	OUT,
 	APPEND,
 	HERE_DOC,
+	FILENAME,
 	CMD,
 }	e_type;
 
@@ -58,6 +59,7 @@ t_data	init(int ac, char **av, char **envp, char **line);
 char	*check_and_parse(char *line);
 int		dispatch(char *line, char **envp, int i);
 char	**ft_tokenize(const char *line);
+t_node	*ft_parse_shell(char **token);
 
 //checkers_utils
 void	check_error(char *line, int ret);
