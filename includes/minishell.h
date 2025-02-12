@@ -83,6 +83,6 @@ int		pipex(t_pipex_data data);
 //utils
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
-__pid_t	ft_exec(char *cmd, char **envp);
+__pid_t	ft_exec_cmd(char *cmd, char **envp);
 
 #endif
