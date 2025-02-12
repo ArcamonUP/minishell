@@ -40,7 +40,7 @@ int	unset(char *arg, char **envp)
 
 void	ft_unset(char **cmd, char **envp)
 {
-	//int	i;
+	int	i;
 
 	if (!cmd[1])
 	{

@@ -53,7 +53,7 @@ char	*check_and_parse(char *line)
 	t_data	data;
 	char	*result;
 
-	data.shell = ft_token_shell(line);
+	data.shell = ft_tokenize(line);
 	if (!data.shell)
 		return (free(line), rl_clear_history(), exit(0), NULL);
 	/*
@@ -92,9 +92,9 @@ int	main(int ac, char **av, char **envp)
 		data.shell = ft_tokenize(line);
 		if (!data.shell)
 			return (free(line), rl_clear_history(), exit(0), 0);
-		line = check_and_parse(line);
-		if (!line)
-			break ;
+		// line = check_and_parse(line);
+		// if (!line)
+		// 	break ;
 		t_node *test = ft_parse_and_or(&data.shell);
 		int i = 0;
 		ft_printtree(test, i);

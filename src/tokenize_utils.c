@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 #include <stdlib.h>
 
 int is_space(const char c)
@@ -55,8 +56,13 @@ int	ft_token_count(const char *line)
 		if (*line && is_operator(*line))
 		{
 			count++;
-			while (*line && is_operator(*line))
+			if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
 				line++;
+			else
+			{
+				while (*line && is_operator(*line))
+					line++;
+			}
 		}
 		else if (*line && !is_operator(*line))
 		{

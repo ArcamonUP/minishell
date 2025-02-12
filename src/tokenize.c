@@ -28,6 +28,8 @@ static char	*ft_token_op(const char *line)
 	len = 0;
 	while (line[len] && is_operator(line[len]))
 		len++;
+	if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
+		len = 1;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -84,8 +86,13 @@ char	**ft_tokenize(const char *line)
 			if (!shell[count])
 				return (clear_double(shell), NULL);
 			count++;
-			while (*line && is_operator(*line))
+			if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
 				line++;
+			else
+			{
+				while (*line && is_operator(*line))
+					line++;
+			}
 		}
 		else if (*line && !is_operator(*line))
 		{

@@ -15,16 +15,12 @@
 
 e_type	ft_opcmp(char *str)
 {
-	if (ft_strncmp(str, "(", 1) == 0)
-		return (SUB);
-	else if (ft_strncmp(str, ")", 1) == 0)
-		return (SUB);
+	if (ft_strncmp(str, "|", 0) == 0)
+		return (PIPE);
 	else if (ft_strncmp(str, "&&", 0) == 0)
 		return (AND);
 	else if (ft_strncmp(str, "||", 0) == 0)
 		return (OR);
-	else if (ft_strncmp(str, "|", 0) == 0)
-		return (PIPE);
 	else if (ft_strncmp(str, "<", 0) == 0)
 		return (IN);
 	else if (ft_strncmp(str, "<<", 0) == 0)
@@ -94,8 +90,6 @@ void	ft_printtree(t_node *tree, int depth)
 			break ;
 		case CMD:
 			ft_printf("%s\n", tree->str);
-			break ;
-		case SUB:
 			break ;
 	}
 	ft_printtree(tree->left, depth + 1);

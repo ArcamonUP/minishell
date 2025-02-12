@@ -31,9 +31,8 @@ typedef struct t_data
 	char	**shell;
 }	t_data;
 
-typedef enum e_type
+typedef enum
 {
-	SUB,
 	PIPE,
 	AND,
 	OR,
@@ -42,11 +41,11 @@ typedef enum e_type
 	APPEND,
 	HERE_DOC,
 	CMD,
-}	t_type;
+}	e_type;
 
 typedef struct s_node
 {
-	t_type			type;
+	e_type			type;
 	char			*str;
 	struct s_node	*left;
 	struct s_node	*right;
