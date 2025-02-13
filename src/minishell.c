@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 19:06:41 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 12:37:40 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,21 @@ char	*check_and_parse(char *line)
 	t_data	data;
 	char	*result;
 
-	data.shell = ft_token_shell(line);
+	data.shell = ft_tokenize(line);
 	if (!data.shell)
 		return (free(line), rl_clear_history(), exit(0), NULL);
-	/*
-	ft_printf("----\n");
-	for (size_t i = 0; data.shell[i]; i++)
-	{
-		ft_printf("%s\n", data.shell[i]);
-	}
-	ft_printf("----\n");
-	*/
 	result = checker(data.shell);
-	free_tab(data.shell);
 	if (!result)
-		return (ft_printf("\nCa fonctionne pas\n"), free(line), NULL);
-	if (ft_strncmp(result, "ok\0", 3) != 0)
+		return (free(line), NULL);
+	if (ft_strncmp(result, "0x20200487515969614000", 23) != 0)
 		return (check_and_parse(result));
-	else
-		return (line);
+	return (free_tab(data.shell), line);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
+	t_node	*test;
 	char	*line;
 
 	data = init(ac, av, envp, &line);
@@ -89,20 +80,21 @@ int	main(int ac, char **av, char **envp)
 		line = readline("\033[37mminishell$ ");
 		if (!line || ft_strncmp(line, "exit", 0) == 0)
 			break ;
-		data.shell = ft_tokenize(line);
-		if (!data.shell)
-			return (free(line), rl_clear_history(), exit(0), 0);
 		line = check_and_parse(line);
 		if (!line)
 			break ;
-		t_node *test = ft_parse_and_or(&data.shell);
-		int i = 0;
-		ft_printtree(test, i);
+		ft_printf("Output apres le checker : %s\n", line);
+		ft_printf("-----\n");
+		test = ft_parse_and_or(/*line | tokenize a faie dans la fonction*/);
+		ft_printtree(test, 0);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
-		ft_printf("%s\n", line);
 	}
-	free(line);
+	if (line)
+		free(line);
+	if (data.shell)
+		free_tab(data.shell);
+	free_node(test);
 	rl_clear_history();
 	return (exit(0), 0);
 }

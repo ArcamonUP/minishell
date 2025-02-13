@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 19:53:59 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 09:52:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <stdio.h>
 
 int		is_redir(char *str);
-e_type	ft_opcmp(char *shell);
-t_node	*ft_node_new(char *str, e_type type);
+t_type	ft_opcmp(char *shell);
+t_node	*ft_node_new(char *str, t_type type);
 t_node	*ft_parse_and_or(char ***token);
 
 static t_node	*ft_parse_cmd(char ***token)
