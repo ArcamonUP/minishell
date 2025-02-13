@@ -32,6 +32,7 @@ SRC =	ft_atoi.c \
 	ft_isalnum.c \
 	ft_memcmp.c \
 	ft_putstr_fd.c \
+	ft_strlen_dbl.c \
 	ft_strlen.c \
 	ft_toupper.c \
 	ft_isalpha.c \

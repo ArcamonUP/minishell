@@ -38,6 +38,7 @@ int		ft_isdigit(int c);
 int		ft_isprint(int c);
 char	*ft_strdup(char *src);
 int		ft_atoi(const char *str);
+size_t	ft_strlen_dbl(char **str);
 size_t	ft_strlen(const char *str);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_bzero(void *s, size_t n);

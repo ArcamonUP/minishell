@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/wait.h>
 # include <sys/types.h>
 # include "pipex.h"
 
@@ -25,11 +26,11 @@
 # define RET_NOPERMISSIONS 5
 # define RET_NEWLINE 6
 
-typedef struct t_data
+typedef struct s_shell
 {
 	char	**envp;
-	char	**shell;
-}	t_data;
+	char	**path;
+}	t_shell;
 
 typedef enum
 {
@@ -53,7 +54,7 @@ typedef struct s_node
 }	t_node;
 
 //init
-t_data	init(int ac, char **av, char **envp, char **line);
+t_shell	init(int ac, char **av, char **envp, char **line);
 
 //minishell
 char	*check_and_parse(char *line);
@@ -83,6 +84,6 @@ int		pipex(t_pipex_data data);
 //utils
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
-__pid_t	ft_exec_cmd(char *cmd, char **envp);
+__pid_t	ft_exec(char *cmd, char **envp);
 
 #endif

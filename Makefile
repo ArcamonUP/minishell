@@ -13,7 +13,7 @@
 GREEN=\033[0;32m
 ORANGE=\033[38;5;214m
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = 
 OTHERFLAGS = -lreadline
 SRCDIR = src
 LIBFT = libft
@@ -27,6 +27,7 @@ SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		tokenize.c tokenize_utils.c \
 		parser.c parser_utils.c \
 		checker.c checker_utils.c \
+		executer.c executer_utils.c \
 		utils.c init.c \
 		minishell.c
 
