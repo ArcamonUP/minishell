@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 16:37:33 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 16:55:26 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ typedef enum
 	PIPE,
 	AND,
 	OR,
-	IN,
-	OUT,
+	INPUT,
+	TRUNC,
 	APPEND,
 	HERE_DOC,
 	FILENAME,

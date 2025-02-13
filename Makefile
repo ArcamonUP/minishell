@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
+#    By: achu <achu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/10 14:48:48 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/13 17:16:35 by achu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		tokenize.c tokenize_utils.c \
 		parser.c parser_utils.c \
 		checker.c checker_utils.c \
-		executer.c executer_utils.c \
+		exec.c exec_redir.c \
 		utils.c init.c \
 		minishell.c
 

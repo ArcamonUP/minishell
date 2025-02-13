@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 12:25:47 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 16:55:26 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ e_type	get_optype(char *str)
 	else if (ft_strncmp(str, ">>", 0) == 0)
 		return (APPEND);
 	else if (ft_strncmp(str, "<", 0) == 0)
-		return (IN);
+		return (INPUT);
 	else if (ft_strncmp(str, ">", 0) == 0)
-		return (OUT);
+		return (TRUNC);
 	return (CMD);
 }
 
@@ -90,10 +90,10 @@ void	ft_print_tree(t_node *tree, int depth)
 		case OR:
 			ft_printf("%s\n", tree->str);
 			break ;
-		case IN:
+		case INPUT:
 			ft_printf("%s\n", tree->str);
 			break ;
-		case OUT:
+		case TRUNC:
 			ft_printf("%s\n", tree->str);
 			break ;
 		case APPEND:

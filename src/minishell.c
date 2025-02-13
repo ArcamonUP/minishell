@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:31:42 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 16:22:42 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	main(int ac, char **av, char **envp)
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
 		t_node *test = ft_parse_shell(tokens);
-		ft_execute_tree(test, path);
+		ft_execute_tree(test, envp);
 		// int i = 0;
 		// ft_print_tree(test, i);
 		add_history(line);
