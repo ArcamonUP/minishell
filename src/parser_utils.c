@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 18:37:46 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 09:53:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-e_type	ft_opcmp(char *str)
+t_type	ft_opcmp(char *str)
 {
 	if (ft_strncmp(str, "(", 1) == 0)
 		return (SUB);
@@ -49,7 +49,7 @@ int	is_redir(char *str)
 	return (0);
 }
 
-t_node	*ft_node_new(char *str, e_type type)
+t_node	*ft_node_new(char *str, t_type type)
 {
 	t_node	*node;
 

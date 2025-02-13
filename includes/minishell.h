@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 16:37:33 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 12:24:37 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ char	**ft_tokenize(const char *line);
 
 //checkers_utils
 void	check_error(char *line, int ret);
-char	*handle_missings(void);
-char	*add_space(char *str);
+char	*handle_missings(char *to_parse);
+char	*add_char(char *str, char c);
+int		wait_next(char **line, int *i, int *y, char c);
 
 //checker
 char	*checker(char **line);
@@ -83,5 +84,8 @@ int		pipex(t_pipex_data data);
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
 __pid_t	ft_exec(char *cmd, char **envp);
+
+//utils_node
+void	free_node(t_node *node);
 
 #endif
