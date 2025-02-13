@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 15:03:24 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 12:24:43 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 #include "libft.h"
 #include <stdlib.h>
 
-int is_space(const char c)
+int	is_space(const char c)
 {
 	return (c == '\n' || c == '\t' || c == '\v' || \
 			c == '\f' || c == '\r' || c == ' ');
 }
 
-int is_operator(const char c)
+int	is_operator(const char c)
 {
 	return (c == '<' || c == '>' || c == '|' || \
 			c == '(' || c == ')' || c == '&');
@@ -68,7 +68,21 @@ int	ft_token_count(const char *line)
 		{
 			count++;
 			while (*line && !is_operator(*line))
+			{
+				if (*line && *line == '"')
+				{
+					line++;
+					while (*line && *line != '"')
+						line++;
+				}
+				else if (*line && *line == '\'')
+				{
+					line++;
+					while (*line && *line != '\'')
+						line++;
+				}
 				line++;
+			}
 		}
 		while (*line && is_space(*line))
 			line++;

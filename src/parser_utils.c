@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 18:37:46 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 12:25:47 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_node	*ft_node_new(char *str, e_type type)
 
 	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
-		return 	(NULL);
+		return (NULL);
 	node->str = str;
 	node->type = type;
 	node->left = NULL;
@@ -65,7 +65,7 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 
 	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
-		return 	(NULL);
+		return (NULL);
 	node->str = str;
 	node->type = get_optype(str);
 	node->left = left;

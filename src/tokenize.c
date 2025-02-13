@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 15:03:28 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/13 12:24:09 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,30 @@ static char	*ft_token_op(const char *line)
 	return (str);
 }
 
+static int	ft_quote_count(const char *line)
+{
+	int	len;
+
+	len = 0;
+	while (line[len] && !is_operator(line[len]))
+	{
+		if (line[len] && line[len] == '"')
+		{
+			len++;
+			while (line[len] && line[len] != '"')
+				len++;
+		}
+		else if (line[len] && line[len] == '\'')
+		{
+			len++;
+			while (line[len] && line[len] != '\'')
+				len++;
+		}
+		len++;
+	}
+	return (len);
+}
+
 static char	*ft_token_cmd(const char *line)
 {
 	int		i;
@@ -50,9 +74,7 @@ static char	*ft_token_cmd(const char *line)
 	char	*trim;
 
 	i = 0;
-	len = 0;
-	while (line[len] && !is_operator(line[len]))
-		len++;
+	len = ft_quote_count(line);
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -86,7 +108,7 @@ char	**ft_tokenize(const char *line)
 			if (!shell[count])
 				return (clear_double(shell), NULL);
 			count++;
-			if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
+			if (*line == '(' || *line == ')')
 				line++;
 			else
 			{
@@ -101,7 +123,21 @@ char	**ft_tokenize(const char *line)
 				return (clear_double(shell), NULL);
 			count++;
 			while (*line && !is_operator(*line))
+			{
+				if (*line && *line == '"')
+				{
+					line++;
+					while (*line && *line != '"')
+						line++;
+				}
+				else if (*line && *line == '\'')
+				{
+					line++;
+					while (*line && *line != '\'')
+						line++;
+				}
 				line++;
+			}
 		}
 		while (*line && is_space(*line))
 			line++;
