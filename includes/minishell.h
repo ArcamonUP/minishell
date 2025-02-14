@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:37 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:12:07 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,29 @@
 # include <sys/types.h>
 # include "pipex.h"
 
-# define RET_PARENTHESIS 1
-# define RET_OPERATOR 2
-# define RET_NOTIMPLEMENTED 3
-# define RET_NOFILE 4
-# define RET_NOPERMISSIONS 5
-# define RET_NEWLINE 6
-
 typedef struct t_data
 {
 	char	**envp;
 	char	**shell;
 }	t_data;
+
+typedef struct s_node
+{
+	t_type			type;
+	char			*str;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_node;
+
+typedef enum e_ret
+{
+	RET_PARENTHESIS = 1,
+	RET_OPERATOR = 2,
+	RET_NOTIMPLEMENTED = 3,
+	RET_NOFILE = 4,
+	RET_NOPERMISSIONS = 5,
+	RET_NEWLINE = 6,
+}	t_ret;
 
 typedef enum e_type
 {
@@ -43,14 +54,6 @@ typedef enum e_type
 	HERE_DOC,
 	CMD,
 }	t_type;
-
-typedef struct s_node
-{
-	t_type			type;
-	char			*str;
-	struct s_node	*left;
-	struct s_node	*right;
-}	t_node;
 
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
@@ -85,7 +88,8 @@ void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
 __pid_t	ft_exec(char *cmd, char **envp);
 
-//utils_node
+//free
 void	free_node(t_node *node);
+void	free_tab(char **tab);
 
 #endif
