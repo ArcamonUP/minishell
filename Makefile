@@ -6,7 +6,7 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/13 11:49:06 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/14 13:08:30 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,9 @@ SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
 		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_heredoc.c \
 		tokenize.c tokenize_utils.c \
-		parser.c parser_utils.c utils_node.c \
+		parser.c parser_utils.c \
 		checker.c checker_utils.c \
-		utils.c init.c \
+		utils.c free.c init.c \
 		minishell.c
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
