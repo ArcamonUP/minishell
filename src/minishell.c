@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:37:40 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:47:31 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		ft_printf("Output apres le checker : %s\n", line);
 		ft_printf("-----\n");
-		test = ft_parse_and_or(/*line | tokenize a faie dans la fonction*/);
+		test = ft_parse_and_or(/*line | tokenize a faire dans la fonction*/);
 		ft_printtree(test, 0);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
