@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/14 13:27:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:47:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,48 +67,56 @@ static char	*ft_token_cmd(const char *line)
 	return (trim);
 }
 
-char	*is_something(const char *line, int *i)
-{
-	char	*result;
-
-	if (line[*i] && is_operator(line[*i]))
-	{
-		result = ft_token_op(line);
-		if (result)
-			return (NULL);
-		while (line[*i] && is_operator(line[*i]))
-			(*i)++;
-	}
-	else if (line[*i] && !is_operator(line[*i]))
-	{
-		result = ft_token_cmd(line);
-		if (!result)
-			return (NULL);
-		while (line[*i] && !is_operator(line[*i]))
-			(*i)++;
-	}
-	return (result);
-}
-
 char	**ft_tokenize(const char *line)
 {
 	int		count;
-	int		i;
 	char	**shell;
 
 	count = 0;
-	i = 0;
 	shell = (char **)ft_calloc(ft_token_count(line) + 1, sizeof(char *));
 	if (!shell)
 		return (NULL);
-	while (line[i])
+	while (*line)
 	{
-		while (line[i] && is_space(line[i]))
-			i++;
-		shell[count] = is_something(line, &i);
-		if (!shell[count])
-			return (clear_double(shell), NULL);
-		count++;
+		if (*line && is_operator(*line))
+		{
+			shell[count] = ft_token_op(line);
+			if (!shell[count])
+				return (clear_double(shell), NULL);
+			count++;
+			if (*line == '(' || *line == ')')
+				line++;
+			else
+			{
+				while (*line && is_operator(*line))
+					line++;
+			}
+		}
+		else if (*line && !is_operator(*line))
+		{
+			shell[count] = ft_token_cmd(line);
+			if (!shell[count])
+				return (clear_double(shell), NULL);
+			count++;
+			while (*line && !is_operator(*line))
+			{
+				if (*line && *line == '"')
+				{
+					line++;
+					while (*line && *line != '"')
+						line++;
+				}
+				else if (*line && *line == '\'')
+				{
+					line++;
+					while (*line && *line != '\'')
+						line++;
+				}
+				line++;
+			}
+		}
+		while (*line && is_space(*line))
+			line++;
 	}
 	shell[count] = 0;
 	return (shell);
