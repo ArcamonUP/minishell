@@ -6,18 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 09:52:35 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:02:08 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <stdio.h>
-
-int		is_redir(char *str);
-t_type	ft_opcmp(char *shell);
-t_node	*ft_node_new(char *str, t_type type);
-t_node	*ft_parse_and_or(char ***token);
 
 static t_node	*ft_parse_cmd(char ***token)
 {
@@ -115,7 +110,8 @@ t_node	*ft_parse_and_or(char ***token)
 	node = ft_parse_pipe(token);
 	if (!node)
 		return (NULL);
-	while (**token && (ft_strncmp("&&", **token, 0) == 0 || ft_strncmp("||", **token, 0) == 0))
+	while (**token && (ft_strncmp("&&", **token, 0) == 0 || \
+	ft_strncmp("||", **token, 0) == 0))
 	{
 		op = **token;
 		(*token)++;

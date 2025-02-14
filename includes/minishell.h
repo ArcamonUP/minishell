@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/14 13:12:07 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:03:27 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ t_data	init(int ac, char **av, char **envp, char **line);
 //minishell
 char	*check_and_parse(char *line);
 int		dispatch(char *line, char **envp, int i);
-char	**ft_tokenize(const char *line);
 
 //checkers_utils
 void	check_error(char *line, int ret);
@@ -91,5 +90,31 @@ __pid_t	ft_exec(char *cmd, char **envp);
 //free
 void	free_node(t_node *node);
 void	free_tab(char **tab);
+void	clear_double(char **ptr);
+
+//tokenize
+char	**ft_tokenize(const char *line);
+
+//tokenize_utils
+int		is_space(const char c);
+int		is_operator(const char c);
+char	*ft_strndup(char *src, int len);
+int		ft_token_count(const char *line);
+int		get_index(const char *line, int i);
+
+//parser
+t_node	*ft_parse_and_or(char ***token);
+
+//parser_utils
+t_type	ft_opcmp(char *str);
+int		is_redir(char *str);
+t_node	*ft_node_new(char *str, t_type type);
+void	ft_printtree(t_node *tree, int depth);
+
+/*
+/!\
+PRINTTREE A ENLEVER A LA FIN
+/!\
+*/
 
 #endif
