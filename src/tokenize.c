@@ -6,17 +6,12 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/14 13:27:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:59:50 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-
-int		is_space(char c);
-int		is_operator(char c);
-int		ft_token_count(const char *line);
-void	clear_double(char **ptr);
 
 static char	*ft_token_op(const char *line)
 {
@@ -28,6 +23,8 @@ static char	*ft_token_op(const char *line)
 	len = 0;
 	while (line[len] && is_operator(line[len]))
 		len++;
+	if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
+		len = 1;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -40,6 +37,30 @@ static char	*ft_token_op(const char *line)
 	return (str);
 }
 
+static int	ft_quote_count(const char *line)
+{
+	int	len;
+
+	len = 0;
+	while (line[len] && !is_operator(line[len]))
+	{
+		if (line[len] && line[len] == '"')
+		{
+			len++;
+			while (line[len] && line[len] != '"')
+				len++;
+		}
+		else if (line[len] && line[len] == '\'')
+		{
+			len++;
+			while (line[len] && line[len] != '\'')
+				len++;
+		}
+		len++;
+	}
+	return (len);
+}
+
 static char	*ft_token_cmd(const char *line)
 {
 	int		i;
@@ -48,9 +69,7 @@ static char	*ft_token_cmd(const char *line)
 	char	*trim;
 
 	i = 0;
-	len = 0;
-	while (line[len] && !is_operator(line[len]))
-		len++;
+	len = ft_quote_count(line);
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
@@ -76,16 +95,20 @@ char	*is_something(const char *line, int *i)
 		result = ft_token_op(line);
 		if (result)
 			return (NULL);
-		while (line[*i] && is_operator(line[*i]))
+		if (line[*i] == '(' || line[*i] == ')')
 			(*i)++;
+		else
+		{
+			while (line[*i] && is_operator(line[*i]))
+				(*i)++;
+		}
 	}
 	else if (line[*i] && !is_operator(line[*i]))
 	{
 		result = ft_token_cmd(line);
-		if (!result)
+		if (result)
 			return (NULL);
-		while (line[*i] && !is_operator(line[*i]))
-			(*i)++;
+		(*i) = get_index(line, *i);
 	}
 	return (result);
 }

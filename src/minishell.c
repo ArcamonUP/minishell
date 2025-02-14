@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:47:31 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:03:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-void	ft_printtree(t_node *tree, int depth);
-t_node	*ft_parse_and_or(char ***token);
 
 int	dispatch(char *line, char **envp, int i)
 {

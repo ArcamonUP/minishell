@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 15:03:24 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/14 13:58:43 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,23 @@ int	ft_token_count(const char *line)
 	return (count);
 }
 
-void	clear_double(char **ptr)
+int	get_index(const char *line, int i)
 {
-	int	i;
-
-	i = 0;
-	if (!ptr)
-		return ;
-	while (ptr[i])
+	while (line[i] && !is_operator(line[i]))
 	{
-		free(ptr[i]);
+		if (line[i] && line[i] == '"')
+		{
+			i++;
+			while (line[i] && line[i] != '"')
+				i++;
+		}
+		else if (line[i] && line[i] == '\'')
+		{
+			i++;
+			while (line[i] && line[i] != '\'')
+				i++;
+		}
 		i++;
 	}
-	free(ptr);
+	return (i);
 }
