@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/14 14:21:27 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:24:48 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,11 @@ char	*is_something(const char *line, int *i)
 {
 	char	*result;
 
+	result = NULL;
 	if (line[*i] && is_operator(line[*i]))
 	{
 		result = ft_token_op(line);
-		if (result)
+		if (!result)
 			return (NULL);
 		if (line[*i] == '(' || line[*i] == ')')
 			(*i)++;
@@ -106,7 +107,7 @@ char	*is_something(const char *line, int *i)
 	else if (line[*i] && !is_operator(line[*i]))
 	{
 		result = ft_token_cmd(line);
-		if (result)
+		if (!result)
 			return (NULL);
 		(*i) = get_index(line, *i);
 	}
