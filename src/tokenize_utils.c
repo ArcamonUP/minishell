@@ -6,20 +6,20 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/14 13:58:43 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:22:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-int is_space(const char c)
+int	is_space(const char c)
 {
 	return (c == '\n' || c == '\t' || c == '\v' || \
 			c == '\f' || c == '\r' || c == ' ');
 }
 
-int is_operator(const char c)
+int	is_operator(const char c)
 {
 	return (c == '<' || c == '>' || c == '|' || \
 			c == '(' || c == ')' || c == '&');
@@ -48,24 +48,27 @@ char	*ft_strndup(char *src, int len)
 int	ft_token_count(const char *line)
 {
 	int	count;
+	int	i;
 
 	count = 0;
-	while (*line)
+	i = 0;
+	while (line[i])
 	{
-		if (*line && is_operator(*line))
+		if (line[i] && is_operator(line[i]))
 		{
-			count++;
-			while (*line && is_operator(*line))
-				line++;
+			if (line[i] == '(' || line[i] == ')')
+				i++;
+			else
+			{
+				while (line[i] && is_operator(line[i]))
+					i++;
+			}
 		}
-		else if (*line && !is_operator(*line))
-		{
-			count++;
-			while (*line && !is_operator(*line))
-				line++;
-		}
-		while (*line && is_space(*line))
-			line++;
+		else if (line[i] && !is_operator(line[i]))
+			i = get_index(line, i);
+		count++;
+		while (line[i] && is_space(line[i]))
+			i++;
 	}
 	return (count);
 }

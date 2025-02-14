@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/14 14:03:27 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:07:21 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,29 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include "pipex.h"
+
+typedef enum e_type
+{
+	SUB,
+	PIPE,
+	AND,
+	OR,
+	IN,
+	OUT,
+	APPEND,
+	HERE_DOC,
+	CMD,
+}	t_type;
+
+typedef enum e_ret
+{
+	RET_PARENTHESIS = 1,
+	RET_OPERATOR = 2,
+	RET_NOTIMPLEMENTED = 3,
+	RET_NOFILE = 4,
+	RET_NOPERMISSIONS = 5,
+	RET_NEWLINE = 6,
+}	t_ret;
 
 typedef struct t_data
 {
@@ -31,29 +54,6 @@ typedef struct s_node
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
-
-typedef enum e_ret
-{
-	RET_PARENTHESIS = 1,
-	RET_OPERATOR = 2,
-	RET_NOTIMPLEMENTED = 3,
-	RET_NOFILE = 4,
-	RET_NOPERMISSIONS = 5,
-	RET_NEWLINE = 6,
-}	t_ret;
-
-typedef enum e_type
-{
-	SUB,
-	PIPE,
-	AND,
-	OR,
-	IN,
-	OUT,
-	APPEND,
-	HERE_DOC,
-	CMD,
-}	t_type;
 
 //init
 t_data	init(int ac, char **av, char **envp, char **line);
