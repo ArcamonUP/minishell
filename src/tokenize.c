@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/14 13:59:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:21:27 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,12 +126,12 @@ char	**ft_tokenize(const char *line)
 		return (NULL);
 	while (line[i])
 	{
-		while (line[i] && is_space(line[i]))
-			i++;
 		shell[count] = is_something(line, &i);
 		if (!shell[count])
 			return (clear_double(shell), NULL);
 		count++;
+		while (line[i] && is_space(line[i]))
+			i++;
 	}
 	shell[count] = 0;
 	return (shell);
