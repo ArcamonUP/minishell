@@ -29,7 +29,9 @@
 typedef struct s_shell
 {
 	char	**envp;
-	char	**path;
+	int		heredoc_idx;
+	int		heredoc_count;
+	int		*heredoc_fd;
 }	t_shell;
 
 typedef enum
@@ -40,7 +42,7 @@ typedef enum
 	INPUT,
 	TRUNC,
 	APPEND,
-	HERE_DOC,
+	HEREDOC,
 	FILENAME,
 	CMD,
 }	e_type;
@@ -49,6 +51,7 @@ typedef struct s_node
 {
 	e_type			type;
 	char			*str;
+	int				is_hdoc;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
@@ -61,6 +64,15 @@ char	*check_and_parse(char *line);
 int		dispatch(char *line, char **envp, int i);
 char	**ft_tokenize(const char *line);
 t_node	*ft_parse_shell(char **token);
+
+//executing tree
+int		ft_execute_tree(t_node *node, t_shell *data);
+int		ft_exec_and(t_node *node, t_shell *data);
+int		ft_exec_or(t_node *node, t_shell *data);
+int		ft_exec_heredoc(t_node *node, t_shell *data);
+int		ft_exec_input(t_node *node, t_shell *data);
+int		ft_exec_trunc(t_node *node, t_shell *data);
+int		ft_exec_append(t_node *node, t_shell *data);
 
 //checkers_utils
 void	check_error(char *line, int ret);

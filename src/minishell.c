@@ -19,10 +19,11 @@
 #include <sys/wait.h>
 
 void	ft_print_tree(t_node *tree, int depth);
-int		ft_execute_tree(t_node *node, char *path[]);
 t_node	*ft_parse_and_or(char ***token);
 char	**ft_parse_env(char *envp[]);
 char	**ft_parse_paths(char **env);
+void	ft_heredoc_count(t_node *node, int *i);
+void	ft_init_heredoc(t_node *tree, t_shell *data);
 
 int	dispatch(char *line, char **envp, int i)
 {
@@ -71,18 +72,14 @@ char	*check_and_parse(char *line)
 
 int	main(int ac, char **av, char **envp)
 {
+	t_shell	data;
+	int		i;
 	char	*line;
 	char	**tokens;
-	char	**env;
-	char	**path;
 
 	((void)ac, (void)av);
-	env = ft_parse_env(envp);
-	if (!env)
-		return (1);
-	path = ft_parse_paths(env);
-	if (!path)
-		return (1);
+	i = 0;
+	data.envp = envp;
 	while (1)
 	{
 		if (line)
@@ -96,13 +93,22 @@ int	main(int ac, char **av, char **envp)
 		tokens = ft_tokenize(line);
 		if (!tokens)
 			return (free(line), rl_clear_history(), exit(0), 0);
+	
 		// for (size_t i = 0; tokens[i]; i++)
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
 		t_node *test = ft_parse_shell(tokens);
-		ft_execute_tree(test, envp);
-		// int i = 0;
-		// ft_print_tree(test, i);
+		ft_heredoc_count(test, &i);
+		data.heredoc_fd = (int *)malloc((i + 1) * sizeof(int));
+		if (!data.heredoc_fd)
+			return (1);
+		data.heredoc_idx = 0;
+		data.heredoc_count = 0;
+		ft_init_heredoc(test, &data);
+		int i = 0;
+		ft_print_tree(test, i);
+		ft_printf("----------------\n");
+		ft_execute_tree(test, &data);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
 	}

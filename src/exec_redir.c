@@ -14,43 +14,27 @@
 #include "libft.h"
 #include <fcntl.h>
 
-int	ft_exec_input(char *file)
+int	ft_exec_input(t_node *node, t_shell *data)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY);
+	fd = open(node->right->str, O_RDONLY);
 	if (fd < 0)
 		return (1);
-	if (dup2(fd, INPUT) < 0)
+	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		close(fd);
 		return (1);
 	}
 	close(fd);
-	return (0);
+	return (ft_execute_tree(node->left, data));
 }
 
-int	ft_exec_trunc(char *file)
+int	ft_exec_trunc(t_node *node, t_shell *data)
 {
 	int	fd;
 
-	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT | 0644);
-	if (fd < 0)
-		return (1);
-	if (dup2(fd, STDOUT_FILENO) < 0)
-	{
-		close(fd);
-		return (1);
-	}
-	close(fd);
-	return (0);
-}
-
-int	ft_exec_append(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_WRONLY | O_APPEND | O_CREAT | 0644);
+	fd = open(node->right->str, O_WRONLY | O_TRUNC | O_CREAT | 0644);
 	if (fd < 0)
 		return (1);
 	if (dup2(fd, STDOUT_FILENO) < 0)
@@ -59,15 +43,21 @@ int	ft_exec_append(char *file)
 		return (1);
 	}
 	close(fd);
-	return (0);
+	return (ft_execute_tree(node->left, data));
 }
 
-int	ft_exec_here_doc(char *file)
+int	ft_exec_append(t_node *node, t_shell *data)
 {
-	//ouais faut faire le here doc ici quoi
-	//le here_doc de base att que tout le commande
-	//soit execute avamtde le lancer sur le terminal
-	//cad que "cat << LIM && echo true && cat << TOTO"
-	//le echo true doit etre ecrit entre LIM et TOTO
-	return (0);
+	int	fd;
+
+	fd = open(node->right->str, O_WRONLY | O_APPEND | O_CREAT | 0644);
+	if (fd < 0)
+		return (1);
+	if (dup2(fd, STDOUT_FILENO) < 0)
+	{
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (ft_execute_tree(node->left, data));
 }

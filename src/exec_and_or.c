@@ -10,3 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+#include "libft.h"
+
+int	ft_exec_and(t_node *node, t_shell *data)
+{
+	int	left;
+
+	left = ft_execute_tree(node->left, data);
+	if (left == 0)
+		return (ft_execute_tree(node->right, data));
+	return (left);
+}
+
+int	ft_exec_or(t_node *node, t_shell *data)
+{
+	int	left;
+
+	left = ft_execute_tree(node->left, data);
+	if (left != 0)
+		return (ft_execute_tree(node->right, data));
+	return (left);
+}

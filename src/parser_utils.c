@@ -22,7 +22,7 @@ e_type	get_optype(char *str)
 	else if (ft_strncmp(str, "||", 0) == 0)
 		return (OR);
 	else if (ft_strncmp(str, "<<", 0) == 0)
-		return (HERE_DOC);
+		return (HEREDOC);
 	else if (ft_strncmp(str, ">>", 0) == 0)
 		return (APPEND);
 	else if (ft_strncmp(str, "<", 0) == 0)
@@ -54,6 +54,7 @@ t_node	*ft_node_new(char *str, e_type type)
 		return (NULL);
 	node->str = str;
 	node->type = type;
+	node->is_hdoc = 0;
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
@@ -68,6 +69,7 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 		return (NULL);
 	node->str = str;
 	node->type = get_optype(str);
+	node->is_hdoc = 0;
 	node->left = left;
 	node->right = right;
 	return (node);
@@ -99,7 +101,7 @@ void	ft_print_tree(t_node *tree, int depth)
 		case APPEND:
 			ft_printf("%s\n", tree->str);
 			break ;
-		case HERE_DOC:
+		case HEREDOC:
 			ft_printf("%s\n", tree->str);
 			break ;
 		case CMD:
