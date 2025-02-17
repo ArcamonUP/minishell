@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:58:23 by achu              #+#    #+#             */
-/*   Updated: 2025/02/16 16:27:21 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/17 12:53:28 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,14 @@ int	ft_limiter(t_node	*node)
 
 void	ft_init_heredoc(t_node *tree, t_shell *data)
 {
-	int	i;
-
-	i = data->heredoc_idx;
 	if (!tree)
 		return ;
 	else if (tree->type == HEREDOC)
 	{
-		data->heredoc_fd[i] = ft_limiter(tree->right);
+		data->heredoc_fd[data->heredoc_count] = ft_limiter(tree->right);
 		if (data->heredoc_fd < 0)
 			return ;
-		data->heredoc_idx++;
+		data->heredoc_count++;
 	}
 	ft_init_heredoc(tree->left, data);
 	ft_init_heredoc(tree->right, data);

@@ -97,17 +97,17 @@ int	main(int ac, char **av, char **envp)
 		// for (size_t i = 0; tokens[i]; i++)
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
+		data.heredoc_idx = 0;
+		data.heredoc_count = 0;
 		t_node *test = ft_parse_shell(tokens);
 		ft_heredoc_count(test, &i);
 		data.heredoc_fd = (int *)malloc((i + 1) * sizeof(int));
 		if (!data.heredoc_fd)
 			return (1);
-		data.heredoc_idx = 0;
-		data.heredoc_count = 0;
 		ft_init_heredoc(test, &data);
-		int i = 0;
-		ft_print_tree(test, i);
-		ft_printf("----------------\n");
+		// int i = 0;
+		// ft_print_tree(test, i);
+		// ft_printf("----------------\n");
 		ft_execute_tree(test, &data);
 		add_history(line);
 		//dispatch(line, data.envp, 0);

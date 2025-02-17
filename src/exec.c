@@ -27,7 +27,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 	else if (pid == 0)
 	{
 		if (node->is_hdoc > 0)
-			ft_printf("%s have hdoc\n", node->str);
+			dup2(data->heredoc_fd[data->heredoc_idx], STDIN_FILENO);
 		cmd = ft_split(node->str, ' ');
 		if (!cmd)
 			exit (EXIT_FAILURE);
@@ -39,6 +39,8 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 		ft_printf("Error: command failed\n");
 		exit(126);
 	}
+	if (node->is_hdoc > 0)
+		data->heredoc_idx++;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -49,14 +51,14 @@ int	ft_execute_tree(t_node *node, t_shell *data)
 {
 	if (!node)
 		return (0);
-	else if (node->type == PIPE)
-		return (0);
 	else if (node->type == CMD)
 		return (ft_exec_cmd(node, data));
 	else if (node->type == AND)
 		return (ft_exec_and(node, data));
 	else if (node->type == OR)
 		return (ft_exec_or(node, data));
+	else if (node->type == PIPE)
+		return (0);
 	else if (node->type == HEREDOC)
 		return (ft_exec_heredoc(node, data));
 	else if (node->type == INPUT)
