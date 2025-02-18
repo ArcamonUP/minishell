@@ -51,9 +51,11 @@ typedef struct s_node
 {
 	e_type			type;
 	char			*str;
-	int				is_hdoc;
 	struct s_node	*left;
 	struct s_node	*right;
+	int				fdin;;
+	int				fdout;
+	int				is_hdoc;
 }	t_node;
 
 //init

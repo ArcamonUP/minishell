@@ -13,6 +13,8 @@
 #include "minishell.h"
 #include "libft.h"
 
+// If the left node executed successfully
+// then the right node is executed
 int	ft_exec_and(t_node *node, t_shell *data)
 {
 	int	left;
@@ -23,6 +25,8 @@ int	ft_exec_and(t_node *node, t_shell *data)
 	return (left);
 }
 
+// If the left node executed unsuccessfully
+// then the right node is executed
 int	ft_exec_or(t_node *node, t_shell *data)
 {
 	int	left;
