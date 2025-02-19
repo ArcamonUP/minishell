@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:43 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 16:28:09 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,30 @@ char	*ft_strndup(char *src, int len)
 
 int	ft_token_count(const char *line)
 {
-	int	count;
+	int		count;
+	char	op;
 
 	count = 0;
 	while (*line)
 	{
 		if (*line && is_operator(*line))
 		{
+			op = *line;
 			count++;
 			if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
 				line++;
 			else
 			{
 				while (*line && is_operator(*line))
+					line++;
+			}
+			if (*line && (op == '<' || op == '>'))
+			{
+				while (*line && is_space(*line))
+					line++;
+				if (*line)
+					count++;
+				while (*line && !is_space(*line))
 					line++;
 			}
 		}

@@ -6,14 +6,13 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 19:53:59 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 16:02:29 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int				is_redir(char *str);
 e_type			get_optype(char *shell);
 t_node			*ft_node_new(char *str, e_type type);
 t_node			*ft_node_parent(char *str, t_node *left, t_node *right);
@@ -22,6 +21,10 @@ static t_node	*ft_parse_and_or(char ***token);
 static t_node	*ft_parse_cmd(char ***tokens)
 {
 	t_node	*node;
+	t_node	*parent;
+	t_node	*right;
+	char	*op;
+	char	*file;
 
 	if (**tokens && (ft_strncmp("(", **tokens, 0) == 0))
 	{

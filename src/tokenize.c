@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:09 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 16:31:14 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,28 @@ static char	*ft_token_cmd(const char *line)
 	return (trim);
 }
 
+static char	*ft_token_file(const char *line)
+{
+	int		i;
+	int		len;
+	char	*str;
+
+	i = 0;
+	len = 0;
+	while (line[len] && !is_space(line[len]))
+		len++;
+	str = malloc((len + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = line[i];
+		i++;
+	}
+	str[i] = 0;
+	return (str);
+}
+
 char	**ft_tokenize(const char *line)
 {
 	int		count;
@@ -113,6 +135,20 @@ char	**ft_tokenize(const char *line)
 			else
 			{
 				while (*line && is_operator(*line))
+					line++;
+			}
+			if (*line && is_redir(shell[count - 1]))
+			{
+				while (*line && is_space(*line))
+					line++;
+				if (*line)
+				{
+					shell[count] = ft_token_file(line);
+					if (!shell[count])
+						return (clear_double(shell), NULL);
+					count++;
+				}
+				while (*line && !is_space(*line))
 					line++;
 			}
 		}

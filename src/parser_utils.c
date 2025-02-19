@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 16:55:26 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 16:02:03 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 void	ft_print_tree(t_node *tree, int depth)
 {
 	if (!tree)
-		return;
+		return ;
 	for (int i = 0; i < depth; i++)
 		ft_printf("    ");
 	switch (tree->type)

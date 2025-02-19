@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executer.c                                         :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/02/13 17:15:36 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 15:14:48 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,13 @@ int	ft_execute_tree(t_node *node, t_shell *data)
 		return (ft_exec_or(node, data));
 	else if (node->type == PIPE)
 		return (0);
-	else if (node->type == HEREDOC || node->type == INPUT)
+	else if (node->type == HEREDOC)
+		return (ft_exec_heredoc(node, data));
+	else if (node->type == INPUT)
 		return (ft_exec_input(node, data));
-	else if (node->type == TRUNC || node->type == APPEND)
-		return (ft_exec_output(node, data));
+	else if (node->type == TRUNC)
+		return (ft_exec_trunc(node, data));
+	else if (node->type == APPEND)
+		return (ft_exec_append(node, data));
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 16:55:26 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/19 16:02:40 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ t_node	*ft_parse_shell(char **token);
 int		ft_execute_tree(t_node *node, t_shell *data);
 int		ft_exec_and(t_node *node, t_shell *data);
 int		ft_exec_or(t_node *node, t_shell *data);
-int		ft_exec_input(t_node *tree, t_shell *data);
-int		ft_exec_output(t_node *tree, t_shell *data);
+int		ft_exec_heredoc(t_node *node, t_shell *data);
+int		ft_exec_input(t_node *node, t_shell *data);
+int		ft_exec_append(t_node *node, t_shell *data);
+int		ft_exec_trunc(t_node *node, t_shell *data);
 
 //checkers_utils
 void	check_error(char *line, int ret);
@@ -106,5 +108,7 @@ __pid_t	ft_exec(char *cmd, char **envp);
 t_lstfd	*ft_lstfd_new(int fd);
 void	ft_lstfd_add_back(t_lstfd **lst, t_lstfd *new);
 void	ft_lstfd_clear(t_lstfd **lst);
+
+int		is_redir(char *str);
 
 #endif
