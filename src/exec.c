@@ -19,15 +19,12 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 	int		status;
 	char	**cmd;
 	char	*path;
-	char	*temp;
 
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
 	{
-		if (node->is_hdoc > 0)
-			dup2(data->heredoc_fd[data->heredoc_idx], STDIN_FILENO);
 		cmd = ft_split(node->str, ' ');
 		if (!cmd)
 			exit (EXIT_FAILURE);
@@ -39,8 +36,6 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 		ft_printf("Error: command failed\n");
 		exit(126);
 	}
-	if (node->is_hdoc > 0)
-		data->heredoc_idx++;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -59,13 +54,9 @@ int	ft_execute_tree(t_node *node, t_shell *data)
 		return (ft_exec_or(node, data));
 	else if (node->type == PIPE)
 		return (0);
-	else if (node->type == HEREDOC)
-		return (ft_exec_heredoc(node, data));
-	else if (node->type == INPUT)
+	else if (node->type == HEREDOC || node->type == INPUT)
 		return (ft_exec_input(node, data));
-	else if (node->type == TRUNC)
-		return (ft_exec_trunc(node, data));
-	else if (node->type == APPEND)
-		return (ft_exec_append(node, data));
+	else if (node->type == TRUNC || node->type == APPEND)
+		return (ft_exec_output(node, data));
 	return (1);
 }

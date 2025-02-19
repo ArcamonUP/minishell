@@ -19,11 +19,8 @@
 #include <sys/wait.h>
 
 void	ft_print_tree(t_node *tree, int depth);
-t_node	*ft_parse_and_or(char ***token);
 char	**ft_parse_env(char *envp[]);
 char	**ft_parse_paths(char **env);
-int		ft_count_hdoc(t_node *node);
-void	ft_init_heredoc(t_node *tree, t_shell *data);
 
 int	dispatch(char *line, char **envp, int i)
 {
@@ -97,13 +94,8 @@ int	main(int ac, char **av, char **envp)
 		// for (size_t i = 0; tokens[i]; i++)
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
-		data.heredoc_idx = 0;
-		data.heredoc_count = 0;
 		t_node *test = ft_parse_shell(tokens);
-		data.heredoc_fd = (int *)ft_calloc(ft_count_hdoc(test) + 1, sizeof(int));
-		if (!data.heredoc_fd)
-			return (1);
-		ft_init_heredoc(test, &data);
+		//ft_init_fdin(test, &data);
 		int i = 0;
 		ft_print_tree(test, i);
 		ft_printf("----------------\n");

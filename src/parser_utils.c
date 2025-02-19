@@ -54,9 +54,10 @@ t_node	*ft_node_new(char *str, e_type type)
 		return (NULL);
 	node->str = str;
 	node->type = type;
-	node->is_hdoc = 0;
 	node->left = NULL;
 	node->right = NULL;
+	node->fdin = -1;
+	node->fdout = -1;
 	return (node);
 }
 
@@ -69,9 +70,10 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 		return (NULL);
 	node->str = str;
 	node->type = get_optype(str);
-	node->is_hdoc = 0;
 	node->left = left;
 	node->right = right;
+	node->fdin = -1;
+	node->fdout = -1;
 	return (node);
 }
 
