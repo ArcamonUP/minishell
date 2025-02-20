@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
 /*   Updated: 2025/02/19 16:02:29 by achu             ###   ########.fr       */
@@ -131,7 +131,8 @@ static t_node	*ft_parse_and_or(char ***tokens)
 	node = ft_parse_pipe(tokens);
 	if (!node)
 		return (NULL);
-	while (**tokens && (ft_strncmp("&&", **tokens, 0) == 0 || ft_strncmp("||", **tokens, 0) == 0))
+	while (**token && (ft_strncmp("&&", **token, 0) == 0 || \
+	ft_strncmp("||", **token, 0) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;

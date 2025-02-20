@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
 /*   Updated: 2025/02/19 16:28:57 by achu             ###   ########.fr       */
@@ -60,11 +60,10 @@ char	*check_and_parse(char *line)
 	result = checker(tokens);
 	free_tab(tokens);
 	if (!result)
-		return (ft_printf("\nCa fonctionne pas\n"), free(line), NULL);
-	if (ft_strncmp(result, "ok\0", 3) != 0)
+		return (free(line), NULL);
+	if (ft_strncmp(result, "0x20200487515969614000", 23) != 0)
 		return (check_and_parse(result));
-	else
-		return (line);
+	return (free_tab(data.shell), line);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -102,7 +101,11 @@ int	main(int ac, char **av, char **envp)
 		add_history(line);
 		//dispatch(line, data.envp, 0);
 	}
-	free(line);
+	if (line)
+		free(line);
+	if (data.shell)
+		free_tab(data.shell);
+	free_node(test);
 	rl_clear_history();
 	return (exit(0), 0);
 }

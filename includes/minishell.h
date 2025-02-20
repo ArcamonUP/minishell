@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
 /*   Updated: 2025/02/19 16:02:40 by achu             ###   ########.fr       */
@@ -19,12 +19,7 @@
 # include <sys/types.h>
 # include "pipex.h"
 
-# define RET_PARENTHESIS 1
-# define RET_OPERATOR 2
-# define RET_NOTIMPLEMENTED 3
-# define RET_NOFILE 4
-# define RET_NOPERMISSIONS 5
-# define RET_NEWLINE 6
+
 
 typedef struct s_lstfd
 {
@@ -51,6 +46,22 @@ typedef enum
 	FILENAME,
 	CMD,
 }	e_type;
+
+typedef enum e_ret
+{
+	RET_PARENTHESIS = 1,
+	RET_OPERATOR = 2,
+	RET_NOTIMPLEMENTED = 3,
+	RET_NOFILE = 4,
+	RET_NOPERMISSIONS = 5,
+	RET_NEWLINE = 6,
+}	t_ret;
+
+typedef struct t_data
+{
+	char	**envp;
+	char	**shell;
+}	t_data;
 
 typedef struct s_node
 {
@@ -83,8 +94,9 @@ int		ft_exec_trunc(t_node *node, t_shell *data);
 
 //checkers_utils
 void	check_error(char *line, int ret);
-char	*handle_missings(void);
-char	*add_space(char *str);
+char	*handle_missings(char *to_parse);
+char	*add_char(char *str, char c);
+int		wait_next(char **line, int *i, int *y, char c);
 
 //checker
 char	*checker(char **line);
@@ -105,10 +117,34 @@ void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
 __pid_t	ft_exec(char *cmd, char **envp);
 
-t_lstfd	*ft_lstfd_new(int fd);
-void	ft_lstfd_add_back(t_lstfd **lst, t_lstfd *new);
-void	ft_lstfd_clear(t_lstfd **lst);
+//free
+void	free_node(t_node *node);
+void	free_tab(char **tab);
+void	clear_double(char **ptr);
 
+//tokenize
+char	**ft_tokenize(const char *line);
+
+//tokenize_utils
+int		is_space(const char c);
+int		is_operator(const char c);
+char	*ft_strndup(char *src, int len);
+int		ft_token_count(const char *line);
+int		get_index(const char *line, int i);
+
+//parser
+t_node	*ft_parse_and_or(char ***token);
+
+//parser_utils
+t_type	ft_opcmp(char *str);
 int		is_redir(char *str);
+t_node	*ft_node_new(char *str, t_type type);
+void	ft_printtree(t_node *tree, int depth);
+
+/*
+/!\
+PRINTTREE A ENLEVER A LA FIN
+/!\
+*/
 
 #endif

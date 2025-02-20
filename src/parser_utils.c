@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
 /*   Updated: 2025/02/19 16:02:03 by achu             ###   ########.fr       */
@@ -45,7 +45,7 @@ int	is_redir(char *str)
 	return (0);
 }
 
-t_node	*ft_node_new(char *str, e_type type)
+t_node	*ft_node_new(char *str, t_type type)
 {
 	t_node	*node;
 

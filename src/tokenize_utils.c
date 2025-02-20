@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
 /*   Updated: 2025/02/19 16:28:09 by achu             ###   ########.fr       */
@@ -52,9 +52,10 @@ int	ft_token_count(const char *line)
 	char	op;
 
 	count = 0;
-	while (*line)
+	i = 0;
+	while (line[i])
 	{
-		if (*line && is_operator(*line))
+		if (line[i] && is_operator(line[i]))
 		{
 			op = *line;
 			count++;

@@ -6,15 +6,45 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 15:06:40 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:24:27 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int	check_redirection(char **line, int i)
+int	count_all(char **line, int parenthesis, int i, int check)
 {
+	int	y;
+
+	while (line[i])
+	{
+		y = 0;
+		while (line[i][y])
+		{
+			if (check == 0 && line[i][y] == '\'')
+				check = wait_next(line, &i, &y, '\'');
+			if (check == 0 && line[i][y] == '\"')
+				check = wait_next(line, &i, &y, '\"');
+			if (check == 0 && line[i][y] == '(')
+				parenthesis++;
+			if (check == 0 && line[i][y] == ')')
+				parenthesis--;
+			if (parenthesis < 0)
+				return (check_error(line[i], RET_PARENTHESIS), 2);
+			if (check == 1)
+				return (1);
+			y++;
+		}
+		i++;
+	}
+	return (parenthesis != 0);
+}
+
+int	check_possible(char **line, int i)
+{
+	if (ft_strncmp(line[i], "&", 1) == 0 && ft_strncmp(line[i], "&&\0", 3) != 0)
+		return (check_error(line[i], RET_NOTIMPLEMENTED), 0);
 	if (ft_strncmp(line[i], "<\0", 2) == 0 || ft_strncmp(line[i], ">\0", 2) == 0 \
 	|| ft_strncmp(line[i], ">>\0", 3) == 0)
 	{
@@ -32,24 +62,9 @@ int	check_redirection(char **line, int i)
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
 	}
+	if (ft_strncmp(line[i], ">", 1) == 0 || ft_strncmp(line[i], "<", 1) == 0)
+		return (check_error(line[i], RET_OPERATOR), 1);
 	return (0);
-}
-
-int	check_possible(char **line, int *parenthesis, int i)
-{
-	if (ft_strncmp(line[i], "(\0", 3) == 0)
-	{
-		(*parenthesis)++;
-		return (0);
-	}
-	if (ft_strncmp(line[i], ")\0", 3) == 0)
-	{
-		(*parenthesis)--;
-		return (0);
-	}
-	if (ft_strncmp(line[i], "&", 1) == 0 && ft_strncmp(line[i], "&&\0", 3) != 0)
-		return (check_error(line[i], RET_NOTIMPLEMENTED), 0);
-	return (check_redirection(line, i));
 }
 
 int	check_bords(char **line, int i)
@@ -73,42 +88,42 @@ char	*missing_elements(char **line)
 {
 	char	*to_parse;
 	char	*temp;
-	char	*temp2;
 	int		i;
 
 	to_parse = line[0];
 	i = 1;
 	while (line[i])
 	{
-		temp = add_space(to_parse);
+		temp = add_char(to_parse, ' ');
 		if (!temp)
-			return (NULL);
+			return (free_tab(line), NULL);
 		to_parse = ft_strjoin(temp, line[i]);
-		(free(temp), free(line[i]));
+		free(temp);
 		if (!to_parse)
-			return (NULL);
+			return (free_tab(line), NULL);
 		i++;
 	}
-	temp2 = handle_missings();
-	to_parse = add_space(to_parse);
-	if (!temp2 || !to_parse)
-		return (free(line), to_parse);
-	temp = ft_strjoin(to_parse, temp2);
-	(free(to_parse), free(temp2), free(line));
-	return (temp);
+	temp = handle_missings(to_parse);
+	if (!temp)
+		return (free_tab(line), NULL);
+	return (free_tab(line), temp);
 }
 
 char	*checker(char **line)
 {
-	int	parenthesis;
 	int	i;
+	int	check;
 
-	parenthesis = 0;
 	i = 0;
+	check = count_all(line, 0, 0, 0);
+	if (check == 2)
+		return (NULL);
+	if (check == 1)
+		return (missing_elements(line));
 	while (line[i])
 	{
-		if (check_possible(line, &parenthesis, i) || parenthesis < 0)
-			return (check_error(line[i], RET_PARENTHESIS), NULL);
+		if (check_possible(line, i))
+			return (NULL);
 		if (ft_strncmp(line[i], "&&\0", 3) == 0 || \
 		ft_strncmp(line[i], "||\0", 3) == 0 || \
 		ft_strncmp(line[i], "|\0", 2) == 0)
@@ -120,7 +135,5 @@ char	*checker(char **line)
 		}
 		i++;
 	}
-	if (parenthesis > 0)
-		return (missing_elements(line));
-	return ("ok");
+	return ("0x20200487515969614000");
 }

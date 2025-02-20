@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/10 16:17:40 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:24:01 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,35 @@ void	check_error(char *line, int ret)
 		check_error_2(line, ret);
 }
 
-char	*handle_missings(void)
+char	*handle_missings(char *to_parse)
 {
 	char	*line;
+	char	*temp;
 
 	line = readline("> ");
-	return (line);
+	if (!line)
+		return (free(to_parse), NULL);
+	temp = add_char(to_parse, '\n');
+	free(to_parse);
+	to_parse = temp;
+	if (!to_parse)
+		return (free(line), NULL);
+	temp = ft_strjoin(to_parse, line);
+	(free(to_parse), free(line));
+	if (!temp)
+		return (NULL);
+	return (temp);
 }
 
-char	*add_space(char *str)
+char	*add_char(char *str, char c)
 {
 	char	*result;
 	int		size;
 	int		i;
 
 	i = 0;
-	size = ft_strlen(str) + 2;
-	result = ft_calloc(size, sizeof(char));
+	size = ft_strlen(str) + 1;
+	result = ft_calloc(size + 1, sizeof(char));
 	if (!result)
 		return (free(str), NULL);
 	while (str[i])
@@ -84,8 +96,26 @@ char	*add_space(char *str)
 		result[i] = str[i];
 		i++;
 	}
-	result[i] = ' ';
+	result[i] = c;
 	result[i + 1] = '\0';
 	free(str);
 	return (result);
+}
+
+int	wait_next(char **line, int *i, int *y, char c)
+{
+	(*y)++;
+	while (line[*i])
+	{
+		while (line[*i][*y] && line[*i][*y] != c)
+			(*y)++;
+		if (!line[*i][*y])
+		{
+			(*i)++;
+			*y = 0;
+		}
+		else
+			return (0);
+	}
+	return (1);
 }
