@@ -15,24 +15,24 @@
 
 // If the left node executed successfully
 // then the right node is executed
-int	ft_exec_and(t_node *node, t_shell *data)
+int	ft_exec_and(t_node *tree, t_shell *data)
 {
 	int	left;
 
-	left = ft_execute_tree(node->left, data);
+	left = ft_execute_tree(tree->left, data);
 	if (left == 0)
-		return (ft_execute_tree(node->right, data));
+		return (ft_execute_tree(tree->right, data));
 	return (left);
 }
 
 // If the left node executed unsuccessfully
 // then the right node is executed
-int	ft_exec_or(t_node *node, t_shell *data)
+int	ft_exec_or(t_node *tree, t_shell *data)
 {
 	int	left;
 
-	left = ft_execute_tree(node->left, data);
+	left = ft_execute_tree(tree->left, data);
 	if (left != 0)
-		return (ft_execute_tree(node->right, data));
+		return (ft_execute_tree(tree->right, data));
 	return (left);
 }

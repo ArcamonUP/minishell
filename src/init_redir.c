@@ -70,9 +70,9 @@ void	ft_init_fdio(t_shell *data, t_node *tree)
 	else if (tree->type == INPUT)
 		fd = open(tree->right->str, O_RDONLY);
 	else if (tree->type == APPEND)
-		fd = open(tree->right->str, O_WRONLY | O_APPEND | O_CREAT | 0644);
+		fd = open(tree->right->str, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else if (tree->type == TRUNC)
-		fd = open(tree->right->str, O_WRONLY | O_TRUNC | O_CREAT | 0644);
+		fd = open(tree->right->str, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd != -1)
 		ft_add_fdio(data, fd, tree->type);
 	ft_init_fdio(data, tree->right);

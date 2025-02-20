@@ -14,44 +14,44 @@
 
 t_lstfd	*ft_lstfd_new(int fd)
 {
-	t_lstfd	*result;
+	t_lstfd	*new;
 
-	result = (t_lstfd *)malloc(sizeof(*result));
-	if (!result)
+	new = (t_lstfd *)malloc(sizeof(t_lstfd));
+	if (!new)
 		return (NULL);
-	result->fd = fd;
-	result->next = NULL;
-	return (result);
+	new->fd = fd;
+	new->next = NULL;
+	return (new);
 }
 
-void	ft_lstfd_add_back(t_lstfd **lst, t_lstfd *new)
+void	ft_lstfd_add_back(t_lstfd **list, t_lstfd *new)
 {
 	t_lstfd	*temp;
 
-	temp = *lst;
-	if (!new || !lst)
+	if (!new || !list)
 		return ;
-	if (!*lst)
+	if (!*list)
 	{
-		*lst = new;
+		*list = new;
 		return ;
 	}
+	temp = *list;
 	while (temp->next)
 		temp = temp->next;
 	temp->next = new;
 }
 
-void	ft_lstfd_clear(t_lstfd **lst)
+void	ft_lstfd_clear(t_lstfd **list)
 {
 	t_lstfd	*temp;
 
-	temp = *lst;
-	if (!lst)
+	temp = *list;
+	if (!list)
 		return ;
-	while (*lst && lst)
+	while (*list && list)
 	{
-		temp = (*lst)->next;
-		free(lst);
-		*lst = temp;
+		temp = (*list)->next;
+		free(list);
+		*list = temp;
 	}
 }

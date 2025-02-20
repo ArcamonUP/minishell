@@ -31,6 +31,10 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 		path = get_path(cmd[0], data->envp);
 		if (!path)
 			exit(127);
+		if (node->fdin)
+			dup2(node->fdin, STDIN_FILENO);
+		if (node->fdout)
+			dup2(node->fdout, STDOUT_FILENO);
 		execve(path, cmd, NULL);
 		free_tab(cmd);
 		ft_printf("Error: command failed\n");

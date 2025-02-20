@@ -82,12 +82,12 @@ t_node	*ft_parse_shell(char **token);
 
 //executing tree
 int		ft_execute_tree(t_node *node, t_shell *data);
-int		ft_exec_and(t_node *node, t_shell *data);
-int		ft_exec_or(t_node *node, t_shell *data);
-int		ft_exec_heredoc(t_node *node, t_shell *data);
-int		ft_exec_input(t_node *node, t_shell *data);
-int		ft_exec_append(t_node *node, t_shell *data);
-int		ft_exec_trunc(t_node *node, t_shell *data);
+int		ft_exec_and(t_node *tree, t_shell *data);
+int		ft_exec_or(t_node *tree, t_shell *data);
+int		ft_exec_heredoc(t_node *tree, t_shell *data);
+int		ft_exec_input(t_node *tree, t_shell *data);
+int		ft_exec_append(t_node *tree, t_shell *data);
+int		ft_exec_trunc(t_node *tree, t_shell *data);
 
 //checkers_utils
 void	check_error(char *line, int ret);

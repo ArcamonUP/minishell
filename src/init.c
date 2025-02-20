@@ -85,6 +85,8 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 		perror("Envp missing");
 		return (data);
 	}
+	data.fdin = NULL;
+	data.fdout = NULL;
 	data.envp = envp;
 	return (data);
 }

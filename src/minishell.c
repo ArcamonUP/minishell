@@ -72,6 +72,8 @@ int	main(int ac, char **av, char **envp)
 
 	((void)ac, (void)av);
 	i = 0;
+	data.fdin = NULL;
+	data.fdout = NULL;
 	data.envp = envp;
 	while (1)
 	{
@@ -90,11 +92,11 @@ int	main(int ac, char **av, char **envp)
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
 		tree = ft_parse_shell(tokens);
-		//ft_init_fdin(test, &data);			//Fonction aui initialise les heredoc redir ...
-		int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
-		ft_print_tree(tree, i);
-		ft_printf("----------------\n");
-		//ft_execute_tree(test, &data);
+		ft_init_fdio(&data, tree);			//Fonction aui initialise les heredoc redir ...
+		// int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
+		// ft_print_tree(tree, i);
+		// ft_printf("----------------\n");
+		ft_execute_tree(tree, &data);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
 		free_node(tree);
