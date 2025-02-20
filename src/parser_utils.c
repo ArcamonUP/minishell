@@ -45,7 +45,7 @@ int	is_redir(char *str)
 	return (0);
 }
 
-t_node	*ft_node_new(char *str, t_type type)
+t_node	*ft_node_new(char *str, e_type type)
 {
 	t_node	*node;
 

@@ -131,8 +131,8 @@ static t_node	*ft_parse_and_or(char ***tokens)
 	node = ft_parse_pipe(tokens);
 	if (!node)
 		return (NULL);
-	while (**token && (ft_strncmp("&&", **token, 0) == 0 || \
-	ft_strncmp("||", **token, 0) == 0))
+	while (**tokens && (ft_strncmp("&&", **tokens, 0) == 0 || \
+	ft_strncmp("||", **tokens, 0) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;

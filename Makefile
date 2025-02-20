@@ -28,9 +28,8 @@ SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		parser.c parser_utils.c \
 		checker.c checker_utils.c \
 		exec.c exec_and_or.c exec_redir.c \
-		utils.c init.c init_redir.c utils_lstfd.c \
-		utils.c free.c init.c \
-		minishell.c
+		utils.c init.c init_redir.c utils_lstfd.c free.c \
+		minishell.c \
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
 

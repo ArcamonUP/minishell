@@ -18,10 +18,6 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-void	ft_print_tree(t_node *tree, int depth);
-char	**ft_parse_env(char *envp[]);
-char	**ft_parse_paths(char **env);
-
 int	dispatch(char *line, char **envp, int i)
 {
 	__pid_t	p;
@@ -63,12 +59,13 @@ char	*check_and_parse(char *line)
 		return (free(line), NULL);
 	if (ft_strncmp(result, "0x20200487515969614000", 23) != 0)
 		return (check_and_parse(result));
-	return (free_tab(data.shell), line);
+	return (line);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	data;
+	t_node *tree;
 	int		i;
 	char	*line;
 	char	**tokens;
@@ -89,23 +86,21 @@ int	main(int ac, char **av, char **envp)
 		tokens = ft_tokenize(line);
 		if (!tokens)
 			return (free(line), rl_clear_history(), exit(0), 0);	
-		// for (size_t i = 0; tokens[i]; i++)
+		// for (size_t i = 0; tokens[i]; i++)	//Pour montrer les tokens de la cmd shell
 		// 	ft_printf("%s\n", tokens[i]);
 		// ft_printf("-----------\n");
-		t_node *test = ft_parse_shell(tokens);
-		//ft_init_fdin(test, &data);
-		int i = 0;
-		ft_print_tree(test, i);
+		tree = ft_parse_shell(tokens);
+		//ft_init_fdin(test, &data);			//Fonction aui initialise les heredoc redir ...
+		int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
+		ft_print_tree(tree, i);
 		ft_printf("----------------\n");
 		//ft_execute_tree(test, &data);
 		add_history(line);
 		//dispatch(line, data.envp, 0);
+		free_node(tree);
 	}
 	if (line)
 		free(line);
-	if (data.shell)
-		free_tab(data.shell);
-	free_node(test);
 	rl_clear_history();
 	return (exit(0), 0);
 }

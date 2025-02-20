@@ -52,10 +52,9 @@ int	ft_token_count(const char *line)
 	char	op;
 
 	count = 0;
-	i = 0;
-	while (line[i])
+	while (*line)
 	{
-		if (line[i] && is_operator(line[i]))
+		if (*line && is_operator(*line))
 		{
 			op = *line;
 			count++;
@@ -100,19 +99,4 @@ int	ft_token_count(const char *line)
 			line++;
 	}
 	return (count);
-}
-
-void	clear_double(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (!ptr)
-		return ;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
 }

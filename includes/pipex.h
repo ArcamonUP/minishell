@@ -13,6 +13,7 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# include "minishell.h"
 # include <sys/types.h>
 
 typedef struct t_pipex_data
@@ -28,7 +29,7 @@ typedef struct t_pipex_data
 
 //init
 t_pipex_data	init_pipex(t_node node, char **envp);
-int				get_fd_file(t_node node, char c, int bonus);
+int				get_fd_file(t_node node, char *str, int bonus);
 
 //pipex
 int				exec_bonus(t_pipex_data data);

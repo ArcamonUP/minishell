@@ -17,9 +17,6 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/types.h>
-# include "pipex.h"
-
-
 
 typedef struct s_lstfd
 {
@@ -109,9 +106,6 @@ void	ft_export(char **cmd, char **envp);
 void	ft_pwd(void);
 void	ft_unset(char **cmd, char **envp);
 
-//pipex
-int		pipex(t_pipex_data data);
-
 //utils
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
@@ -132,14 +126,15 @@ char	*ft_strndup(char *src, int len);
 int		ft_token_count(const char *line);
 int		get_index(const char *line, int i);
 
-//parser
-t_node	*ft_parse_and_or(char ***token);
+//utils
+t_lstfd	*ft_lstfd_new(int fd);
+void	ft_lstfd_add_back(t_lstfd **lst, t_lstfd *new);
+void	ft_lstfd_clear(t_lstfd **lst);
 
 //parser_utils
-t_type	ft_opcmp(char *str);
 int		is_redir(char *str);
-t_node	*ft_node_new(char *str, t_type type);
-void	ft_printtree(t_node *tree, int depth);
+char	*get_path(char *cmd, char **envp);
+void	ft_print_tree(t_node *tree, int depth);
 
 /*
 /!\
