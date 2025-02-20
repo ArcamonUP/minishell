@@ -36,6 +36,28 @@ static t_node	*ft_parse_cmd(char ***tokens)
 			return (NULL);
 		return (node);
 	}
+	else if (**tokens && is_redir(**tokens))
+	{
+		op = **tokens;
+		(*tokens)++;
+		file = **tokens;
+		(*tokens)++;
+		right = ft_node_new(file, FILENAME);
+		if (!right)
+			return (NULL);
+		if (**tokens)
+		{
+			node = ft_node_new(**tokens, CMD);
+			if (!node)
+				return (NULL);
+			(*tokens)++;
+		}
+		parent = ft_node_parent(op, node, right);
+		if (!parent)
+			return (NULL);
+		node = parent;
+		return (node);
+	}
 	else
 	{
 		node = ft_node_new(**tokens, CMD);

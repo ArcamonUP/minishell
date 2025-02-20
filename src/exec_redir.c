@@ -18,44 +18,24 @@
 // checking from his left node, right then left, store the heredoc
 int	ft_exec_heredoc(t_node *node, t_shell *data)
 {
-	int	fd;
-
-	fd = open(node->right->str, O_WRONLY | O_APPEND | O_CREAT | 0644);
-	if (fd < 0)
-		return (1);
 	
 	return (ft_execute_tree(node->left, data));
 }
 
 int	ft_exec_input(t_node *node, t_shell *data)
 {
-	int	fd;
-
-	fd = open(node->right->str, O_WRONLY | O_APPEND | O_CREAT | 0644);
-	if (fd < 0)
-		return (1);
 	
 	return (ft_execute_tree(node->left, data));
 }
 
 int	ft_exec_append(t_node *node, t_shell *data)
 {
-	int	fd;
-
-	fd = open(node->right->str, O_WRONLY | O_APPEND | O_CREAT | 0644);
-	if (fd < 0)
-		return (1);
 	
 	return (ft_execute_tree(node->left, data));
 }
 
 int	ft_exec_trunc(t_node *node, t_shell *data)
 {
-	int	fd;
-
-	fd = open(node->right->str, O_WRONLY | O_TRUNC | O_CREAT | 0644);
-	if (fd < 0)
-		return (1);
 	
 	return (ft_execute_tree(node->left, data));
 }
