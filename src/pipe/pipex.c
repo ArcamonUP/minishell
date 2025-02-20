@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/04 15:54:58 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:55:42 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,24 @@ static int	do_cmd(t_pipex_data data)
 	return (y);
 }
 
-int	pipex(t_pipex_data data)
+//Ne gere pas encore <<
+//Il y a un pb avec le if data.limiter : Il faut ouvrir que outfile dans ce cas : ou il est ?
+int	pipex(t_node node, char **envp)
 {
+	t_pipex_data	data;
+
+	data = init_pipex(node, envp);
 	if (data.limiter != NULL)
 	{
-		data.fd[1] = open(data.outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		data.fd[1] = get_fd_file(node, ">>", 1);
 		data.fd[0] = -1;
 		if (data.fd[1] == -1 || !exec_bonus(data))
 			return (end(data, 1), 1);
 	}
 	else
 	{
-		data.fd[0] = open(data.infile, O_RDONLY);
-		data.fd[1] = open(data.outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		data.fd[0] = get_fd_file(node, "<", 0);
+		data.fd[1] = get_fd_file(node, ">", 0);
 		if (data.fd[0] == -1 || data.fd[1] == -1)
 			return (end(data, 0), 1);
 		dup2(data.fd[0], STDIN_FILENO);
