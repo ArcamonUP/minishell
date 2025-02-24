@@ -42,7 +42,7 @@ static int	ft_limiter(char *limit)
 }
 
 // Add the fd to the right linked list
-static void	ft_add_fdio(t_shell *data, int fd, e_type op)
+static void	ft_add_fdio(t_shell *data, int fd, t_type op)
 {
 	t_lstfd	*newfd;
 

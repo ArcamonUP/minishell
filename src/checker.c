@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:27 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:51:56 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,18 @@ char	*missing_elements(char **line)
 	{
 		temp = add_char(to_parse, ' ');
 		if (!temp)
-			return (free_tab(line), NULL);
+			return (NULL);
 		to_parse = ft_strjoin(temp, line[i]);
 		free(temp);
 		if (!to_parse)
-			return (free_tab(line), NULL);
+			return (NULL);
 		i++;
 	}
 	temp = handle_missings(to_parse);
+	free(to_parse);
 	if (!temp)
-		return (free_tab(line), NULL);
-	return (free_tab(line), temp);
+		return (NULL);
+	return (temp);
 }
 
 char	*checker(char **line)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 14:48:31 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/24 11:33:32 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 
 	((void)ac, (void)av);
 	data.envp = NULL;
-	*line = NULL;
 	rl_catch_signals = 0;
 	if (signal(SIGINT, ctrl_c) == SIG_ERR || \
 	signal(SIGQUIT, SIG_IGN) == SIG_ERR)
@@ -86,7 +85,9 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 		return (data);
 	}
 	data.fdin = NULL;
+	*line = NULL;
 	data.fdout = NULL;
+	data.line = NULL;
 	data.envp = envp;
 	return (data);
 }
