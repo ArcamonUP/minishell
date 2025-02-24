@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/19 16:28:57 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/24 12:36:59 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,75 +52,60 @@ char	*check_and_parse(char *line)
 
 	tokens = ft_tokenize(line);
 	if (!tokens)
-		return (free(line), rl_clear_history(), exit(0), NULL);
+		return (free(line), NULL);
 	result = checker(tokens);
 	free_tab(tokens);
 	if (!result)
 		return (free(line), NULL);
 	if (ft_strncmp(result, "0x20200487515969614000", 23) != 0)
-		return (check_and_parse(result));
+		return (free(line), check_and_parse(result));
 	return (line);
+}
+
+int	routine(t_shell data, char **line)
+{
+	t_node	*tree;
+
+	if (*line)
+		free(*line);
+	*line = readline("\033[37mminishell$ ");
+	if (!*line || ft_strncmp(*line, "exit\0", 5) == 0)
+		return (1);
+	*line = check_and_parse(*line);
+	if (!*line)
+		return (1);
+	data.line = ft_tokenize(*line);
+	if (!data.line)
+		return (1);
+	tree = ft_parse_shell(data.line);
+	ft_init_fdio(&data, tree);
+	ft_execute_tree(tree, &data);
+	add_history(*line);
+	free_node(tree);
+	free_tab(data.line);
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	data;
-	t_node *tree;
+	t_node	*tree;
 	int		i;
 	char	*line;
 	char	**tokens;
 
 	((void)ac, (void)av);
 	i = 0;
-	data.fdin = NULL;
-	data.fdout = NULL;
-	data.envp = envp;
+	data = init(ac, av, envp, &line);
+	if (!data.envp)
+		return (1);
 	while (1)
 	{
-		if (line)
-			free(line);
-		line = readline("\033[37mminishell$ ");
-		if (!line || ft_strncmp(line, "exit", 0) == 0)
+		if (routine(data, &line))
 			break ;
-		// line = check_and_parse(line);
-		// if (!line)
-		// 	break ;
-		tokens = ft_tokenize(line);
-		if (!tokens)
-			return (free(line), rl_clear_history(), exit(0), 0);	
-		// for (size_t i = 0; tokens[i]; i++)	//Pour montrer les tokens de la cmd shell
-		// 	ft_printf("%s\n", tokens[i]);
-		// ft_printf("-----------\n");
-		tree = ft_parse_shell(tokens);
-		ft_init_fdio(&data, tree);			//Fonction aui initialise les heredoc redir ...
-		// int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
-		// ft_print_tree(tree, i);
-		// ft_printf("----------------\n");
-		ft_execute_tree(tree, &data);
-		add_history(line);
-		//dispatch(line, data.envp, 0);
-		free_node(tree);
 	}
 	if (line)
 		free(line);
 	rl_clear_history();
 	return (exit(0), 0);
 }
-
-/*
-//Pour appeller pipex:
-int	main(int ac, char **av, char **envp)
-{
-	t_pipex_data	data;
-
-	(void)ac;
-	(void)av;
-	data.infile = "Makefile";
-	data.outfile = "outfile";
-	data.limiter = NULL;
-	data.cmd = ft_split("env*ls", '*');
-	data.envp = envp;
-	pipex(data);
-	return (0);
-}
-*/

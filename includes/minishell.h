@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/19 16:02:40 by achu             ###   ########.fr       */
+/*   Updated: 2025/02/24 11:33:40 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ typedef struct s_shell
 	char	**envp;
 	t_lstfd	*fdin;
 	t_lstfd	*fdout;
+	char	**line;
 }	t_shell;
 
-typedef enum
+typedef enum e_type
 {
 	PIPE,
 	AND,
@@ -42,7 +43,7 @@ typedef enum
 	HEREDOC,
 	FILENAME,
 	CMD,
-}	e_type;
+}	t_type;
 
 typedef enum e_ret
 {
@@ -54,15 +55,9 @@ typedef enum e_ret
 	RET_NEWLINE = 6,
 }	t_ret;
 
-typedef struct t_data
-{
-	char	**envp;
-	char	**shell;
-}	t_data;
-
 typedef struct s_node
 {
-	e_type			type;
+	t_type			type;
 	char			*str;
 	struct s_node	*left;
 	struct s_node	*right;

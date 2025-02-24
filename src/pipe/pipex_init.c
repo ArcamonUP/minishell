@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/20 13:52:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:12:25 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char	*get_limiter(t_node node)
 	char	*result;
 
 	result = NULL;
-	while (node.right && node.str != ">>")
+	while (node.right && ft_strncmp(node.str, ">>\0", 3) != 0)
 		node = *(node.right);
-	if (node.str == ">>" && node.right)
+	if (ft_strncmp(node.str, ">>\0", 3) == 0 && node.right)
 	{
 		result = ft_strdup(node.right->str);
 		if (!result)
