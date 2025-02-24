@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/02/24 11:25:07 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:14:52 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,36 +83,7 @@ void	ft_print_tree(t_node *tree, int depth)
 		return ;
 	for (int i = 0; i < depth; i++)
 		ft_printf("    ");
-	switch (tree->type)
-	{
-		case PIPE:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case AND:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case OR:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case INPUT:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case TRUNC:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case APPEND:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case HEREDOC:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case CMD:
-			ft_printf("%s\n", tree->str);
-			break ;
-		case FILENAME:
-			ft_printf("%s\n", tree->str);
-			break ;
-	}
+	ft_printf("%s\n", tree->str);
 	ft_print_tree(tree->left, depth + 1);
 	ft_print_tree(tree->right, depth + 1);
 }

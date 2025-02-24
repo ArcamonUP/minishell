@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 12:51:56 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:09:50 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	check_possible(char **line, int i)
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
 	}
-	if (ft_strncmp(line[i], ">", 1) == 0 || ft_strncmp(line[i], "<", 1) == 0)
-		return (check_error(line[i], RET_OPERATOR), 1);
 	return (0);
 }
 

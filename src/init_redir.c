@@ -29,7 +29,8 @@ static int	ft_limiter(char *limit)
 	{
 		ft_printf("> ");
 		line = get_next_line(STDIN_FILENO);
-		if (ft_strncmp(line, limit, len) == 0 && (line[len] == '\0' || line[len] == '\n'))
+		if (ft_strncmp(line, limit, len) == 0 && (line[len] == '\0' || \
+		line[len] == '\n'))
 		{
 			free(line);
 			break ;
