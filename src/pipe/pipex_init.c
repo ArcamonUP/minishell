@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 11:12:25 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:52:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ t_pipex_data	init_pipex(t_node node, char **envp)
 	if (node.left->type == CMD)
 		temp[0] = ft_strdup(node.left->str);
 	else
-		temp[0] = ft_strjoin("echo ", node.left->str); //Ici node.left->str doit etre remplace
-		//par une fonction qui va chercher le contenu de la variable (un exec)
+		temp[0] = ft_strjoin("echo ", node.left->str);
+		//Ici node.left->str doit etre remplace par une fonction
+		//qui va chercher le contenu de la variable (un exec)
 	if (!temp[0])
 		return (error("Malloc failed.", NULL), free_tab(temp), data);
 	if (node.right->type == CMD)

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/20 13:55:42 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:30:06 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,11 @@ static int	do_cmd(t_pipex_data data)
 	return (y);
 }
 
-//Ne gere pas encore <<
-//Il y a un pb avec le if data.limiter : Il faut ouvrir que outfile dans ce cas : ou il est ?
-int	pipex(t_node node, char **envp)
+int	pipex(t_node node, t_shell shell_data)
 {
 	t_pipex_data	data;
 
-	data = init_pipex(node, envp);
+	data = init_pipex(node, shell_data.envp);
 	if (data.limiter != NULL)
 	{
 		data.fd[1] = get_fd_file(node, ">>", 1);

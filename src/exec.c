@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/02/24 11:55:05 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:49:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data)
 
 int	ft_execute_tree(t_node *node, t_shell *data)
 {
+	ft_print_tree(node, 0); //A enlever plus tard.
 	if (!node)
 		return (0);
 	else if (node->type == CMD)
@@ -57,7 +58,7 @@ int	ft_execute_tree(t_node *node, t_shell *data)
 	else if (node->type == OR)
 		return (ft_exec_or(node, data));
 	else if (node->type == PIPE)
-		return (0);
+		return (pipex(node, data));
 	else if (node->type == HEREDOC)
 		return (ft_exec_heredoc(node, data));
 	else if (node->type == INPUT)
