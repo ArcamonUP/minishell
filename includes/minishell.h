@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 11:33:40 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:11:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_shell
 	char	**envp;
 	t_lstfd	*fdin;
 	t_lstfd	*fdout;
-	char	**line;
 }	t_shell;
 
 typedef enum e_type
@@ -130,6 +129,9 @@ void	ft_lstfd_clear(t_lstfd **lst);
 int		is_redir(char *str);
 char	*get_path(char *cmd, char **envp);
 void	ft_print_tree(t_node *tree, int depth);
+
+//pipex
+int		pipex(t_node *node, t_shell *shell_data);
 
 /*
 /!\

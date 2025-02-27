@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 13:30:06 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:39:56 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,25 +122,14 @@ static int	do_cmd(t_pipex_data data)
 	return (y);
 }
 
-int	pipex(t_node node, t_shell shell_data)
+int	pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
 
-	data = init_pipex(node, shell_data.envp);
-	if (data.limiter != NULL)
-	{
-		data.fd[1] = get_fd_file(node, ">>", 1);
-		data.fd[0] = -1;
-		if (data.fd[1] == -1 || !exec_bonus(data))
-			return (end(data, 1), 1);
-	}
-	else
-	{
-		data.fd[0] = get_fd_file(node, "<", 0);
-		data.fd[1] = get_fd_file(node, ">", 0);
-		if (data.fd[0] == -1 || data.fd[1] == -1)
-			return (end(data, 0), 1);
-		dup2(data.fd[0], STDIN_FILENO);
-	}
+	data = init_pipex(node, shell_data);
+	data.fd[0] = -1;
+	data.fd[1] = node->fdout;
+	if (data.fd[1] == -1)
+		return (end(data, 1), 1);
 	return (do_cmd(data));
 }
