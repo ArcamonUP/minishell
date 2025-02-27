@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 14:16:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:49:52 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,10 @@ char	*check_and_parse(char *line)
 	return (line);
 }
 
-void	ft_printtab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		ft_printf("%s\n", tab[i]);
-		i++;
-	}
-}
-
 int	routine(t_shell data, char *line)
 {
+	//Le ^C ne s'affiche plus quand on fait un ctrl-c, idk why.
+	//J'ai rien touhe, il a juste disparu
 	t_node	*tree;
 	char	**temp;
 
@@ -83,7 +73,7 @@ int	routine(t_shell data, char *line)
 		free(line);
 	line = readline("\033[37mminishell$ ");
 	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
-		return (1);
+		return (write(1, "exit\n", 5), 1);
 	line = check_and_parse(line);
 	if (!line)
 		return (1);
