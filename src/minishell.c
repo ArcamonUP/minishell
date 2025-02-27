@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 12:36:59 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:16:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,40 @@ char	*check_and_parse(char *line)
 	return (line);
 }
 
-int	routine(t_shell data, char **line)
+void	ft_printtab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		ft_printf("%s\n", tab[i]);
+		i++;
+	}
+}
+
+int	routine(t_shell data, char *line)
 {
 	t_node	*tree;
+	char	**temp;
 
-	if (*line)
-		free(*line);
-	*line = readline("\033[37mminishell$ ");
-	if (!*line || ft_strncmp(*line, "exit\0", 5) == 0)
+	if (line)
+		free(line);
+	line = readline("\033[37mminishell$ ");
+	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
 		return (1);
-	*line = check_and_parse(*line);
-	if (!*line)
+	line = check_and_parse(line);
+	if (!line)
 		return (1);
-	data.line = ft_tokenize(*line);
-	if (!data.line)
+	temp = ft_tokenize(line);
+	if (!temp)
 		return (1);
-	tree = ft_parse_shell(data.line);
+	tree = ft_parse_shell(temp);
 	ft_init_fdio(&data, tree);
 	ft_execute_tree(tree, &data);
-	add_history(*line);
+	add_history(line);
 	free_node(tree);
-	free_tab(data.line);
+	free_tab(temp);
 	return (0);
 }
 
@@ -101,7 +114,7 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		if (routine(data, &line))
+		if (routine(data, line))
 			break ;
 	}
 	if (line)

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 11:33:32 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:11:30 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 	data.fdin = NULL;
 	*line = NULL;
 	data.fdout = NULL;
-	data.line = NULL;
 	data.envp = envp;
 	return (data);
 }

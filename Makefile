@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: achu <achu@student.42.fr>                  +#+  +:+       +#+         #
+#    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/20 13:40:49 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/02/27 14:00:02 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 
 SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
 		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
-		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_heredoc.c pipe/pipex_init.c \
+		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_init.c \
 		tokenize.c tokenize_utils.c \
 		parser.c parser_utils.c \
 		checker.c checker_utils.c \

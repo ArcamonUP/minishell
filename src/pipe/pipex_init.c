@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 13:52:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:47:08 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	get_fd_file(t_node node, char *str, int bonus)
+int	get_fd_file(t_node *node, char *str, int bonus)
 {
 	int	fd;
 
 	fd = -1;
-	while (node.right && ft_strncmp(node.str, str, 2) != 0)
-		node = *(node.right);
-	if (ft_strncmp(node.str, str, 2) == 0 && node.right)
+	while (node->right && ft_strncmp(node->str, str, 2) != 0)
+		node = node->right;
+	if (ft_strncmp(node->str, str, 2) == 0 && node->right)
 	{
 		if (bonus)
-			fd = open(node.right->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
+			fd = open(node->right->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
-			fd = open(node.right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd = open(node->right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd == -1)
 			return (error("Failed to open file.", NULL), -1);
 	}
@@ -53,7 +53,36 @@ char	*get_limiter(t_node node)
 	return (result);
 }
 
-t_pipex_data	init_pipex(t_node node, char **envp)
+char	*get_result(t_node *node, t_shell *shell_data)
+{
+	char	*result;
+	char	*temp;
+	char	*line;
+	int		fd[2];
+
+	line = NULL;
+	if (pipe(fd) == -1)
+		return (NULL);
+	close(fd[0]);
+	dup2(fd[1], STDOUT_FILENO);
+	ft_execute_tree(node, shell_data);
+	temp = get_next_line(fd[1]);
+	while (temp)
+	{
+		result = ft_strjoin(line, temp);
+		if (line)
+			free(line);
+		free(temp);
+		if (!result)
+			return (NULL);
+		line = result;
+		temp = get_next_line(fd[1]);
+	}
+	result = ft_strjoin("echo ", line);
+	return (free(line), result);
+}
+
+t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
 	char			**temp;
@@ -62,23 +91,14 @@ t_pipex_data	init_pipex(t_node node, char **envp)
 	temp = ft_calloc(sizeof(char *), 3);
 	if (!temp)
 		return (error("Malloc failed.", NULL), data);
-	if (node.left->type == CMD)
-		temp[0] = ft_strdup(node.left->str);
-	else
-		temp[0] = ft_strjoin("echo ", node.left->str);
-		//Ici node.left->str doit etre remplace par une fonction
-		//qui va chercher le contenu de la variable (un exec)
+	temp[0] = get_result(node, shell_data);
 	if (!temp[0])
-		return (error("Malloc failed.", NULL), free_tab(temp), data);
-	if (node.right->type == CMD)
-		temp[1] = ft_strdup(node.right->str);
-	else
-		temp[1] = ft_strjoin("echo ", node.right->str); //De meme ici
+		return (error("Execution failed.", NULL), free_tab(temp), data);
+	temp[1] = get_result(node->right, shell_data);
 	if (!temp[1])
-		return (error("Malloc failed.", NULL), free_tab(temp), data);
+		return (error("Execution failed.", NULL), free_tab(temp), data);
 	data.cmd = temp;
-	data.envp = envp;
-	data.limiter = get_limiter(node);
+	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
 	return (data);
 }

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:56 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/20 13:50:55 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:38:42 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 
 typedef struct t_pipex_data
 {
-	char	*infile;
-	char	*limiter;
-	char	*outfile;
 	char	**cmd;
 	char	**envp;
 	pid_t	*pid_tab;
@@ -28,8 +25,8 @@ typedef struct t_pipex_data
 }	t_pipex_data;
 
 //init
-t_pipex_data	init_pipex(t_node node, char **envp);
-int				get_fd_file(t_node node, char *str, int bonus);
+t_pipex_data	init_pipex(t_node *node, t_shell *shell_data);
+int				get_fd_file(t_node *node, char *str, int bonus);
 
 //pipex
 int				exec_bonus(t_pipex_data data);
