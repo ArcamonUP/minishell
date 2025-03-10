@@ -6,14 +6,14 @@
 #    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/27 14:00:02 by kbaridon         ###   ########.fr        #
+#    Updated: 2025/03/10 11:56:20 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 GREEN=\033[0;32m
 ORANGE=\033[38;5;214m
 CC = cc
-CFLAGS = 
+CFLAGS = -Wall -Wextra -Werror -g
 OTHERFLAGS = -lreadline
 SRCDIR = src
 LIBFT = libft

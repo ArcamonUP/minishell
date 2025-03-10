@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 14:49:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:31:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,8 @@ int	routine(t_shell data, char *line)
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	data;
-	t_node	*tree;
 	int		i;
 	char	*line;
-	char	**tokens;
 
 	((void)ac, (void)av);
 	i = 0;

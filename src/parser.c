@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/02/24 11:24:51 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:35:25 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ static t_node	*ft_parse_cmd(char ***tokens)
 		{
 			node = ft_node_new(**tokens, CMD);
 			if (!node)
-				return (NULL);
+				return (free_node(right), NULL);
 			(*tokens)++;
 		}
+		else
+			node = NULL;
 		parent = ft_node_parent(op, node, right);
 		if (!parent)
 			return (NULL);
