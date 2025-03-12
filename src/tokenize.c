@@ -6,14 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/10 10:27:24 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:18:32 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-static char	*ft_token_op(const char *line)
+char	*ft_token_op(const char *line)
 {
 	int		i;
 	int		len;
@@ -25,7 +25,7 @@ static char	*ft_token_op(const char *line)
 		len++;
 	if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
 		len = 1;
-	str = malloc((len + 1) * sizeof(char));
+	str = ft_calloc((len + 1), sizeof(char));
 	if (!str)
 		return (NULL);
 	while (i < len)
@@ -61,7 +61,7 @@ static int	ft_quote_count(const char *line)
 	return (len);
 }
 
-static char	*ft_token_cmd(const char *line)
+char	*ft_token_cmd(const char *line)
 {
 	int		i;
 	int		len;
@@ -70,7 +70,7 @@ static char	*ft_token_cmd(const char *line)
 
 	i = 0;
 	len = ft_quote_count(line);
-	str = malloc((len + 1) * sizeof(char));
+	str = ft_calloc((len + 1), sizeof(char));
 	if (!str)
 		return (NULL);
 	while (i < len)
@@ -86,7 +86,7 @@ static char	*ft_token_cmd(const char *line)
 	return (trim);
 }
 
-static char	*ft_token_file(const char *line)
+char	*ft_token_file(const char *line)
 {
 	int		i;
 	int		len;
@@ -112,69 +112,27 @@ char	**ft_tokenize(const char *line)
 {
 	int		count;
 	int		i;
-	char	**shell;
+	char	**tokens;
 
 	count = 0;
 	i = 0;
-	shell = (char **)ft_calloc(ft_token_count(line) + 1, sizeof(char *));
-	if (!shell)
+	tokens = ft_calloc(ft_token_count(line) + 1, sizeof(char *));
+	if (!tokens)
 		return (NULL);
-	while (*line)
+	while (line[i])
 	{
-		if (*line && is_operator(*line))
-		{
-			shell[count] = ft_token_op(line);
-			if (!shell[count])
-				return (clear_double(shell), NULL);
-			count++;
-			if (*line == '(' || *line == ')')
-				line++;
-			else
-			{
-				while (*line && is_operator(*line))
-					line++;
-			}
-			if (*line && is_redir(shell[count - 1]))
-			{
-				while (*line && is_space(*line))
-					line++;
-				if (*line)
-				{
-					shell[count] = ft_token_file(line);
-					if (!shell[count])
-						return (clear_double(shell), NULL);
-					count++;
-				}
-				while (*line && !is_space(*line))
-					line++;
-			}
-		}
-		else if (*line && !is_operator(*line))
-		{
-			shell[count] = ft_token_cmd(line);
-			if (!shell[count])
-				return (clear_double(shell), NULL);
-			count++;
-			while (*line && !is_operator(*line))
-			{
-				if (*line && *line == '"')
-				{
-					line++;
-					while (*line && *line != '"')
-						line++;
-				}
-				else if (*line && *line == '\'')
-				{
-					line++;
-					while (*line && *line != '\'')
-						line++;
-				}
-				line++;
-			}
-		}
-		while (*line && is_space(*line))
-			line++;
+		if (count > 0 && is_redir(tokens[count - 1]))
+			tokens[count] = get_redir(line, &i, 0);
+		else if (is_operator(line[i]))
+			tokens[count] = get_operator(line, &i, 0);
+		else
+			tokens[count] = get_cmd(line, &i, 0);
+		if (!tokens[count])
+			return (clear_double(tokens), NULL);
+		count++;
+		while (line[i] && is_space(line[i]))
+			i++;
 	}
-	shell[count] = 0;
-	return (shell);
+	tokens[count] = NULL;
+	return (tokens);
 }

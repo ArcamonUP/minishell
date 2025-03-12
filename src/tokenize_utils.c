@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/02/19 16:28:09 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/12 11:18:55 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,55 +48,20 @@ char	*ft_strndup(char *src, int len)
 
 int	ft_token_count(const char *line)
 {
-	int		count;
-	char	op;
+	int	count;
+	int	i;
 
 	count = 0;
-	while (*line)
+	i = 0;
+	while (line[i])
 	{
-		if (*line && is_operator(*line))
-		{
-			op = *line;
-			count++;
-			if (ft_strncmp("(", line, 1) == 0 || ft_strncmp(")", line, 1) == 0)
-				line++;
-			else
-			{
-				while (*line && is_operator(*line))
-					line++;
-			}
-			if (*line && (op == '<' || op == '>'))
-			{
-				while (*line && is_space(*line))
-					line++;
-				if (*line)
-					count++;
-				while (*line && !is_space(*line))
-					line++;
-			}
-		}
-		else if (*line && !is_operator(*line))
-		{
-			count++;
-			while (*line && !is_operator(*line))
-			{
-				if (*line && *line == '"')
-				{
-					line++;
-					while (*line && *line != '"')
-						line++;
-				}
-				else if (*line && *line == '\'')
-				{
-					line++;
-					while (*line && *line != '\'')
-						line++;
-				}
-				line++;
-			}
-		}
-		while (*line && is_space(*line))
-			line++;
+		if (is_operator(line[i]))
+			get_operator(line, &i, 1);
+		else
+			get_cmd(line, &i, 1);
+		count++;
+		while (line[i] && is_space(line[i]))
+			i++;
 	}
 	return (count);
 }

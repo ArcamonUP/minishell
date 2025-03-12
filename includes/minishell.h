@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 14:11:44 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:18:10 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,20 @@ void	clear_double(char **ptr);
 
 //tokenize
 char	**ft_tokenize(const char *line);
+char	*ft_token_op(const char *line);
+char	*ft_token_cmd(const char *line);
+char	*ft_token_file(const char *line);
 
 //tokenize_utils
 int		is_space(const char c);
 int		is_operator(const char c);
 char	*ft_strndup(char *src, int len);
 int		ft_token_count(const char *line);
-int		get_index(const char *line, int i);
+
+//get_tokenize
+char	*get_redir(const char *line, int *i, int count);
+char	*get_operator(const char *line, int *i, int count);
+char	*get_cmd(const char *line, int *i, int count);
 
 //utils
 t_lstfd	*ft_lstfd_new(int fd);
