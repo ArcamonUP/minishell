@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/12 12:15:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:24:09 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	routine(t_shell data, char *line)
 		free(line);
 	line = readline("\033[37mminishell$ ");
 	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
-		return (write(1, "exit\n", 5), 1);
+		return (free(line), write(1, "exit\n", 5), 1);
 	line = check_and_parse(line);
 	if (!line)
 		return (1);
@@ -84,6 +84,7 @@ int	routine(t_shell data, char *line)
 	ft_init_fdio(&data, tree);
 	ft_execute_tree(tree, &data);
 	add_history(line);
+	free(line);
 	free_node(tree);
 	free_tab(temp);
 	return (0);
