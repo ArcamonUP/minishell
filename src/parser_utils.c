@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/10 12:33:10 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:14:22 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,32 @@
 
 t_type	get_optype(char *str)
 {
-	if (ft_strncmp(str, "|", 0) == 0)
+	if (ft_strncmp(str, "|", ft_strlen(str)) == 0)
 		return (PIPE);
-	else if (ft_strncmp(str, "&&", 0) == 0)
+	else if (ft_strncmp(str, "&&", ft_strlen(str)) == 0)
 		return (AND);
-	else if (ft_strncmp(str, "||", 0) == 0)
+	else if (ft_strncmp(str, "||", ft_strlen(str)) == 0)
 		return (OR);
-	else if (ft_strncmp(str, "<<", 0) == 0)
+	else if (ft_strncmp(str, "<<", ft_strlen(str)) == 0)
 		return (HEREDOC);
-	else if (ft_strncmp(str, ">>", 0) == 0)
+	else if (ft_strncmp(str, ">>", ft_strlen(str)) == 0)
 		return (APPEND);
-	else if (ft_strncmp(str, "<", 0) == 0)
+	else if (ft_strncmp(str, "<", ft_strlen(str)) == 0)
 		return (INPUT);
-	else if (ft_strncmp(str, ">", 0) == 0)
+	else if (ft_strncmp(str, ">", ft_strlen(str)) == 0)
 		return (TRUNC);
 	return (CMD);
 }
 
 int	is_redir(char *str)
 {
-	if (ft_strncmp(str, "<<", 0) == 0)
+	if (ft_strncmp(str, "<<", ft_strlen(str)) == 0)
 		return (1);
-	else if (ft_strncmp(str, ">>", 0) == 0)
+	else if (ft_strncmp(str, ">>", ft_strlen(str)) == 0)
 		return (1);
-	else if (ft_strncmp(str, "<", 0) == 0)
+	else if (ft_strncmp(str, "<", ft_strlen(str)) == 0)
 		return (1);
-	else if (ft_strncmp(str, ">", 0) == 0)
+	else if (ft_strncmp(str, ">", ft_strlen(str)) == 0)
 		return (1);
 	return (0);
 }

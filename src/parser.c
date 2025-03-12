@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/03/10 12:35:25 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/12 12:17:45 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static t_node	*ft_parse_cmd(char ***tokens)
 	char	*op;
 	char	*file;
 
-	if (**tokens && (ft_strncmp("(", **tokens, 0) == 0))
+	if (**tokens && (ft_strncmp("(", **tokens, ft_strlen(**tokens)) == 0))
 	{
 		(*tokens)++;
 		node = ft_parse_and_or(tokens);
-		if (**tokens && (ft_strncmp(")", **tokens, 0) == 0))
+		if (**tokens && (ft_strncmp(")", **tokens, ft_strlen(**tokens)) == 0))
 			(*tokens)++;
 		else
 			return (NULL);
@@ -60,7 +60,7 @@ static t_node	*ft_parse_cmd(char ***tokens)
 		node = parent;
 		return (node);
 	}
-	else
+	else if (**tokens)
 	{
 		node = ft_node_new(**tokens, CMD);
 		if (!node)
@@ -68,6 +68,7 @@ static t_node	*ft_parse_cmd(char ***tokens)
 		(*tokens)++;
 		return (node);
 	}
+	return (NULL);
 }
 
 static t_node	*ft_parse_redir(char ***tokens)
