@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/12 12:45:54 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:17:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,31 +61,3 @@ char	*get_path(char *cmd, char **envp)
 	return (free_tab(path), NULL);
 }
 
-__pid_t	ft_exec(char *cmd, char **envp)
-{
-	char	**args;
-	char	*path;
-	__pid_t	p;
-
-	p = fork();
-	if (p == -1)
-		return (-1);
-	if (p != 0)
-		signal(SIGINT, parent_ctrl_c);
-	if (p == 0)
-	{
-		path = NULL;
-		args = ft_split(cmd, ' ');
-		if (args)
-			path = get_path(args[0], envp);
-		if (!args || !path)
-		{
-			//gestion d'erreurs avec free...
-			exit(0);
-		}
-		execve(path, args, envp);
-		//gestion d'erreurs avec free...
-		exit(0);
-	}
-	return (p);
-}

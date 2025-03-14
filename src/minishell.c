@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 09:04:31 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:17:34 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,6 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
-
-int	dispatch(char *line, char **envp, int i)
-{
-	__pid_t	p;
-
-	//ICI les ft_split sont temporaires, en attendant le parsing.
-	if (ft_strncmp(line, "echo", 4) == 0)
-		return (ft_echo(ft_split(line, ' '), envp), 1);
-	if (ft_strncmp(line, "pwd", 3) == 0)
-		return (ft_pwd(), 1);
-	if (ft_strncmp(line, "cd", 2) == 0)
-		return (ft_cd(ft_split(line, ' ')), 1);
-	if (ft_strncmp(line, "export", 6) == 0)
-		return (ft_export(ft_split(line, ' '), envp), 1);
-	if (ft_strncmp(line, "unset", 5) == 0)
-		return (ft_unset(ft_split(line, ' '), envp), 1);
-	if (ft_strncmp(line, "env", 3) == 0)
-		return (ft_env(envp), 1);
-	if (i == 0)
-	{
-		p = ft_exec(line, envp);
-		waitpid(p, NULL, 0);
-		signal(SIGINT, ctrl_c);
-		return (1);
-	}
-	return (0);
-}
 
 char	*check_and_parse(char *line)
 {
@@ -65,7 +38,7 @@ char	*check_and_parse(char *line)
 int	routine(t_shell data, char *line)
 {
 	//Le ^C ne s'affiche plus quand on fait un ctrl-c, idk why.
-	//J'ai rien touhe, il a juste disparu
+	//J'ai rien touche, il a juste disparu
 	t_node	*tree;
 	char	**temp;
 
@@ -101,8 +74,6 @@ int	main(int ac, char **av, char **envp)
 	((void)ac, (void)av);
 	i = 0;
 	data = init(ac, av, envp, &line);
-	//if (!data.envp)
-		//return (1);
 	while (1)
 	{
 		if (routine(data, line))
@@ -111,5 +82,5 @@ int	main(int ac, char **av, char **envp)
 	if (line)
 		free(line);
 	rl_clear_history();
-	return (exit(0), g_exit_status);
+	exit(g_exit_status);
 }
