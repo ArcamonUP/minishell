@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/03/12 11:18:55 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:59:45 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ int	ft_token_count(const char *line)
 	i = 0;
 	while (line[i])
 	{
+		if (ft_strncmp(">", line + i, 1) == 0 || \
+		ft_strncmp("<", line + i, 1) == 0)
+			count++;
 		if (is_operator(line[i]))
 			get_operator(line, &i, 1);
 		else
