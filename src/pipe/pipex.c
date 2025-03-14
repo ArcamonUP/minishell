@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 13:39:56 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:38:57 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,15 @@ static int	last_exec(t_pipex_data data, int fd)
 static int	do_cmd(t_pipex_data data)
 {
 	int	i;
-	int	x;
 	int	y;
 
 	i = 0;
-	x = 0;
-	if (data.fd[0] == -1)
-	{
-		x = 1;
-		i = 1;
-	}
 	data.pid_tab = ft_calloc(sizeof(pid_t), ft_tablen(data.cmd) + 1);
 	if (!data.pid_tab)
 		return (end(data, 0), 1);
 	while (data.cmd[i + 1])
 	{
-		data.pid_tab[i - x] = pre_exec(data.cmd[i], data);
+		data.pid_tab[i] = pre_exec(data.cmd[i], data);
 		i++;
 	}
 	y = last_exec(data, data.fd[1]);
@@ -127,9 +120,7 @@ int	pipex(t_node *node, t_shell *shell_data)
 	t_pipex_data	data;
 
 	data = init_pipex(node, shell_data);
-	data.fd[0] = -1;
-	data.fd[1] = node->fdout;
-	if (data.fd[1] == -1)
+	if (!data.cmd)
 		return (end(data, 1), 1);
 	return (do_cmd(data));
 }

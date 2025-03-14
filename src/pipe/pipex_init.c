@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 13:47:08 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:40:16 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,27 @@ char	*get_result(t_node *node, t_shell *shell_data)
 	char	*temp;
 	char	*line;
 	int		fd[2];
+	int		s_stdout;
 
-	line = NULL;
+	if (node->type == CMD)
+		return (ft_strdup(node->str));
+	s_stdout = dup(STDOUT_FILENO); //pas protege
+	line = ft_calloc(1, sizeof(char));
+	if (!line)
+		return (error("Malloc failed.\n", NULL), NULL);
 	if (pipe(fd) == -1)
-		return (NULL);
-	close(fd[0]);
-	dup2(fd[1], STDOUT_FILENO);
-	ft_execute_tree(node, shell_data);
-	temp = get_next_line(fd[1]);
+		return (error("Pipe failed.\n", NULL), NULL);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	{
+		close(fd[0]);
+		close(fd[1]);
+		return (error("Dup2 failed.\n", NULL), NULL);
+	}
+	close(fd[1]);
+	ft_execute_tree(node, shell_data, fd[1]);
+	dup2(s_stdout, STDOUT_FILENO); //pas protege
+	close(s_stdout);
+	temp = get_next_line(fd[0]);
 	while (temp)
 	{
 		result = ft_strjoin(line, temp);
@@ -74,10 +87,11 @@ char	*get_result(t_node *node, t_shell *shell_data)
 			free(line);
 		free(temp);
 		if (!result)
-			return (NULL);
+			return (error("Malloc failed.", NULL), NULL);
 		line = result;
-		temp = get_next_line(fd[1]);
+		temp = get_next_line(fd[0]);
 	}
+	close(fd[0]);
 	result = ft_strjoin("echo ", line);
 	return (free(line), result);
 }
@@ -91,7 +105,7 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	temp = ft_calloc(sizeof(char *), 3);
 	if (!temp)
 		return (error("Malloc failed.", NULL), data);
-	temp[0] = get_result(node, shell_data);
+	temp[0] = get_result(node->left, shell_data);
 	if (!temp[0])
 		return (error("Execution failed.", NULL), free_tab(temp), data);
 	temp[1] = get_result(node->right, shell_data);
@@ -100,5 +114,9 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.cmd = temp;
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
+	data.fd[0] = get_fd_file(node, "<\0", 0);
+	data.fd[1] = get_fd_file(node, ">\0", 0);
+	if (data.fd[1] == -1)
+		data.fd[1] = STDOUT_FILENO;
 	return (data);
 }
