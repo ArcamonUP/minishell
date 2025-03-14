@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:16 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:34:31 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:26:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-//A test apres parsing
-void	ft_cd(char **cmd)
+int	ft_cd(char *line)
 {
+	char	**cmd;
+
+	cmd = ft_split(line, ' ');
+	if (!cmd)
+		return (127);
 	if (cmd[2])
 	{
-		ft_putstr_fd("cd: string not in pwd: ", STDERR_FILENO);
-		ft_putstr_fd(cmd[1], 2);
-		write(2, "\n", 1);
-		exit(0);
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (free_tab(cmd), 1);
 	}
 	else if (chdir(cmd[1]) == -1)
 	{
-		ft_putstr_fd("cd: no such file or directory: ", STDERR_FILENO);
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		ft_putstr_fd(cmd[1], 2);
-		write(2, "\n", 1);
-		exit(1);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (free_tab(cmd), 1);
 	}
+	return (free_tab(cmd), 0);
 }

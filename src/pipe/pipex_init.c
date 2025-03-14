@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 09:40:16 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:15:45 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,32 @@ int	get_fd_file(t_node *node, char *str, int bonus)
 	return (fd);
 }
 
-char	*get_limiter(t_node node)
+int	setup_get(char **line, t_node *node, t_shell *shell_data)
 {
-	char	*result;
+	int	stdout;
+	int	fd[2];
 
-	result = NULL;
-	while (node.right && ft_strncmp(node.str, ">>\0", 3) != 0)
-		node = *(node.right);
-	if (ft_strncmp(node.str, ">>\0", 3) == 0 && node.right)
+	stdout = dup(STDOUT_FILENO);
+	if (stdout == -1)
+		return (error("Dup failed.\n", NULL), -1);
+	*line = ft_calloc(1, sizeof(char));
+	if (!*line)
+		return (error("Malloc failed.\n", NULL), close(stdout), -1);
+	if (pipe(fd) == -1)
+		return (free(*line), close(stdout), error("Pipe error.\n", NULL), -1);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
-		result = ft_strdup(node.right->str);
-		if (!result)
-			return (error("Malloc failed.", NULL), NULL);
+		(close(fd[0]), close(fd[1]), close(stdout));
+		return (free(*line), error("Dup2 failed.\n", NULL), -1);
 	}
-	return (result);
+	close(fd[1]);
+	ft_execute_tree(node, shell_data, fd[0]);
+	if (dup2(stdout, STDOUT_FILENO) == -1)
+	{
+		(close(fd[0]), close(stdout));
+		return (free(*line), error("Error.\n", NULL), -1);
+	}
+	return (close(stdout), close(fd[0]), fd[0]);
 }
 
 char	*get_result(t_node *node, t_shell *shell_data)
@@ -58,40 +70,24 @@ char	*get_result(t_node *node, t_shell *shell_data)
 	char	*result;
 	char	*temp;
 	char	*line;
-	int		fd[2];
-	int		s_stdout;
+	int		fd;
 
 	if (node->type == CMD)
 		return (ft_strdup(node->str));
-	s_stdout = dup(STDOUT_FILENO); //pas protege
-	line = ft_calloc(1, sizeof(char));
-	if (!line)
-		return (error("Malloc failed.\n", NULL), NULL);
-	if (pipe(fd) == -1)
-		return (error("Pipe failed.\n", NULL), NULL);
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
-	{
-		close(fd[0]);
-		close(fd[1]);
-		return (error("Dup2 failed.\n", NULL), NULL);
-	}
-	close(fd[1]);
-	ft_execute_tree(node, shell_data, fd[1]);
-	dup2(s_stdout, STDOUT_FILENO); //pas protege
-	close(s_stdout);
-	temp = get_next_line(fd[0]);
+	fd = setup_get(&line, node, shell_data);
+	if (fd < 0)
+		return (NULL);
+	temp = get_next_line(fd);
 	while (temp)
 	{
 		result = ft_strjoin(line, temp);
-		if (line)
-			free(line);
-		free(temp);
+		(free(line), free(temp));
 		if (!result)
 			return (error("Malloc failed.", NULL), NULL);
 		line = result;
-		temp = get_next_line(fd[0]);
+		temp = get_next_line(fd);
 	}
-	close(fd[0]);
+	close(fd);
 	result = ft_strjoin("echo ", line);
 	return (free(line), result);
 }

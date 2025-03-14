@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:02 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:34:47 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 10:58:05 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 //Affiche l'environnement de l'utilisateur
-void	ft_env(char **envp)
+int	ft_env(char **envp)
 {
 	int	i;
 	int	j;
@@ -32,5 +32,5 @@ void	ft_env(char **envp)
 		write(1, "\n", STDOUT_FILENO);
 		i++;
 	}
-	exit(0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 09:09:51 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:19:50 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ void	ft_init_fdio(t_shell *data, t_node *tree);
 
 //minishell
 char	*check_and_parse(char *line);
-int		dispatch(char *line, char **envp, int i);
 char	**ft_tokenize(const char *line);
 t_node	*ft_parse_shell(char **token);
 
@@ -93,12 +92,12 @@ int		wait_next(char **line, int *i, int *y, char c);
 char	*checker(char **line);
 
 //functions
-void	ft_cd(char **cmd);
-void	ft_echo(char **cmd, char **envp);
-void	ft_env(char **envp);
-void	ft_export(char **cmd, char **envp);
-void	ft_pwd(void);
-void	ft_unset(char **cmd, char **envp);
+int		ft_cd(char *line);
+int		ft_echo(char *line, char **envp);
+int		ft_env(char **envp);
+int		ft_export(char *line, char **envp);
+int		ft_pwd(void);
+int		ft_unset(char *line, char **envp);
 
 //utils
 void	ctrl_c(int sig);

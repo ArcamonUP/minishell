@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:36:32 by achu              #+#    #+#             */
-/*   Updated: 2025/02/11 14:35:21 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:00:23 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	*buf;
 	char	*pwd;
@@ -25,5 +25,5 @@ void	ft_pwd(void)
 	write(1, "\n", STDOUT_FILENO);
 	free(pwd);
 	free(buf);
-	exit(0);
+	return (0);
 }

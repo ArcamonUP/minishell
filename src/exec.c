@@ -6,12 +6,35 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/14 09:28:24 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:19:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+void	dispatch(char *line, t_shell *data, int fd)
+{
+	int	exit_code;
+
+	if (ft_strncmp(line, "echo", 4) == 0)
+		exit_code = ft_echo(line, data->envp);
+	else if (ft_strncmp(line, "pwd", 3) == 0)
+		exit_code = ft_pwd();
+	else if (ft_strncmp(line, "cd", 2) == 0)
+		exit_code = ft_cd(line);
+	else if (ft_strncmp(line, "export", 6) == 0)
+		exit_code = ft_export(line, data->envp);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		exit_code = ft_unset(line, data->envp);
+	else if (ft_strncmp(line, "env", 3) == 0)
+		exit_code = ft_env(data->envp);
+	else
+		return ;
+	if (fd > -1)
+		close(fd);
+	exit(exit_code);
+}
 
 static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 {
@@ -25,6 +48,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 		return (0);
 	else if (pid == 0)
 	{
+		dispatch(node->str, data, 1);
 		cmd = ft_split(node->str, ' ');
 		if (!cmd)
 			exit (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:20 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:12:31 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 11:27:02 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,16 @@ char	**add_env(char *arg, char **envp)
 	return (free(envp), temp);
 }
 
-void	ft_export(char **cmd, char **envp)
+int	ft_export(char *line, char **envp)
 {
-	int	i;
+	int		i;
+	char	**cmd;
 
+	cmd = ft_split(line, ' ');
+	if (!cmd)
+		return (127);
 	if (!cmd[1])
-		(print_sorted_env(envp), exit(0));
+		return (print_sorted_env(envp), free_tab(cmd), 0);
 	i = 1;
 	while (cmd[i])
 	{
@@ -95,5 +99,5 @@ void	ft_export(char **cmd, char **envp)
 		}
 		i++;
 	}
-	exit(0);
+	return (free_tab(cmd), 0);
 }
