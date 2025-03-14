@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/11 14:36:22 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:36:13 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	end(t_pipex_data data, int i)
 			close(data.fd[0]);
 	}
 	free_tab(data.cmd);
-	error("Unable to open the files\n", NULL);
+	error("Error\n", NULL);
 }
 
 void	wait_children(t_pipex_data data, pid_t p)

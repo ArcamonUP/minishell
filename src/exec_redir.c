@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 23:16:37 by achu              #+#    #+#             */
-/*   Updated: 2025/02/24 13:50:32 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:10:33 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 // If an heredoc is found, the nearsest command traversing the ast
 // checking from his left node, right then left, store the heredoc
-int	ft_exec_heredoc(t_node *tree, t_shell *data)
+int	ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd)
 {
 	int		fd;
 	t_node	*leaf;
@@ -30,10 +30,10 @@ int	ft_exec_heredoc(t_node *tree, t_shell *data)
 	temp = data->fdin->next;
 	free(data->fdin);
 	data->fdin = temp;
-	return (ft_execute_tree(tree->left, data));
+	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
-int	ft_exec_input(t_node *tree, t_shell *data)
+int	ft_exec_input(t_node *tree, t_shell *data, int pipe_fd)
 {
 	int		fd;
 	t_node	*leaf;
@@ -47,10 +47,10 @@ int	ft_exec_input(t_node *tree, t_shell *data)
 	temp = data->fdin->next;
 	free(data->fdin);
 	data->fdin = temp;
-	return (ft_execute_tree(tree->left, data));
+	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
-int	ft_exec_append(t_node *tree, t_shell *data)
+int	ft_exec_append(t_node *tree, t_shell *data, int pipe_fd)
 {
 	int		fd;
 	t_node	*leaf;
@@ -64,10 +64,10 @@ int	ft_exec_append(t_node *tree, t_shell *data)
 	temp = data->fdout->next;
 	free(data->fdout);
 	data->fdout = temp;
-	return (ft_execute_tree(tree->left, data));
+	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
-int	ft_exec_trunc(t_node *tree, t_shell *data)
+int	ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd)
 {
 	int		fd;
 	t_node	*leaf;
@@ -81,5 +81,5 @@ int	ft_exec_trunc(t_node *tree, t_shell *data)
 	temp = data->fdout->next;
 	free(data->fdout);
 	data->fdout = temp;
-	return (ft_execute_tree(tree->left, data));
+	return (ft_execute_tree(tree->left, data, pipe_fd));
 }

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/12 12:24:09 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:04:31 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,15 @@ int	routine(t_shell data, char *line)
 		return (1);
 	tree = ft_parse_shell(temp);
 	ft_init_fdio(&data, tree);
-	ft_execute_tree(tree, &data);
+	ft_execute_tree(tree, &data, -1);
 	add_history(line);
 	free(line);
 	free_node(tree);
 	free_tab(temp);
 	return (0);
 }
+
+int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -99,8 +101,8 @@ int	main(int ac, char **av, char **envp)
 	((void)ac, (void)av);
 	i = 0;
 	data = init(ac, av, envp, &line);
-	if (!data.envp)
-		return (1);
+	//if (!data.envp)
+		//return (1);
 	while (1)
 	{
 		if (routine(data, line))
@@ -109,5 +111,5 @@ int	main(int ac, char **av, char **envp)
 	if (line)
 		free(line);
 	rl_clear_history();
-	return (exit(0), 0);
+	return (exit(0), g_exit_status);
 }

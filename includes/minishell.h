@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/12 11:18:10 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:09:51 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ char	**ft_tokenize(const char *line);
 t_node	*ft_parse_shell(char **token);
 
 //executing tree
-int		ft_execute_tree(t_node *node, t_shell *data);
-int		ft_exec_and(t_node *tree, t_shell *data);
-int		ft_exec_or(t_node *tree, t_shell *data);
-int		ft_exec_heredoc(t_node *tree, t_shell *data);
-int		ft_exec_input(t_node *tree, t_shell *data);
-int		ft_exec_append(t_node *tree, t_shell *data);
-int		ft_exec_trunc(t_node *tree, t_shell *data);
+int		ft_execute_tree(t_node *node, t_shell *data, int fd);
+int		ft_exec_and(t_node *tree, t_shell *data, int fd);
+int		ft_exec_or(t_node *tree, t_shell *data, int fd);
+int		ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_input(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_append(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd);
 
 //checkers_utils
 void	check_error(char *line, int ret);
