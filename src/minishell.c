@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:17:34 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:51:00 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ char	*check_and_parse(char *line)
 
 int	routine(t_shell data, char *line)
 {
-	//Le ^C ne s'affiche plus quand on fait un ctrl-c, idk why.
-	//J'ai rien touche, il a juste disparu
 	t_node	*tree;
 	char	**temp;
 
@@ -74,6 +72,8 @@ int	main(int ac, char **av, char **envp)
 	((void)ac, (void)av);
 	i = 0;
 	data = init(ac, av, envp, &line);
+	if (!data.envp)
+		return (1);
 	while (1)
 	{
 		if (routine(data, line))

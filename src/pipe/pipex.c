@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:08:14 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:04:42 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 
 	dispatch_pipex(cmd, data, fd);
 	path = NULL;
-	args = ft_split(cmd, ' ');
+	args = ft_pipex_split(cmd, ' ');
 	if (args)
 		path = get_path(args[0], data.envp);
 	if (!args || !path)
@@ -112,6 +112,10 @@ static int	do_cmd(t_pipex_data data)
 	if (data.fd[0] != -1)
 		close(data.fd[0]);
 	close(data.fd[1]);
+	dup2(data.s_stdin, STDIN_FILENO);
+	dup2(data.s_stdout, STDOUT_FILENO);
+	close(data.s_stdin);
+	close(data.s_stdout);
 	return (y);
 }
 

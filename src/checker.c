@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 13:09:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:49:02 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ int	check_possible(char **line, int i)
 	{
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
-		if (access(line[i + 1], F_OK) == -1)
+		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], F_OK) == -1)
 			return (check_error(line[i + 1], RET_NOFILE), 1);
 		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], R_OK) == -1)
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
-		if (ft_strncmp(line[i], ">", 1) == 0 && access(line[i + 1], W_OK) == -1)
+		if (ft_strncmp(line[i], ">", 1) == 0 && \
+		(access(line[i + 1], F_OK) == 1 && access(line[i + 1], W_OK) == -1))
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
 	}
 	if (ft_strncmp(line[i], "<<\0", 3) == 0)

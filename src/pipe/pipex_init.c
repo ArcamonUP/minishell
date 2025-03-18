@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 10:15:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:05:58 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,20 @@ int	get_fd_file(t_node *node, char *str, int bonus)
 	int	fd;
 
 	fd = -1;
-	while (node->right && ft_strncmp(node->str, str, 2) != 0)
-		node = node->right;
-	if (ft_strncmp(node->str, str, 2) == 0 && node->right)
+	while (node)
 	{
-		if (bonus)
-			fd = open(node->right->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else
-			fd = open(node->right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd == -1)
-			return (error("Failed to open file.", NULL), -1);
+		if (node->str && ft_strncmp(node->str, str, ft_strlen(str) + 1) == 0)
+		{
+			if (bonus)
+				fd = open(node->right->str, O_CREAT | O_WRONLY | O_APPEND, \
+					0644);
+			else
+				fd = open(node->right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (fd == -1)
+				return (error("Error.\n", NULL), -1);
+		}
+		node = node->left;
 	}
-	else
-		return (-1);
 	return (fd);
 }
 
@@ -74,6 +75,8 @@ char	*get_result(t_node *node, t_shell *shell_data)
 
 	if (node->type == CMD)
 		return (ft_strdup(node->str));
+	if (node->type == TRUNC && node->left && node->left->type == CMD)
+		return (ft_strdup(node->left->str));
 	fd = setup_get(&line, node, shell_data);
 	if (fd < 0)
 		return (NULL);
@@ -92,27 +95,47 @@ char	*get_result(t_node *node, t_shell *shell_data)
 	return (free(line), result);
 }
 
+char	**init_tab_cmd(t_node *node, t_shell *shell_data)
+{
+	char	**result;
+	t_node	*temp;
+	int		i;
+
+	i = 1;
+	temp = node;
+	while (temp && temp->type == PIPE && i++)
+		temp = temp->left;
+	i--;
+	result = ft_calloc(sizeof(char *), i + 2);
+	if (!result)
+		return (NULL);
+	temp = node;
+	while (i > -1)
+	{
+		if (temp->type == PIPE)
+			result[i] = get_result(temp->right, shell_data);
+		else
+			result[i] = get_result(temp, shell_data);
+		if (!result[i])
+			return (ft_tabnfree(result, i), NULL);
+		temp = temp->left;
+		i--;
+	}
+	return (result);
+}
+
 t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
-	char			**temp;
 
-	data.cmd = NULL;
-	temp = ft_calloc(sizeof(char *), 3);
-	if (!temp)
-		return (error("Malloc failed.", NULL), data);
-	temp[0] = get_result(node->left, shell_data);
-	if (!temp[0])
-		return (error("Execution failed.", NULL), free_tab(temp), data);
-	temp[1] = get_result(node->right, shell_data);
-	if (!temp[1])
-		return (error("Execution failed.", NULL), free_tab(temp), data);
-	data.cmd = temp;
+	data.cmd = init_tab_cmd(node, shell_data);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
 	data.fd[0] = get_fd_file(node, "<\0", 0);
 	data.fd[1] = get_fd_file(node, ">\0", 0);
 	if (data.fd[1] == -1)
-		data.fd[1] = STDOUT_FILENO;
+		data.fd[1] = dup(STDOUT_FILENO);
+	data.s_stdin = dup(STDIN_FILENO);
+	data.s_stdout = dup(STDOUT_FILENO);
 	return (data);
 }

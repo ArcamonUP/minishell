@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/14 11:19:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:46:17 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	char	**cmd;
 	char	*path;
 
+	//Des fds sont ouverts mais pas fermes, faut trouver lesquels.
 	pid = fork();
 	if (pid < 0)
 		return (0);
@@ -51,17 +52,17 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 		dispatch(node->str, data, 1);
 		cmd = ft_split(node->str, ' ');
 		if (!cmd)
-			exit (EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		path = get_path(cmd[0], data->envp);
 		if (!path)
-			exit(127);
-		if (node->fdin)
+			(free_tab(cmd), exit(127));
+		if (node->fdin != -1)
 			dup2(node->fdin, STDIN_FILENO);
-		if (node->fdout)
+		if (node->fdout != -1)
 			dup2(node->fdout, STDOUT_FILENO);
 		if (fd > -1)
 			close(fd);
-		execve(path, cmd, NULL);
+		execve(path, cmd, data->envp);
 		free_tab(cmd);
 		ft_printf("Error: command failed\n");
 		exit(126);
@@ -74,7 +75,6 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 
 int	ft_execute_tree(t_node *node, t_shell *data, int fd)
 {
-	//ft_print_tree(node, 0);
 	if (!node)
 		return (0);
 	else if (node->type == CMD)

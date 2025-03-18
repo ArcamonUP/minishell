@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:17:28 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:05:27 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ void	end(t_pipex_data data, int i)
 			close(data.fd[0]);
 	}
 	free_tab(data.cmd);
+	dup2(data.s_stdin, STDIN_FILENO);
+	dup2(data.s_stdout, STDOUT_FILENO);
+	close(data.s_stdin);
+	close(data.s_stdout);
 	error("Error\n", NULL);
 }
 

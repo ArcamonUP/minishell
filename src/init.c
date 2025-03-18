@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/27 14:11:30 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:11:13 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,7 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 	*line = NULL;
 	data.fdout = NULL;
 	data.envp = envp;
+	if (!data.envp)
+		data.envp = ft_calloc(1, 1);
 	return (data);
 }
