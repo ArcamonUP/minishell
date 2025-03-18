@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:17:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 11:50:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 void	ctrl_c(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+	write(1, "^C\n", 3);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -61,3 +61,13 @@ char	*get_path(char *cmd, char **envp)
 	return (free_tab(path), NULL);
 }
 
+void	ft_tabnfree(char **tab, int i)
+{
+	i++;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}

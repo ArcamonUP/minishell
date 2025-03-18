@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:19:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:27:24 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		ft_unset(char *line, char **envp);
 //utils
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
-__pid_t	ft_exec(char *cmd, char **envp);
+void	ft_tabnfree(char **tab, int i);
 
 //free
 void	free_node(t_node *node);
