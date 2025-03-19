@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 10:05:27 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:00:38 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 	if (ft_strncmp(line, "echo", 4) == 0)
 		exit_code = ft_echo(line, data.envp);
 	else if (ft_strncmp(line, "pwd", 3) == 0)
-		exit_code = ft_pwd();
+		exit_code = ft_pwd(data.envp);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		exit_code = ft_cd(line);
+		exit_code = ft_cd(line, &data.envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, data.envp);
+		exit_code = ft_export(line, &data.envp);
 	else if (ft_strncmp(line, "unset", 5) == 0)
-		exit_code = ft_unset(line, data.envp);
+		exit_code = ft_unset(line, &data.envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
 		exit_code = ft_env(data.envp);
 	else

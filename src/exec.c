@@ -6,67 +6,73 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/18 11:46:17 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:41:15 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-void	dispatch(char *line, t_shell *data, int fd)
+int	dispatch(char *line, t_shell *data)
 {
-	int	exit_code;
+	int		exit_code;
+	char	**temp;
 
+	temp = cp_tab(data->envp);
 	if (ft_strncmp(line, "echo", 4) == 0)
-		exit_code = ft_echo(line, data->envp);
+		exit_code = ft_echo(line, temp);
 	else if (ft_strncmp(line, "pwd", 3) == 0)
-		exit_code = ft_pwd();
+		exit_code = ft_pwd(temp);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		exit_code = ft_cd(line);
+		exit_code = ft_cd(line, &temp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, data->envp);
+		exit_code = ft_export(line, &temp);
 	else if (ft_strncmp(line, "unset", 5) == 0)
-		exit_code = ft_unset(line, data->envp);
+		exit_code = ft_unset(line, &temp);
 	else if (ft_strncmp(line, "env", 3) == 0)
-		exit_code = ft_env(data->envp);
+		exit_code = ft_env(temp);
 	else
-		return ;
+		return (-1);
+	data->envp = temp;
+	return (exit_code);
+}
+
+static void	child_process(int fd, t_node *node, t_shell *data)
+{
+	char	**cmd;
+	char	*path;
+
+	cmd = ft_split(node->str, ' ');
+	if (!cmd)
+		exit(EXIT_FAILURE);
+	path = get_path(cmd[0], data->envp);
+	if (!path)
+		(free_tab(cmd), exit(127));
+	if (node->fdin != -1)
+		dup2(node->fdin, STDIN_FILENO);
+	if (node->fdout != -1)
+		dup2(node->fdout, STDOUT_FILENO);
 	if (fd > -1)
 		close(fd);
-	exit(exit_code);
+	execve(path, cmd, data->envp);
+	free_tab(cmd);
+	ft_printf("Error: command failed\n");
+	exit(126);
 }
 
 static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 {
 	pid_t	pid;
 	int		status;
-	char	**cmd;
-	char	*path;
 
-	//Des fds sont ouverts mais pas fermes, faut trouver lesquels.
+	status = dispatch(node->str, data);
+	if (status > -1)
+		return (status);
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
-	{
-		dispatch(node->str, data, 1);
-		cmd = ft_split(node->str, ' ');
-		if (!cmd)
-			exit(EXIT_FAILURE);
-		path = get_path(cmd[0], data->envp);
-		if (!path)
-			(free_tab(cmd), exit(127));
-		if (node->fdin != -1)
-			dup2(node->fdin, STDIN_FILENO);
-		if (node->fdout != -1)
-			dup2(node->fdout, STDOUT_FILENO);
-		if (fd > -1)
-			close(fd);
-		execve(path, cmd, data->envp);
-		free_tab(cmd);
-		ft_printf("Error: command failed\n");
-		exit(126);
-	}
+		child_process(fd, node, data);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
