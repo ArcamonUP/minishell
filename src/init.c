@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 11:11:13 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:38:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,38 @@ char	**ft_parse_paths(char **env)
 	return (sub);
 }
 
+char	**create_env(void)
+{
+	char	**env;
+	char	cwd[1024];
+
+	env = ft_calloc(7, sizeof(char *));
+	if (!env)
+		return (NULL);
+	env[0] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
+	if (!env[0])
+		return (free_tab(env), NULL);
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		env[1] = ft_strjoin("PWD=", cwd);
+	else
+		env[1] = ft_strdup("PWD=/");
+	if (!env[1])
+		return (free_tab(env), NULL);
+	env[2] = ft_strdup("SHLVL=1");
+	if (!env[2])
+		return (free_tab(env), NULL);
+	env[3] = ft_strdup("_=/usr/bin/env");
+	if (!env[3])
+		return (free_tab(env), NULL);
+	env[4] = ft_strdup("TERM=xterm-256color");
+	if (!env[4])
+		return (free_tab(env), NULL);
+	env[5] = ft_strdup("OLDPWD=");
+	if (!env[5])
+		return (free_tab(env), NULL);
+	return (env);
+}
+
 t_shell	init(int ac, char **av, char **envp, char **line)
 {
 	t_shell	data;
@@ -79,16 +111,11 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 		perror("Signal failed");
 		return (data);
 	}
-	if (getenv("PATH") == NULL)
-	{
-		perror("Envp missing");
-		return (data);
-	}
 	data.fdin = NULL;
 	*line = NULL;
 	data.fdout = NULL;
 	data.envp = envp;
-	if (!data.envp)
-		data.envp = ft_calloc(1, 1);
+	if (!data.envp || !data.envp[0])
+		data.envp = create_env();
 	return (data);
 }
