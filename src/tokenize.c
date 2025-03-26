@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/14 11:50:16 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:02:04 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_token_op(const char *line)
 	return (str);
 }
 
-static int	ft_quote_count(const char *line)
+int	ft_quote_count(const char *line)
 {
 	int	len;
 

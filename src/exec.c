@@ -6,12 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/19 15:41:15 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:09:21 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include "pipex.h"
+#include <signal.h>
 
 int	dispatch(char *line, t_shell *data)
 {
@@ -32,7 +34,7 @@ int	dispatch(char *line, t_shell *data)
 	else if (ft_strncmp(line, "env", 3) == 0)
 		exit_code = ft_env(temp);
 	else
-		return (-1);
+		return (free_tab(temp), -1);
 	data->envp = temp;
 	return (exit_code);
 }
@@ -56,7 +58,7 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 		close(fd);
 	execve(path, cmd, data->envp);
 	free_tab(cmd);
-	ft_printf("Error: command failed\n");
+	ft_putstr_fd("Error: command failed\n", 2);
 	exit(126);
 }
 
@@ -73,7 +75,9 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 		return (0);
 	else if (pid == 0)
 		child_process(fd, node, data);
+	signal(SIGINT, parent_ctrl_c);
 	waitpid(pid, &status, 0);
+	signal(SIGINT, ctrl_c);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);

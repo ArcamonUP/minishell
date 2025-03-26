@@ -1,62 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   basics.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 13:07:53 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/26 11:54:19 by kbaridon         ###   ########.fr       */
+/*   Created: 2025/03/26 11:25:31 by kbaridon          #+#    #+#             */
+/*   Updated: 2025/03/26 11:54:12 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
+#include "libft.h"
+#include "pipex.h"
 
-void	free_node(t_node *node)
+char	**cp_tab(char **tab)
 {
-	if (!node)
-		return ;
-	free_node(node->left);
-	free_node(node->right);
-	free(node);
+	char	**new_tab;
+	int		i;
+
+	i = 0;
+	new_tab = ft_calloc(sizeof(char *), ft_tablen(tab) + 1);
+	if (!new_tab)
+		return (NULL);
+	while (tab[i])
+	{
+		new_tab[i] = ft_strdup(tab[i]);
+		if (!new_tab[i])
+			return (free_tab(new_tab), NULL);
+		i++;
+	}
+	return (new_tab);
 }
 
-void	free_tab(char **tab)
+int	ft_tablen(char **tab)
 {
 	int	i;
 
 	i = 0;
 	while (tab[i])
-	{
-		free(tab[i]);
 		i++;
-	}
-	free(tab);
-}
-
-void	clear_double(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (!ptr)
-		return ;
-	while (ptr[i])
-	{
-		free(ptr[i]);
-		i++;
-	}
-	free(ptr);
-}
-
-void	ft_tabnfree(char **tab, int i)
-{
-	i++;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
+	return (i);
 }

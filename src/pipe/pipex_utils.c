@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:57:15 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/19 15:00:38 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:26:25 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,6 @@
 #include "libft.h"
 #include "pipex.h"
 #include "minishell.h"
-
-int	ft_tablen(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	return (i);
-}
 
 void	error(char *msg, char *other)
 {

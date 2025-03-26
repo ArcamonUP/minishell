@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/19 14:41:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:47:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
+#include <unistd.h>
 
 void	ctrl_c(int sig)
 {
@@ -30,7 +31,37 @@ void	ctrl_c(int sig)
 void	parent_ctrl_c(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+}
+
+char	*dupcheck(char **env, int i, char *str)
+{
+	char	*temp;
+
+	if (i > 0 && !env[i - 1])
+		return (NULL);
+	temp = ft_strdup(str);
+	if (!temp)
+		return (NULL);
+	return (temp);
+}
+
+char	*get_exec(char *cmd)
+{
+	char	*path;
+	char	*temp;
+
+	temp = getcwd(NULL, 0);
+	if (!temp)
+		return (NULL);
+	path = ft_strjoin(temp, "/");
+	free(temp);
+	if (!path)
+		return (NULL);
+	temp = path;
+	path = ft_strjoin(temp, cmd);
+	if (!path)
+		return (free(temp), NULL);
+	return (free(temp), path);
 }
 
 char	*get_path(char *cmd, char **envp)
@@ -59,35 +90,5 @@ char	*get_path(char *cmd, char **envp)
 		}
 		(free(result), i++);
 	}
-	return (free_tab(path), NULL);
-}
-
-void	ft_tabnfree(char **tab, int i)
-{
-	i++;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}
-
-char	**cp_tab(char **tab)
-{
-	char	**new_tab;
-	int		i;
-
-	i = 0;
-	new_tab = ft_calloc(sizeof(char *), ft_tablen(tab) + 1);
-	if (!new_tab)
-		return (NULL);
-	while (tab[i])
-	{
-		new_tab[i] = ft_strdup(tab[i]);
-		if (!new_tab[i])
-			return (free_tab(new_tab), NULL);
-		i++;
-	}
-	return (new_tab);
+	return (free_tab(path), get_exec(cmd));
 }

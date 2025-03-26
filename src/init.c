@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/19 13:38:18 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:11:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,25 +74,15 @@ char	**create_env(void)
 	env = ft_calloc(7, sizeof(char *));
 	if (!env)
 		return (NULL);
-	env[0] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
-	if (!env[0])
-		return (free_tab(env), NULL);
+	env[0] = dupcheck(env, 0, "PATH=/usr/bin:/bin:/usr/sbin:/sbin");
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		env[1] = ft_strjoin("PWD=", cwd);
 	else
 		env[1] = ft_strdup("PWD=/");
-	if (!env[1])
-		return (free_tab(env), NULL);
-	env[2] = ft_strdup("SHLVL=1");
-	if (!env[2])
-		return (free_tab(env), NULL);
-	env[3] = ft_strdup("_=/usr/bin/env");
-	if (!env[3])
-		return (free_tab(env), NULL);
-	env[4] = ft_strdup("TERM=xterm-256color");
-	if (!env[4])
-		return (free_tab(env), NULL);
-	env[5] = ft_strdup("OLDPWD=");
+	env[2] = dupcheck(env, 2, "SHLVL=1");
+	env[3] = dupcheck(env, 3, "_=/usr/bin/env");
+	env[4] = dupcheck(env, 4, "TERM=xterm-256color");
+	env[5] = dupcheck(env, 5, "OLDPWD=");
 	if (!env[5])
 		return (free_tab(env), NULL);
 	return (env);

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/19 13:25:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:03:34 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,4 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 	node->fdin = -1;
 	node->fdout = -1;
 	return (node);
-}
-
-void	ft_print_tree(t_node *tree, int depth)
-{
-	int	i;
-
-	i = 0;
-	if (!tree)
-		return ;
-	while (i++ < depth)
-		ft_printf("    ");
-	ft_printf("%s\n", tree->str);
-	ft_print_tree(tree->left, depth + 1);
-	ft_print_tree(tree->right, depth + 1);
 }
