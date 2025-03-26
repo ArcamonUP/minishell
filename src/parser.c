@@ -6,19 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/03/14 11:44:57 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:05:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-t_type			get_optype(char *shell);
-t_node			*ft_node_new(char *str, t_type type);
-t_node			*ft_node_parent(char *str, t_node *left, t_node *right);
-static t_node	*ft_parse_and_or(char ***token);
-
-static t_node	*ft_parse_cmd(char ***tokens)
+t_node	*ft_parse_cmd(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -71,7 +66,7 @@ static t_node	*ft_parse_cmd(char ***tokens)
 	return (NULL);
 }
 
-static t_node	*ft_parse_redir(char ***tokens)
+t_node	*ft_parse_redir(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -99,7 +94,7 @@ static t_node	*ft_parse_redir(char ***tokens)
 	return (node);
 }
 
-static t_node	*ft_parse_pipe(char ***tokens)
+t_node	*ft_parse_pipe(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -124,7 +119,7 @@ static t_node	*ft_parse_pipe(char ***tokens)
 	return (node);
 }
 
-static t_node	*ft_parse_and_or(char ***tokens)
+t_node	*ft_parse_and_or(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;

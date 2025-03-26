@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 13:04:42 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 10:53:48 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <signal.h>
 
 static void	exec(char *cmd, t_pipex_data data, int fd[2])
 {
@@ -89,7 +90,9 @@ static int	last_exec(t_pipex_data data, int fd)
 		i++;
 	if (p == 0)
 		exec(data.cmd[i], data, NULL);
+	signal(SIGINT, parent_ctrl_c);
 	wait_children(data, p);
+	signal(SIGINT, ctrl_c);
 	free_tab(data.cmd);
 	return (0);
 }

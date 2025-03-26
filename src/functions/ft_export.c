@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:20 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/14 11:27:02 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:49:26 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,22 @@ char	**add_env(char *arg, char **envp)
 	return (free(envp), temp);
 }
 
-int	ft_export(char *line, char **envp)
+int	ft_export(char *line, char ***envp)
 {
 	int		i;
 	char	**cmd;
+	char	**temp;
 
 	cmd = ft_split(line, ' ');
 	if (!cmd)
 		return (127);
 	if (!cmd[1])
-		return (print_sorted_env(envp), free_tab(cmd), 0);
+	{
+		temp = cp_tab(*envp);
+		if (!temp)
+			return (free_tab(cmd), 127);
+		return (print_sorted_env(temp), free_tab(cmd), free_tab(temp), 0);
+	}
 	i = 1;
 	while (cmd[i])
 	{
@@ -88,14 +94,14 @@ int	ft_export(char *line, char **envp)
 			if (ft_strncmp(cmd[i], "_=", 2) == 0)
 				i++;
 			else
-				envp = add_env(cmd[i], envp);
+				*envp = add_env(cmd[i], *envp);
 		}
 		else
 		{
 			if (ft_strncmp(cmd[i], "_", 1) == 0)
 				i++;
 			else
-				envp = add_env(ft_strjoin(cmd[i], "="), envp);
+				*envp = add_env(ft_strjoin(cmd[i], "="), *envp);
 		}
 		i++;
 	}
