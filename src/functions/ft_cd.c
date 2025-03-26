@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:16 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/19 15:08:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:49:46 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,6 @@
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
-
-void	print_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "OLDPWD=", 7) == 0)
-		{
-			ft_putstr_fd(envp[i], STDOUT_FILENO);
-			write(1, "\n", 1);
-		}
-		else if (ft_strncmp(envp[i], "PWD=", 4) == 0)
-		{
-			ft_putstr_fd(envp[i], STDOUT_FILENO);
-			write(1, "\n", 1);
-		}
-		i++;
-	}
-	write(1, "---------\n", 10);
-}
 
 void	update_env(char ***envp, char *old_pwd)
 {
@@ -62,7 +40,7 @@ void	update_env(char ***envp, char *old_pwd)
 	(*envp)[i] = ft_strjoin("OLDPWD=", old_pwd);
 }
 
-int	ft_cd(char *line, char ***envp)
+int	ft_cd(char *line, char ***envp, int custom)
 {
 	char	**cmd;
 	char	*old_pwd;
@@ -70,7 +48,6 @@ int	ft_cd(char *line, char ***envp)
 	cmd = ft_split(line, ' ');
 	if (!cmd)
 		return (127);
-	print_env(*envp);
 	old_pwd = get_var("PWD", *envp);
 	if (cmd[2])
 	{
@@ -84,7 +61,7 @@ int	ft_cd(char *line, char ***envp)
 		ft_putstr_fd(": No such file or directory\n", 2);
 		return (free_tab(cmd), 1);
 	}
-	update_env(envp, old_pwd);
-	print_env(*envp);
+	if (custom)
+		update_env(envp, old_pwd);
 	return (free_tab(cmd), 0);
 }

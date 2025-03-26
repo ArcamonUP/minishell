@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/26 12:09:21 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:50:20 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	dispatch(char *line, t_shell *data)
 	else if (ft_strncmp(line, "pwd", 3) == 0)
 		exit_code = ft_pwd(temp);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		exit_code = ft_cd(line, &temp);
+		exit_code = ft_cd(line, &temp, data->custom_envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
 		exit_code = ft_export(line, &temp);
 	else if (ft_strncmp(line, "unset", 5) == 0)
@@ -35,7 +35,10 @@ int	dispatch(char *line, t_shell *data)
 		exit_code = ft_env(temp);
 	else
 		return (free_tab(temp), -1);
+	if (data->custom_envp == 1)
+		free_tab(data->envp);
 	data->envp = temp;
+	data->custom_envp = 1;
 	return (exit_code);
 }
 

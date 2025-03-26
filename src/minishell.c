@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 11:51:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:49:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	main(int ac, char **av, char **envp)
 	}
 	if (line)
 		free(line);
+	if (data.custom_envp)
+		free_tab(data.envp);
 	rl_clear_history();
 	exit(g_exit_status);
 }

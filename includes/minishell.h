@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/26 12:12:35 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:49:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_lstfd
 typedef struct s_shell
 {
 	char	**envp;
+	int		custom_envp;
 	t_lstfd	*fdin;
 	t_lstfd	*fdout;
 }	t_shell;
@@ -65,7 +66,7 @@ typedef struct s_node
 }	t_node;
 
 //ft_cd.c
-int		ft_cd(char *line, char ***envp);
+int		ft_cd(char *line, char ***envp, int custom);
 
 //ft_echo.c
 char	*get_var(char *arg, char **envp);
