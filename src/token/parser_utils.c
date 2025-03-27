@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/26 12:03:34 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:57:51 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,44 @@ t_node	*ft_node_parent(char *str, t_node *left, t_node *right)
 	node->fdin = -1;
 	node->fdout = -1;
 	return (node);
+}
+
+void	ft_print_tree(t_node *tree, int depth)
+{
+	if (!tree)
+		return ;
+	for (int i = 0; i < depth; i++)
+		ft_printf("    ");
+	switch (tree->type)
+	{
+		case PIPE:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case AND:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case OR:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case INPUT:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case TRUNC:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case APPEND:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case HEREDOC:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case CMD:
+			ft_printf("%s\n", tree->str);
+			break ;
+		case FILENAME:
+			ft_printf("%s\n", tree->str);
+			break ;
+	}
+	ft_print_tree(tree->left, depth + 1);
+	ft_print_tree(tree->right, depth + 1);
 }

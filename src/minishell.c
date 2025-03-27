@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/27 14:54:12 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/27 14:58:22 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	routine(t_shell data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-	//-----------
+	
 	ft_init_fdio(&data, tree);
 	ft_execute_tree(tree, &data, -1);
 	add_history(line);
