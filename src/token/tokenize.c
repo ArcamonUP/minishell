@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/26 12:02:04 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:46:14 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*ft_token_file(const char *line)
 
 	i = 0;
 	len = 0;
-	while (line[len] && !is_space(line[len]))
+	while (line[len] && !ft_isspace(line[len]))
 		len++;
 	str = malloc((len + 1) * sizeof(char));
 	if (!str)
@@ -116,7 +116,7 @@ char	**ft_tokenize(const char *line)
 
 	count = 0;
 	i = 0;
-	tokens = ft_calloc(ft_token_count(line) + 1, sizeof(char *));
+	tokens = ft_calloc(incr_token(line) + 1, sizeof(char *));
 	if (!tokens)
 		return (NULL);
 	while (line[i])
@@ -130,7 +130,7 @@ char	**ft_tokenize(const char *line)
 		if (!tokens[count])
 			return (clear_double(tokens), NULL);
 		count++;
-		while (line[i] && is_space(line[i]))
+		while (line[i] && ft_isspace(line[i]))
 			i++;
 	}
 	tokens[count] = NULL;

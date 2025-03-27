@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 20:01:20 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 11:42:36 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/27 14:41:27 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_isspace(int c);
 char	*ft_strdup(char *src);
 int		ft_atoi(const char *str);
 size_t	ft_strlen_dbl(char **str);
