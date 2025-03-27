@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:27 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:49:02 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ int	check_possible(char **line, int i)
 	{
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
-		if (access(line[i + 1], F_OK) == -1)
+		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], F_OK) == -1)
 			return (check_error(line[i + 1], RET_NOFILE), 1);
 		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], R_OK) == -1)
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
-		if (ft_strncmp(line[i], ">", 1) == 0 && access(line[i + 1], W_OK) == -1)
+		if (ft_strncmp(line[i], ">", 1) == 0 && \
+		(access(line[i + 1], F_OK) == 1 && access(line[i + 1], W_OK) == -1))
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
 	}
 	if (ft_strncmp(line[i], "<<\0", 3) == 0)
@@ -62,8 +63,6 @@ int	check_possible(char **line, int i)
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
 	}
-	if (ft_strncmp(line[i], ">", 1) == 0 || ft_strncmp(line[i], "<", 1) == 0)
-		return (check_error(line[i], RET_OPERATOR), 1);
 	return (0);
 }
 
@@ -96,17 +95,18 @@ char	*missing_elements(char **line)
 	{
 		temp = add_char(to_parse, ' ');
 		if (!temp)
-			return (free_tab(line), NULL);
+			return (NULL);
 		to_parse = ft_strjoin(temp, line[i]);
 		free(temp);
 		if (!to_parse)
-			return (free_tab(line), NULL);
+			return (NULL);
 		i++;
 	}
 	temp = handle_missings(to_parse);
+	free(to_parse);
 	if (!temp)
-		return (free_tab(line), NULL);
-	return (free_tab(line), temp);
+		return (NULL);
+	return (temp);
 }
 
 char	*checker(char **line)

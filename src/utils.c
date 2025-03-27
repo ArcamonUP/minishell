@@ -6,21 +6,23 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/14 13:08:41 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:47:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+#include "pipex.h"
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
+#include <unistd.h>
 
 void	ctrl_c(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+	write(1, "^C\n", 3);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
@@ -29,7 +31,37 @@ void	ctrl_c(int sig)
 void	parent_ctrl_c(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+}
+
+char	*dupcheck(char **env, int i, char *str)
+{
+	char	*temp;
+
+	if (i > 0 && !env[i - 1])
+		return (NULL);
+	temp = ft_strdup(str);
+	if (!temp)
+		return (NULL);
+	return (temp);
+}
+
+char	*get_exec(char *cmd)
+{
+	char	*path;
+	char	*temp;
+
+	temp = getcwd(NULL, 0);
+	if (!temp)
+		return (NULL);
+	path = ft_strjoin(temp, "/");
+	free(temp);
+	if (!path)
+		return (NULL);
+	temp = path;
+	path = ft_strjoin(temp, cmd);
+	if (!path)
+		return (free(temp), NULL);
+	return (free(temp), path);
 }
 
 char	*get_path(char *cmd, char **envp)
@@ -58,34 +90,5 @@ char	*get_path(char *cmd, char **envp)
 		}
 		(free(result), i++);
 	}
-	return (free_tab(path), NULL);
-}
-
-__pid_t	ft_exec(char *cmd, char **envp)
-{
-	char	**args;
-	char	*path;
-	__pid_t	p;
-
-	p = fork();
-	if (p == -1)
-		return (-1);
-	if (p != 0)
-		signal(SIGINT, parent_ctrl_c);
-	if (p == 0)
-	{
-		path = NULL;
-		args = ft_split(cmd, ' ');
-		if (args)
-			path = get_path(args[0], envp);
-		if (!args || !path)
-		{
-			//gestion d'erreurs avec free...
-			exit(0);
-		}
-		execve(path, args, envp);
-		//gestion d'erreurs avec free...
-		exit(0);
-	}
-	return (p);
+	return (free_tab(path), get_exec(cmd));
 }

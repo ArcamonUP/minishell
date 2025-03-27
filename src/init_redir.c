@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_fdin.c                                     :+:      :+:    :+:   */
+/*   init_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:58:23 by achu              #+#    #+#             */
-/*   Updated: 2025/02/18 15:44:25 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/14 11:40:49 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static int	ft_limiter(char *limit)
 	{
 		ft_printf("> ");
 		line = get_next_line(STDIN_FILENO);
-		if (ft_strncmp(line, limit, len) == 0 && (line[len] == '\0' || line[len] == '\n'))
+		if (ft_strncmp(line, limit, len) == 0 && (line[len] == '\0' || \
+		line[len] == '\n'))
 		{
 			free(line);
 			break ;
@@ -42,7 +43,7 @@ static int	ft_limiter(char *limit)
 }
 
 // Add the fd to the right linked list
-static void	ft_add_fdio(t_shell *data, int fd, e_type op)
+static void	ft_add_fdio(t_shell *data, int fd, t_type op)
 {
 	t_lstfd	*newfd;
 

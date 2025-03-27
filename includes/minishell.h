@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/19 16:02:40 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/26 12:12:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_shell
 	t_lstfd	*fdout;
 }	t_shell;
 
-typedef enum
+typedef enum e_type
 {
 	PIPE,
 	AND,
@@ -42,7 +42,7 @@ typedef enum
 	HEREDOC,
 	FILENAME,
 	CMD,
-}	e_type;
+}	t_type;
 
 typedef enum e_ret
 {
@@ -54,15 +54,9 @@ typedef enum e_ret
 	RET_NEWLINE = 6,
 }	t_ret;
 
-typedef struct t_data
-{
-	char	**envp;
-	char	**shell;
-}	t_data;
-
 typedef struct s_node
 {
-	e_type			type;
+	t_type			type;
 	char			*str;
 	struct s_node	*left;
 	struct s_node	*right;
@@ -70,76 +64,105 @@ typedef struct s_node
 	int				fdout;
 }	t_node;
 
-//init
-t_shell	init(int ac, char **av, char **envp, char **line);
-void	ft_init_fdio(t_shell *data, t_node *tree);
+//ft_cd.c
+int		ft_cd(char *line, char ***envp);
 
-//minishell
-char	*check_and_parse(char *line);
-int		dispatch(char *line, char **envp, int i);
-char	**ft_tokenize(const char *line);
-t_node	*ft_parse_shell(char **token);
+//ft_echo.c
+char	*get_var(char *arg, char **envp);
+int		ft_echo(char *line, char **envp);
 
-//executing tree
-int		ft_execute_tree(t_node *node, t_shell *data);
-int		ft_exec_and(t_node *tree, t_shell *data);
-int		ft_exec_or(t_node *tree, t_shell *data);
-int		ft_exec_heredoc(t_node *tree, t_shell *data);
-int		ft_exec_input(t_node *tree, t_shell *data);
-int		ft_exec_append(t_node *tree, t_shell *data);
-int		ft_exec_trunc(t_node *tree, t_shell *data);
+//ft_env.c
+int		ft_env(char **envp);
 
-//checkers_utils
+//ft_export.c
+int		ft_export(char *line, char ***envp);
+
+//ft_pwd.c
+int		ft_pwd(char **envp);
+
+//ft_unset.c
+int		ft_unset(char *line, char ***envp);
+
+//basics.c
+char	**cp_tab(char **tab);
+int		ft_tablen(char **tab);
+
+//checker_utils.c
 void	check_error(char *line, int ret);
 char	*handle_missings(char *to_parse);
 char	*add_char(char *str, char c);
 int		wait_next(char **line, int *i, int *y, char c);
 
-//checker
+//checker.c
 char	*checker(char **line);
 
-//functions
-void	ft_cd(char **cmd);
-void	ft_echo(char **cmd, char **envp);
-void	ft_env(char **envp);
-void	ft_export(char **cmd, char **envp);
-void	ft_pwd(void);
-void	ft_unset(char **cmd, char **envp);
+//exec_and_or.c
+int		ft_exec_and(t_node *tree, t_shell *data, int fd);
+int		ft_exec_or(t_node *tree, t_shell *data, int fd);
 
-//utils
-void	ctrl_c(int sig);
-void	parent_ctrl_c(int sig);
-__pid_t	ft_exec(char *cmd, char **envp);
+//exec_redir.c
+int		ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_input(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_append(t_node *tree, t_shell *data, int pipe_fd);
+int		ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd);
 
-//free
+//exec.c
+int		ft_execute_tree(t_node *node, t_shell *data, int fd);
+
+//free.c
 void	free_node(t_node *node);
 void	free_tab(char **tab);
 void	clear_double(char **ptr);
+void	ft_tabnfree(char **tab, int i);
 
-//tokenize
-char	**ft_tokenize(const char *line);
+//get_tokenize.c
+char	*get_redir(const char *line, int *i, int count);
+char	*get_operator(const char *line, int *i, int count);
+char	*get_cmd(const char *line, int *i, int count);
 
-//tokenize_utils
+//init_redir.c
+void	ft_init_fdio(t_shell *data, t_node *tree);
+
+//init.c
+t_shell	init(int ac, char **av, char **envp, char **line);
+
+//minishell.c
+
+//parser_utils.c
+t_type	get_optype(char *str);
+int		is_redir(char *str);
+t_node	*ft_node_new(char *str, t_type type);
+t_node	*ft_node_parent(char *str, t_node *left, t_node *right);
+
+//parser.c
+t_node	*ft_parse_cmd(char ***tokens);
+t_node	*ft_parse_redir(char ***tokens);
+t_node	*ft_parse_pipe(char ***tokens);
+t_node	*ft_parse_and_or(char ***tokens);
+t_node	*ft_parse_shell(char **tokens);
+
+//tokenize_utils.c
 int		is_space(const char c);
 int		is_operator(const char c);
 char	*ft_strndup(char *src, int len);
 int		ft_token_count(const char *line);
-int		get_index(const char *line, int i);
 
-//utils
+//tokenize.c
+char	*ft_token_op(const char *line);
+char	*ft_token_cmd(const char *line);
+char	*ft_token_file(const char *line);
+char	**ft_tokenize(const char *line);
+
+//utils_lstfd.c
 t_lstfd	*ft_lstfd_new(int fd);
-void	ft_lstfd_add_back(t_lstfd **lst, t_lstfd *new);
-void	ft_lstfd_clear(t_lstfd **lst);
+void	ft_lstfd_add_back(t_lstfd **alst, t_lstfd *new);
+void	ft_lstfd_clear(t_lstfd **list);
 
-//parser_utils
-int		is_redir(char *str);
+//utils.c
+void	ctrl_c(int sig);
+void	parent_ctrl_c(int sig);
+char	*dupcheck(char **env, int i, char *str);
+char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);
-void	ft_print_tree(t_node *tree, int depth);
-
-/*
-/!\
-PRINTTREE A ENLEVER A LA FIN
-/!\
-*/
 
 #endif

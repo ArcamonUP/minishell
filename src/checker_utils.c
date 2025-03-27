@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 12:24:01 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:47:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,10 @@ char	*handle_missings(char *to_parse)
 
 	line = readline("> ");
 	if (!line)
-		return (free(to_parse), NULL);
+		return (NULL);
 	temp = add_char(to_parse, '\n');
-	free(to_parse);
+	if (!temp)
+		return (free(line), NULL);
 	to_parse = temp;
 	if (!to_parse)
 		return (free(line), NULL);
@@ -98,7 +99,6 @@ char	*add_char(char *str, char c)
 	}
 	result[i] = c;
 	result[i + 1] = '\0';
-	free(str);
 	return (result);
 }
 

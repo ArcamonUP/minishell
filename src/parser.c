@@ -6,19 +6,14 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/02/19 16:02:29 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/26 12:05:41 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-e_type			get_optype(char *shell);
-t_node			*ft_node_new(char *str, e_type type);
-t_node			*ft_node_parent(char *str, t_node *left, t_node *right);
-static t_node	*ft_parse_and_or(char ***token);
-
-static t_node	*ft_parse_cmd(char ***tokens)
+t_node	*ft_parse_cmd(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -26,11 +21,11 @@ static t_node	*ft_parse_cmd(char ***tokens)
 	char	*op;
 	char	*file;
 
-	if (**tokens && (ft_strncmp("(", **tokens, 0) == 0))
+	if (**tokens && (ft_strncmp("(", **tokens, ft_strlen(**tokens)) == 0))
 	{
 		(*tokens)++;
 		node = ft_parse_and_or(tokens);
-		if (**tokens && (ft_strncmp(")", **tokens, 0) == 0))
+		if (**tokens && (ft_strncmp(")", **tokens, ft_strlen(**tokens)) == 0))
 			(*tokens)++;
 		else
 			return (NULL);
@@ -49,16 +44,18 @@ static t_node	*ft_parse_cmd(char ***tokens)
 		{
 			node = ft_node_new(**tokens, CMD);
 			if (!node)
-				return (NULL);
+				return (free_node(right), NULL);
 			(*tokens)++;
 		}
+		else
+			node = NULL;
 		parent = ft_node_parent(op, node, right);
 		if (!parent)
 			return (NULL);
 		node = parent;
 		return (node);
 	}
-	else
+	else if (**tokens)
 	{
 		node = ft_node_new(**tokens, CMD);
 		if (!node)
@@ -66,9 +63,10 @@ static t_node	*ft_parse_cmd(char ***tokens)
 		(*tokens)++;
 		return (node);
 	}
+	return (NULL);
 }
 
-static t_node	*ft_parse_redir(char ***tokens)
+t_node	*ft_parse_redir(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -96,7 +94,7 @@ static t_node	*ft_parse_redir(char ***tokens)
 	return (node);
 }
 
-static t_node	*ft_parse_pipe(char ***tokens)
+t_node	*ft_parse_pipe(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -106,7 +104,7 @@ static t_node	*ft_parse_pipe(char ***tokens)
 	node = ft_parse_redir(tokens);
 	if (!node)
 		return (NULL);
-	while (**tokens && (ft_strncmp("|", **tokens, 0) == 0))
+	while (**tokens && (ft_strncmp("|", **tokens, ft_strlen(**tokens)) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;
@@ -121,7 +119,7 @@ static t_node	*ft_parse_pipe(char ***tokens)
 	return (node);
 }
 
-static t_node	*ft_parse_and_or(char ***tokens)
+t_node	*ft_parse_and_or(char ***tokens)
 {
 	t_node	*node;
 	t_node	*parent;
@@ -131,8 +129,8 @@ static t_node	*ft_parse_and_or(char ***tokens)
 	node = ft_parse_pipe(tokens);
 	if (!node)
 		return (NULL);
-	while (**tokens && (ft_strncmp("&&", **tokens, 0) == 0 || \
-	ft_strncmp("||", **tokens, 0) == 0))
+	while (**tokens && (ft_strncmp("&&", **tokens, ft_strlen(**tokens)) == 0 || \
+	ft_strncmp("||", **tokens, ft_strlen(**tokens)) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;

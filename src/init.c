@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 14:48:31 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/26 12:11:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,34 @@ char	**ft_parse_paths(char **env)
 	return (sub);
 }
 
+char	**create_env(void)
+{
+	char	**env;
+	char	cwd[1024];
+
+	env = ft_calloc(7, sizeof(char *));
+	if (!env)
+		return (NULL);
+	env[0] = dupcheck(env, 0, "PATH=/usr/bin:/bin:/usr/sbin:/sbin");
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		env[1] = ft_strjoin("PWD=", cwd);
+	else
+		env[1] = ft_strdup("PWD=/");
+	env[2] = dupcheck(env, 2, "SHLVL=1");
+	env[3] = dupcheck(env, 3, "_=/usr/bin/env");
+	env[4] = dupcheck(env, 4, "TERM=xterm-256color");
+	env[5] = dupcheck(env, 5, "OLDPWD=");
+	if (!env[5])
+		return (free_tab(env), NULL);
+	return (env);
+}
+
 t_shell	init(int ac, char **av, char **envp, char **line)
 {
 	t_shell	data;
 
 	((void)ac, (void)av);
 	data.envp = NULL;
-	*line = NULL;
 	rl_catch_signals = 0;
 	if (signal(SIGINT, ctrl_c) == SIG_ERR || \
 	signal(SIGQUIT, SIG_IGN) == SIG_ERR)
@@ -80,13 +101,11 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 		perror("Signal failed");
 		return (data);
 	}
-	if (getenv("PATH") == NULL)
-	{
-		perror("Envp missing");
-		return (data);
-	}
 	data.fdin = NULL;
+	*line = NULL;
 	data.fdout = NULL;
 	data.envp = envp;
+	if (!data.envp || !data.envp[0])
+		data.envp = create_env();
 	return (data);
 }

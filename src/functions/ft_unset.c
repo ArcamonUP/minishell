@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:33:04 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/13 09:51:42 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:50:50 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,43 @@
 #include "libft.h"
 #include <stdlib.h>
 
-int	unset(char *arg, char **envp)
+void	unset(char *arg, char ***envp)
 {
 	char	*temp;
 	int		i;
 
-	if (!arg || !envp)
-		return (1);
+	if (!arg || !(*envp))
+		return ;
 	i = 0;
 	temp = ft_strjoin(arg, "=");
 	if (!temp)
-		return (1);
-	while (envp[i] && ft_strncmp(temp, envp[i], ft_strlen(temp)) != 0)
+		return ;
+	while ((*envp)[i] && ft_strncmp(temp, (*envp)[i], ft_strlen(temp)) != 0)
 		i++;
-	if (!envp[i])
-		return (free(temp), 1);
-	free(envp[i]);
-	while (envp[i + 1])
+	if (!(*envp)[i])
+		return (free(temp), (void)0);
+	free((*envp)[i]);
+	while ((*envp)[i + 1])
 	{
-		envp[i] = envp[i + 1];
+		(*envp)[i] = (*envp)[i + 1];
 		i++;
 	}
-	return (free(temp), 0);
+	return (free(temp), (void)0);
 }
 
-void	ft_unset(char **cmd, char **envp)
+int	ft_unset(char *line, char ***envp)
 {
-	int	i;
+	int		i;
+	char	**cmd;
 
-	if (!cmd[1])
-	{
-		ft_putstr_fd("unset: not enough arguments\n", STDERR_FILENO);
-		exit(1);
-	}
+	cmd = ft_split(line, ' ');
+	if (!cmd)
+		return (127);
 	i = 1;
 	while (cmd[i])
 	{
-		if (unset(cmd[i], envp))
-			exit(1);
+		unset(cmd[i], envp);
 		i++;
 	}
-	exit(0);
+	return (free_tab(cmd), 0);
 }

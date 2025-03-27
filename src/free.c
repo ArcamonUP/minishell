@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:07:53 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/14 13:58:29 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:54:19 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,15 @@ void	clear_double(char **ptr)
 		i++;
 	}
 	free(ptr);
+}
+
+void	ft_tabnfree(char **tab, int i)
+{
+	i++;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
