@@ -1,8 +1,5 @@
 # Executables
 minishell
-outf*
-outfile*
-output*
 
 # Prerequisites
 *.d

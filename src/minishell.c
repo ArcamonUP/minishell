@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/27 14:58:22 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/27 15:01:42 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
+
+void	ft_print_tree(t_node *tree, int depth);
 
 char	*check_and_parse(char *line)
 {
@@ -52,7 +54,9 @@ int	routine(t_shell data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-	
+		int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
+		ft_print_tree(tree, i);
+		ft_printf("----------------\n");
 	ft_init_fdio(&data, tree);
 	ft_execute_tree(tree, &data, -1);
 	add_history(line);

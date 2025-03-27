@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 16:17:09 by kbaridon          #+#    #+#             */
-/*   Updated: 2024/11/20 17:01:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:27:49 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,3 @@ char	*get_next_line(int fd)
 	buffer = next_line(buffer);
 	return (line);
 }
-
