@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:33:04 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/19 14:50:50 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:30:20 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,50 @@
 #include "libft.h"
 #include <stdlib.h>
 
-void	unset(char *arg, char ***envp)
+void	unset(char **cmd, char ***result, char **envp)
 {
-	char	*temp;
-	int		i;
+	int	i;
+	int	y;
+	int	c;
 
-	if (!arg || !(*envp))
-		return ;
 	i = 0;
-	temp = ft_strjoin(arg, "=");
-	if (!temp)
-		return ;
-	while ((*envp)[i] && ft_strncmp(temp, (*envp)[i], ft_strlen(temp)) != 0)
-		i++;
-	if (!(*envp)[i])
-		return (free(temp), (void)0);
-	free((*envp)[i]);
-	while ((*envp)[i + 1])
+	c = 0;
+	while (envp[i])
 	{
-		(*envp)[i] = (*envp)[i + 1];
+		y = 0;
+		while (cmd[y])
+		{
+			if (ft_strncmp(envp[i], cmd[y], ft_strlen(cmd[y])) == 0)
+				break ;
+			y++;
+		}
+		if (!cmd[y])
+			(*result)[c++] = ft_strdup(envp[i]);
 		i++;
 	}
-	return (free(temp), (void)0);
 }
 
 int	ft_unset(char *line, char ***envp)
 {
 	int		i;
+	int		size;
 	char	**cmd;
+	char	**result;
 
 	cmd = ft_split(line, ' ');
 	if (!cmd)
 		return (127);
+	size = 0;
+	while ((*envp)[size])
+		size++;
 	i = 1;
-	while (cmd[i])
-	{
-		unset(cmd[i], envp);
-		i++;
-	}
+	while (cmd[i++])
+		size--;
+	result = ft_calloc(sizeof(char *), size + 1);
+	if (!result)
+		return (free_tab(cmd), 127);
+	unset(cmd, &result, *envp);
+	free_tab(*envp);
+	*envp = result;
 	return (free_tab(cmd), 0);
 }

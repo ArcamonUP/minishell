@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/27 14:46:14 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 14:34:32 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_node
 }	t_node;
 
 //ft_cd.c
-int		ft_cd(char *line, char ***envp);
+int		ft_cd(char *line, char **envp);
 
 //ft_echo.c
 char	*get_var(char *arg, char **envp);
@@ -75,7 +75,7 @@ int		ft_echo(char *line, char **envp);
 int		ft_env(char **envp);
 
 //ft_export.c
-int		ft_export(char *line, char ***envp);
+int		ft_export(char *line, char ***envp, int i, int y);
 
 //ft_pwd.c
 int		ft_pwd(char **envp);
@@ -86,6 +86,7 @@ int		ft_unset(char *line, char ***envp);
 //basics.c
 char	**cp_tab(char **tab);
 int		ft_tablen(char **tab);
+void	print_sorted_tab(char **tab);
 
 //checker_utils.c
 void	check_error(char *line, int ret);

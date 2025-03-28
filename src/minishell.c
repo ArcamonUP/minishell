@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/27 15:01:42 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 14:30:29 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
+
+int	g_exit_status = 0;
 
 void	ft_print_tree(t_node *tree, int depth);
 
@@ -37,7 +39,7 @@ char	*check_and_parse(char *line)
 	return (line);
 }
 
-int	routine(t_shell data, char *line)
+int	routine(t_shell *data, char *line)
 {
 	t_node	*tree;
 	char	**temp;
@@ -57,16 +59,14 @@ int	routine(t_shell data, char *line)
 		int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
 		ft_print_tree(tree, i);
 		ft_printf("----------------\n");
-	ft_init_fdio(&data, tree);
-	ft_execute_tree(tree, &data, -1);
+	ft_init_fdio(data, tree);
+	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
 	free(line);
 	free_node(tree);
 	free_tab(temp);
 	return (0);
 }
-
-int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -81,11 +81,13 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		if (routine(data, line))
+		if (routine(&data, line))
 			break ;
 	}
 	if (line)
 		free(line);
+	if (data.envp)
+		free_tab(data.envp);
 	rl_clear_history();
 	exit(g_exit_status);
 }
