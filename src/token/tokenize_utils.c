@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/03/27 14:49:43 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 16:18:48 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,19 @@ int	is_operator(const char c)
 {
 	return (c == '<' || c == '>' || c == '|' || \
 			c == '(' || c == ')' || c == '&');
+}
+
+int	is_redir(char *str)
+{
+	if (ft_strncmp(str, ">>\0", 3) == 0)
+		return (1);
+	else if (ft_strncmp(str, ">\0", 2) == 0)
+		return (1);
+	else if (ft_strncmp(str, "<<\0", 3) == 0)
+		return (1);
+	else if (ft_strncmp(str, "<\0", 2) == 0)
+		return (1);
+	return (0);
 }
 
 // Copy paste into another char* the src depends on len
