@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:32:20 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/28 10:33:15 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:48:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,95 +15,135 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void	print_sorted_env(char **envp)
+static int	get_len(char *line)
 {
-	int		i;
-	int		j;
-	char	*temp;
+	int	i;
+	int	size;
+	int	c;
 
-	i = 0;
-	while (envp[i])
+	c = 0;
+	size = 0;
+	while (line[size] && line[size] != '=')
+		size++;
+	i = size;
+	while (line[i] && (line[i] != ' ' || c != 0))
 	{
-		j = i + 1;
-		while (envp[j])
+		if (line[i] == '\"' || line[i] == '\'')
 		{
-			if (ft_strncmp(envp[i], envp[j], ft_strlen(envp[i])) > 0)
-			{
-				temp = envp[i];
-				envp[i] = envp[j];
-				envp[j] = temp;
-			}
-			j++;
+			if (c == line[i])
+				c = 0;
+			else if (c == 0)
+				c = line[i];
 		}
-		ft_putstr_fd(envp[i], 1);
-		write(1, "\n", 1);
+		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
+		(c != 0 && c != line[i]))
+			size++;
 		i++;
 	}
+	return (size);
 }
 
-char	**add_env(char *arg, char **envp)
+static char	*get_value(char *line, int i, int c)
 {
-	int		i;
-	char	**temp;
+	int		y;
+	char	*arg;
 
-	i = 0;
-	while (envp[i])
+	y = 0;
+	arg = ft_calloc(sizeof(char), get_len(line) + 1);
+	if (!arg)
+		return (NULL);
+	while (line[i] && line[i] != '=')
+		arg[y++] = line[i++];
+	while (line[i] && (line[i] != ' ' || c != 0))
 	{
-		if (ft_strncmp(arg, envp[i], ft_strlen(arg)) == 0)
+		if (line[i] == '\"' || line[i] == '\'')
 		{
-			free(envp[i]);
-			envp[i] = ft_strdup(arg);
-			return (envp);
+			if (c == line[i])
+				c = 0;
+			else if (c == 0)
+				c = line[i];
 		}
+		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
+		(c != 0 && c != line[i]))
+			arg[y++] = line[i];
 		i++;
 	}
-	temp = ft_calloc(i + 2, sizeof(char *));
-	if (!temp)
-		return (free(envp), NULL);
-	i = 0;
-	while (envp[i])
-	{
-		temp[i] = ft_strdup(envp[i]);
-		free(envp[i++]);
-	}
-	temp[i] = ft_strdup(arg);
-	return (free(envp), temp);
+	return (arg);
 }
 
-int	ft_export(char *line, char **envp)
+static char	*get_arg(char *line)
 {
 	int		i;
-	char	**cmd;
+	int		y;
+	char	*arg;
+
+	i = 0;
+	while (line[i] && line[i] != '=')
+		i++;
+	if (line[i - 1] == ' ')
+	{
+		y = i;
+		while (line[y] && line[y] != ' ')
+			y++;
+		arg = ft_strndup(line + i, y - i);
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		return (free(arg), NULL);
+	}
+	while (line[i] && line[i] != ' ')
+		i--;
+	i++;
+	arg = get_value(line + i, 0, 0);
+	return (arg);
+}
+
+void	add_env(char ***envp, char *arg, int y)
+{
+	int		i;
+	char	**result;
+
+	result = ft_calloc(sizeof(char *), y + 2);
+	if (!result)
+		return ;
+	i = 0;
+	while ((*envp)[i])
+	{
+		result[i] = ft_strdup((*envp)[i]);
+		if (!result[i])
+			return (free_tab(result), (void)0);
+		i++;
+	}
+	result[i] = arg;
+	free_tab((*envp));
+	(*envp) = result;
+}
+
+int	ft_export(char *line, char ***envp, int i, int y)
+{
+	char	*arg;
 	char	**temp;
 
-	cmd = ft_split(line, ' ');
-	if (!cmd)
-		return (127);
-	if (!cmd[1])
+	if (!ft_strchr(line, ' '))
 	{
-		temp = cp_tab(envp);
+		temp = cp_tab(*envp);
 		if (!temp)
-			return (free_tab(cmd), 127);
-		return (print_sorted_env(temp), free_tab(cmd), free_tab(temp), 0);
+			return (127);
+		return (print_sorted_tab(temp), free_tab(temp), 0);
 	}
-	i = 1;
-	while (cmd[i])
-	{
-		if (ft_strchr(cmd[i], '='))
-		{
-			if (ft_strncmp(cmd[i], "_=", 2) == 0)
-				i++;
-			else
-				envp = add_env(cmd[i], envp);
-		}
-		else
-		{
-			if (ft_strncmp(cmd[i], "_", 1) == 0)
-				i++;
-			else
-				envp = add_env(ft_strjoin(cmd[i], "="), envp);
-		}
+	arg = get_arg(line);
+	if (!arg)
+		return (1);
+	while (arg[i] && arg[i] != '=')
 		i++;
+	while ((*envp)[y] && ft_strncmp(arg, (*envp)[y], i) != 0)
+		y++;
+	if ((*envp)[y])
+	{
+		free((*envp)[y]);
+		(*envp)[y] = arg;
+		return (0);
 	}
-	return (free_tab(cmd), 0);
+	add_env(envp, arg, y);
+	return (0);
 }

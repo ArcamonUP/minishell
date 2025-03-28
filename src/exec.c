@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/28 10:42:05 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:33:37 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	dispatch(char *line, t_shell *data)
 	else if (ft_strncmp(line, "cd", 2) == 0)
 		exit_code = ft_cd(line, data->envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, data->envp);
+		exit_code = ft_export(line, &data->envp, 0, 0);
 	else if (ft_strncmp(line, "unset", 5) == 0)
-		exit_code = ft_unset(line, data->envp);
+		exit_code = ft_unset(line, &data->envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
 		exit_code = ft_env(data->envp);
 	else

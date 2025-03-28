@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/28 10:39:24 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:30:29 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*check_and_parse(char *line)
 	return (line);
 }
 
-int	routine(t_shell data, char *line)
+int	routine(t_shell *data, char *line)
 {
 	t_node	*tree;
 	char	**temp;
@@ -54,8 +54,8 @@ int	routine(t_shell data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-	ft_init_fdio(&data, tree);
-	g_exit_status = ft_execute_tree(tree, &data, -1);
+	ft_init_fdio(data, tree);
+	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
 	free(line);
 	free_node(tree);
@@ -76,7 +76,7 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		if (routine(data, line))
+		if (routine(&data, line))
 			break ;
 	}
 	if (line)
