@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:58:06 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/26 12:49:17 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 10:39:52 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,10 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 	data.fdin = NULL;
 	*line = NULL;
 	data.fdout = NULL;
-	data.custom_envp = 0;
 	data.envp = envp;
 	if (!data.envp || !data.envp[0])
-	{
-		data.custom_envp = 1;
 		data.envp = create_env();
-	}
+	else
+		data.envp = cp_tab(data.envp);
 	return (data);
 }
