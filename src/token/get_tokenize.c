@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_tokenize.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:54:44 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/12 11:13:52 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:43:24 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_redir(const char *line, int *i, int count)
 {
 	char	*result;
 
-	while (line[*i] && is_space(line[*i]))
+	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
 	if (line[*i])
 	{
@@ -27,7 +27,7 @@ char	*get_redir(const char *line, int *i, int count)
 			result = ft_token_file(line + *i);
 		if (!count && !result)
 			return (NULL);
-		while (line[*i] && !is_space(line[*i]))
+		while (line[*i] && !ft_isspace(line[*i]))
 			(*i)++;
 	}
 	else

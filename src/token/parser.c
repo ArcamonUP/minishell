@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/03/26 12:05:41 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:32:22 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ t_node	*ft_parse_cmd(char ***tokens)
 	char	*op;
 	char	*file;
 
-	if (**tokens && (ft_strncmp("(", **tokens, ft_strlen(**tokens)) == 0))
+	if (**tokens && (ft_strncmp("(", **tokens, 1) == 0))
 	{
 		(*tokens)++;
 		node = ft_parse_and_or(tokens);
-		if (**tokens && (ft_strncmp(")", **tokens, ft_strlen(**tokens)) == 0))
+		if (**tokens && (ft_strncmp(")", **tokens, 1) == 0))
 			(*tokens)++;
 		else
 			return (NULL);
@@ -104,7 +104,7 @@ t_node	*ft_parse_pipe(char ***tokens)
 	node = ft_parse_redir(tokens);
 	if (!node)
 		return (NULL);
-	while (**tokens && (ft_strncmp("|", **tokens, ft_strlen(**tokens)) == 0))
+	while (**tokens && (ft_strncmp("|\0", **tokens, 2) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;
@@ -129,8 +129,8 @@ t_node	*ft_parse_and_or(char ***tokens)
 	node = ft_parse_pipe(tokens);
 	if (!node)
 		return (NULL);
-	while (**tokens && (ft_strncmp("&&", **tokens, ft_strlen(**tokens)) == 0 || \
-	ft_strncmp("||", **tokens, ft_strlen(**tokens)) == 0))
+	while (**tokens && (ft_strncmp("&&\0", **tokens, 3) == 0 || \
+	ft_strncmp("||\0", **tokens, 3) == 0))
 	{
 		op = **tokens;
 		(*tokens)++;

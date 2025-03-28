@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
 /*   Updated: 2025/03/28 14:30:29 by kbaridon         ###   ########.fr       */
@@ -19,6 +19,8 @@
 #include <sys/wait.h>
 
 int	g_exit_status = 0;
+
+void	ft_print_tree(t_node *tree, int depth);
 
 char	*check_and_parse(char *line)
 {
@@ -54,6 +56,9 @@ int	routine(t_shell *data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
+		int i = 0;								//Pour montrer l ast et l ordre d execution des cmds
+		ft_print_tree(tree, i);
+		ft_printf("----------------\n");
 	ft_init_fdio(data, tree);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);

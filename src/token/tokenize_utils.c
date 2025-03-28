@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:48:44 by achu              #+#    #+#             */
-/*   Updated: 2025/03/14 11:59:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:49:43 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,14 @@
 #include "libft.h"
 #include <stdlib.h>
 
-int	is_space(const char c)
-{
-	return (c == '\n' || c == '\t' || c == '\v' || \
-			c == '\f' || c == '\r' || c == ' ');
-}
-
+// Return True if the char is an operator symbol
 int	is_operator(const char c)
 {
 	return (c == '<' || c == '>' || c == '|' || \
 			c == '(' || c == ')' || c == '&');
 }
 
+// Copy paste into another char* the src depends on len
 char	*ft_strndup(char *src, int len)
 {
 	int		i;
@@ -46,7 +42,7 @@ char	*ft_strndup(char *src, int len)
 	return (dest);
 }
 
-int	ft_token_count(const char *line)
+int	incr_token(const char *line)
 {
 	int	count;
 	int	i;
@@ -63,7 +59,7 @@ int	ft_token_count(const char *line)
 		else
 			get_cmd(line, &i, 1);
 		count++;
-		while (line[i] && is_space(line[i]))
+		while (line[i] && ft_isspace(line[i]))
 			i++;
 	}
 	return (count);

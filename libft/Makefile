@@ -6,7 +6,7 @@
 #    By: achu <achu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 19:36:55 by kbaridon          #+#    #+#              #
-#    Updated: 2025/02/13 11:42:38 by achu             ###   ########.fr        #
+#    Updated: 2025/03/27 14:41:12 by achu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRC =	ft_atoi.c \
 	ft_isalpha.c \
 	ft_isascii.c \
 	ft_isdigit.c \
+	ft_isspace.c \
 	ft_memcpy.c \
 	ft_memmove.c \
 	ft_memset.c \

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
 /*   Updated: 2025/03/28 14:34:32 by kbaridon         ###   ########.fr       */
@@ -143,10 +143,9 @@ t_node	*ft_parse_and_or(char ***tokens);
 t_node	*ft_parse_shell(char **tokens);
 
 //tokenize_utils.c
-int		is_space(const char c);
 int		is_operator(const char c);
 char	*ft_strndup(char *src, int len);
-int		ft_token_count(const char *line);
+int		incr_token(const char *line);
 
 //tokenize.c
 char	*ft_token_op(const char *line);
