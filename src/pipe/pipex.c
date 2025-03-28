@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:58 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/26 10:53:48 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 10:43:53 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 		free_tab(data.cmd);
 		free(data.pid_tab);
 		error("no such file or directory: ", args[0]);
-		free_tab(args);
+		(free_tab(args), free_tab(data.envp));
 		if (fd)
 			(close(fd[0]), close(fd[1]));
 		if (data.fd[0] != -1)
@@ -43,7 +43,7 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 		exit(EXIT_FAILURE);
 	}
 	execve(path, args, data.envp);
-	free_tab(args);
+	(free_tab(args), free_tab(data.envp));
 	free(path);
 	exit(EXIT_FAILURE);
 }

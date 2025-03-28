@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 11:51:00 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 10:39:24 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <readline/history.h>
 #include <signal.h>
 #include <sys/wait.h>
+
+int	g_exit_status = 0;
 
 char	*check_and_parse(char *line)
 {
@@ -53,15 +55,13 @@ int	routine(t_shell data, char *line)
 		return (1);
 	tree = ft_parse_shell(temp);
 	ft_init_fdio(&data, tree);
-	ft_execute_tree(tree, &data, -1);
+	g_exit_status = ft_execute_tree(tree, &data, -1);
 	add_history(line);
 	free(line);
 	free_node(tree);
 	free_tab(temp);
 	return (0);
 }
-
-int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -81,6 +81,8 @@ int	main(int ac, char **av, char **envp)
 	}
 	if (line)
 		free(line);
+	if (data.envp)
+		free_tab(data.envp);
 	rl_clear_history();
 	exit(g_exit_status);
 }

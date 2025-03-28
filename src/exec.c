@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/26 12:09:21 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 10:42:05 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,21 @@
 int	dispatch(char *line, t_shell *data)
 {
 	int		exit_code;
-	char	**temp;
 
-	temp = cp_tab(data->envp);
 	if (ft_strncmp(line, "echo", 4) == 0)
-		exit_code = ft_echo(line, temp);
+		exit_code = ft_echo(line, data->envp);
 	else if (ft_strncmp(line, "pwd", 3) == 0)
-		exit_code = ft_pwd(temp);
+		exit_code = ft_pwd(data->envp);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		exit_code = ft_cd(line, &temp);
+		exit_code = ft_cd(line, data->envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, &temp);
+		exit_code = ft_export(line, data->envp);
 	else if (ft_strncmp(line, "unset", 5) == 0)
-		exit_code = ft_unset(line, &temp);
+		exit_code = ft_unset(line, data->envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
-		exit_code = ft_env(temp);
+		exit_code = ft_env(data->envp);
 	else
-		return (free_tab(temp), -1);
-	data->envp = temp;
+		return (-1);
 	return (exit_code);
 }
 
@@ -49,7 +46,7 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 		exit(EXIT_FAILURE);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
-		(free_tab(cmd), exit(127));
+		(free_tab(cmd), free_tab(data->envp), exit(127));
 	if (node->fdin != -1)
 		dup2(node->fdin, STDIN_FILENO);
 	if (node->fdout != -1)
@@ -58,6 +55,7 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 		close(fd);
 	execve(path, cmd, data->envp);
 	free_tab(cmd);
+	free_tab(data->envp);
 	ft_putstr_fd("Error: command failed\n", 2);
 	exit(126);
 }
