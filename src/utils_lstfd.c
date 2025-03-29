@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 02:21:47 by achu              #+#    #+#             */
-/*   Updated: 2025/02/19 02:39:14 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/29 20:40:38 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	ft_lstfd_clear(t_lstfd **list)
 	while (*list && list)
 	{
 		temp = (*list)->next;
-		free(list);
 		*list = temp;
+		free(list);
 	}
 }

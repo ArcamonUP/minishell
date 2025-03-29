@@ -21,8 +21,8 @@ INCDIR = includes
 NAME = minishell
 HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 
-SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
-		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
+SRC =	function/ft_cd.c function/ft_echo.c function/ft_env.c \
+		function/ft_export.c function/ft_pwd.c function/ft_unset.c \
 		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_init.c pipe/pipex_lib.c \
 		token/tokenize.c token/get_tokenize.c token/tokenize_utils.c \
 		token/parser.c token/parser_utils.c \

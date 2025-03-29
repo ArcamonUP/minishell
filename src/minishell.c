@@ -71,11 +71,9 @@ int	routine(t_shell *data, char *line)
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	data;
-	int		i;
 	char	*line;
 
 	((void)ac, (void)av);
-	i = 0;
 	data = init(ac, av, envp, &line);
 	if (!data.envp)
 		return (1);

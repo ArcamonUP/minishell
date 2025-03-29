@@ -36,6 +36,26 @@ int	dispatch(char *line, t_shell *data)
 	return (exit_code);
 }
 
+static int	fdio_process(t_node	*leaf, t_shell *data)
+{
+	int	fd;
+	int	exit_code;
+
+	fd = dup(STDOUT_FILENO);
+	if (fd < 0)
+		return (error("Dup failed.\n", NULL), -1);
+	if (leaf->fdout)
+	{
+		if (dup2(leaf->fdout, STDOUT_FILENO) == 0)
+			return (close(fd), error("Dup2 failed.\n", NULL), -1);
+	}
+	exit_code = dispatch(leaf->str, data);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+		return (close(fd), error("Error.\n", NULL), -1);
+	close(fd);
+	return (exit_code);
+}
+
 static void	child_process(int fd, t_node *node, t_shell *data)
 {
 	char	**cmd;
@@ -65,7 +85,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	pid_t	pid;
 	int		status;
 
-	status = dispatch(node->str, data);
+	status = fdio_process(node, data);
 	if (status > -1)
 		return (status);
 	pid = fork();
