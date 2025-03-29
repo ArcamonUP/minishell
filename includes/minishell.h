@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 15:43:37 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/28 14:34:32 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 16:16:06 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,17 +129,10 @@ t_shell	init(int ac, char **av, char **envp, char **line);
 
 //minishell.c
 
-//parser_utils.c
+//parser
 t_type	get_optype(char *str);
-int		is_redir(char *str);
 t_node	*ft_node_new(char *str, t_type type);
 t_node	*ft_node_parent(char *str, t_node *left, t_node *right);
-
-//parser.c
-t_node	*ft_parse_cmd(char ***tokens);
-t_node	*ft_parse_redir(char ***tokens);
-t_node	*ft_parse_pipe(char ***tokens);
-t_node	*ft_parse_and_or(char ***tokens);
 t_node	*ft_parse_shell(char **tokens);
 
 //tokenize_utils.c

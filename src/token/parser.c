@@ -6,12 +6,15 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:14 by achu              #+#    #+#             */
-/*   Updated: 2025/03/27 15:32:22 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 17:51:32 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+t_node	*ft_parse_and_or(char ***tokens);
+int		is_redir(char *str);
 
 t_node	*ft_parse_cmd(char ***tokens)
 {

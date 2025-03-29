@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:40:53 by achu              #+#    #+#             */
-/*   Updated: 2025/03/28 14:33:37 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/03/28 18:16:45 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,26 @@ int	dispatch(char *line, t_shell *data)
 		exit_code = ft_env(data->envp);
 	else
 		return (-1);
+	return (exit_code);
+}
+
+static int	fdio_process(t_node	*leaf, t_shell *data)
+{
+	int	fd;
+	int	exit_code;
+
+	fd = dup(STDOUT_FILENO);
+	if (fd < 0)
+		return (error("Dup failed.\n", NULL), -1);
+	if (leaf->fdout)
+	{
+		if (dup2(leaf->fdout, STDOUT_FILENO) == 0)
+			return (close(fd), error("Dup2 failed.\n", NULL), -1);
+	}
+	exit_code = dispatch(leaf->str, data);
+	if (dup2(fd, STDOUT_FILENO) == -1)
+		return (close(fd), error("Error.\n", NULL), -1);
+	close(fd);
 	return (exit_code);
 }
 
@@ -65,7 +85,7 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	pid_t	pid;
 	int		status;
 
-	status = dispatch(node->str, data);
+	status = fdio_process(node, data);
 	if (status > -1)
 		return (status);
 	pid = fork();

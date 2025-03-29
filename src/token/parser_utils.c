@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:03:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/27 15:34:28 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 17:45:29 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,18 @@ t_type	get_optype(char *str)
 	return (CMD);
 }
 
-int	is_redir(char *str)
+int	is_input(char *str)
 {
 	if (ft_strncmp(str, "<<\0", 3) == 0)
 		return (1);
-	else if (ft_strncmp(str, ">>\0", 3) == 0)
-		return (1);
 	else if (ft_strncmp(str, "<\0", 2) == 0)
+		return (1);
+	return (0);
+}
+
+int	is_output(char *str)
+{
+	if (ft_strncmp(str, ">>\0", 3) == 0)
 		return (1);
 	else if (ft_strncmp(str, ">\0", 2) == 0)
 		return (1);

@@ -6,7 +6,7 @@
 #    By: achu <achu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/03/28 15:38:16 by achu             ###   ########.fr        #
+#    Updated: 2025/03/28 18:05:19 by achu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,13 @@ INCDIR = includes
 NAME = minishell
 HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 
-SRC =	functions/ft_cd.c functions/ft_echo.c functions/ft_env.c \
-		functions/ft_export.c functions/ft_pwd.c functions/ft_unset.c \
+SRC =	function/ft_cd.c function/ft_echo.c function/ft_env.c \
+		function/ft_export.c function/ft_pwd.c function/ft_unset.c \
 		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_init.c pipe/pipex_lib.c \
 		token/tokenize.c token/get_tokenize.c token/tokenize_utils.c \
-		token/parser.c token/parser_utils.c basics.c \
+		token/parser.c token/parser_utils.c \
 		checker.c checker_utils.c \
+		basics.c \
 		exec/exec.c exec/exec_and_or.c exec/exec_redir.c \
 		utils.c init.c init_redir.c utils_lstfd.c free.c \
 		minishell.c \

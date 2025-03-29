@@ -6,12 +6,14 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:41:17 by achu              #+#    #+#             */
-/*   Updated: 2025/03/27 14:46:14 by achu             ###   ########.fr       */
+/*   Updated: 2025/03/28 16:19:06 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+int	is_redir(char *str);
 
 char	*ft_token_op(const char *line)
 {
