@@ -6,92 +6,95 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 23:20:20 by achu              #+#    #+#             */
-/*   Updated: 2025/03/31 02:09:13 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/01 00:19:33 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "minishell.h"
-//#include "libft.h"
-#include <stdio.h>
-#include <dirent.h>
+#include "minishell.h"
+#include "libft.h"
 
-static int	get_patern(char *find)
+char	**get_wild(char *find);
+
+// Calculate the len of string after an asterisk
+int	ft_strstrlen(char *str, char *find)
 {
-	int	id;
 	int	i;
+	int	j;
 
 	i = 0;
-	id = 0;
-	while (find[i])
+	while (str[i] != '\0')
 	{
-		if (find[i] == '*')
-		{
-			if (!find[i - 1])
-				id += 1;
-			else if (!find[i + 1])
-				id += 2;
-			else
-				id += 4;
-		}
+		j = 0;
+		while (find[j] && str[i + j] != '\0' && str[i + j] == find[j])
+			j++;
+		if (!find[j])
+			return (i + j);
 		i++;
 	}
-	return (id);
+	return (-1);
 }
 
-static int	proccess_wild(char *str, char *find, int id)
+// Proceed if this is the last asterisk and the next one is the last word
+static int	is_last(char *str, char *token)
 {
-	int	rem;
-	int	result;
+	size_t	len;
+	size_t	tokenlen;
 
-	rem = id;
-	result = id;
-	if (rem >= 4)
-	{
-		
-		rem -= 4;
-	}
-	else if (rem >= 2)
-	{
-		rem -= 2;
-	}
-	else if (rem >= 1)
-	{
-		
-		rem -= 1;
-	}
-	if (rem != 0)
+	len = ft_strlen(str);
+	tokenlen = ft_strlen(token);
+	if (ft_strncmp(str + len - tokenlen, token, len) != 0)
 		return (0);
 	return (1);
 }
 
-char	**all_wild(char *find, int id)
+static int	is_wildcard(char *str, char **tokens)
 {
+	int		i;
+
+	i = 0;
+	while (tokens[i])
+	{
+		if (!ft_strncmp(tokens[i], "*", 1))
+		{
+			if (!tokens[i + 1])
+				return (1);
+			if (!tokens[i + 2])
+				return (is_last(str, tokens[i + 1]));
+			if (ft_strstrlen(str, tokens[i + 1]) < 0)
+				return (0);
+			str += ft_strstrlen(str, tokens[i + 1]);
+			i++;
+		}
+		else
+		{
+			if (ft_strncmp(str, tokens[i], ft_strlen(tokens[i])) != 0)
+				return (0);
+			str += ft_strlen(tokens[i]);
+		}
+		i++;
+	}
+	return (*str == '\0');
+}
+
+// TODO : free return
+void	get_file(char *find)
+{
+	char			**tokens;
 	DIR				*dir;
 	struct dirent	*entry;
 
+	tokens = get_wild(find);
+	if (!tokens)
+		return ;
 	dir = opendir(".");
 	if (!dir)
-		return (perror("Cannot open .\n"), 1);
+		return (ft_perror("Cannot open . dir\n"));
 	entry = readdir(dir);
 	while (entry)
 	{
-		proccess_wild(entry->d_name, find, id);
+		if (is_wildcard(entry->d_name, tokens))
+			ft_printf("%s\n", entry->d_name);
 		entry = readdir(dir);
 	}
 	closedir(dir);
-}
-
-int main(int argc, char **argv)
-{
-	char	**wildcard;
-	int		id;
-
-	id = get_patern(argv[1]);
-	if (id > 0)
-		{
-			wildcard = all_wild(argv[1], id);
-			if (!wildcard)
-				return (1);
-		}
-	return (0);
 }

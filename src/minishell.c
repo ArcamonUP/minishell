@@ -47,6 +47,7 @@ int	routine(t_shell *data, char *line)
 	if (line)
 		free(line);
 	line = readline("\033[37mminishell$ ");
+	get_file(line);
 	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
 		return (free(line), write(1, "exit\n", 5), 1);
 	line = check_and_parse(line);
@@ -56,9 +57,9 @@ int	routine(t_shell *data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-				int i = 0;
-				ft_print_tree(tree, i);
-				ft_printf("----------------\n");
+				// int i = 0;
+				// ft_print_tree(tree, i);
+				// ft_printf("----------------\n");
 	ft_init_fdio(data, tree);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
