@@ -47,14 +47,6 @@ int	routine(t_shell *data, char *line)
 	if (line)
 		free(line);
 	line = readline("\033[37mminishell$ ");
-	int i = 0;
-	char **wilds = get_file(line);
-	while (wilds[i])
-	{
-		ft_printf("%s ", wilds[i]);
-		i++;
-	}
-	ft_printf("\n");
 	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
 		return (free(line), write(1, "exit\n", 5), 1);
 	line = check_and_parse(line);
