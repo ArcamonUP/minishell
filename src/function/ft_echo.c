@@ -6,37 +6,13 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/01 14:11:13 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:47:54 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <stdlib.h>
-
-char	*get_var(char *arg, char **envp)
-{
-	char	*result;
-	char	*temp;
-	int		i;
-
-	temp = ft_strjoin(arg, "=");
-	if (!temp)
-		return (NULL);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(temp, envp[i], ft_strlen(temp)) == 0)
-		{
-			result = ft_strdup(envp[i] + ft_strlen(temp));
-			free(temp);
-			return (result);
-		}
-		i++;
-	}
-	free(temp);
-	return (NULL);
-}
 
 char	*get_value(char *cmd, char *result, char **envp, int *y)
 {
@@ -47,24 +23,24 @@ char	*get_value(char *cmd, char *result, char **envp, int *y)
 
 	(*y)++;
 	temp = *y;
-	while (cmd[*y] && cmd[*y] != ' ' && \
-	cmd[*y] != '\"' && cmd[*y] != '\'')
+	while (cmd[*y] && cmd[*y] != ' ' && cmd[*y] != '\"' && cmd[*y] != '\'')
 		(*y)++;
-	if (cmd[*y] == '\'' || cmd[*y] == '\"')
-		return (result);
+	if ((cmd[*y] == '\'' || cmd[*y] == '\"') && cmd[temp - 1] != cmd[*y])
+		return ((*y)--, result);
+	if (cmd[*y - 1] == ',')
+		(*y)--;
 	name = ft_substr(cmd, temp, *y - temp);
 	if (!name)
 		return (result);
-	if (!cmd[*y])
+	if (!cmd[*y] || cmd[*y] == '\'' || cmd[*y] == '\"' || cmd[*y] == ',')
 		(*y)--;
 	var = get_var(name, envp);
-	free(name);
 	if (!var)
-		return (result);
+		return (free(name), result);
 	joined = ft_strjoin(result, var);
 	if (!joined)
-		return (free(var), result);
-	return (free(result), free(var), joined);
+		return (free(var), free(name), result);
+	return (free(result), free(var), free(name), joined);
 }
 
 static char	*ft_strjoin_char(char *str, char c)
@@ -96,11 +72,15 @@ static char	*get_arg(char *str, char *cmd, char **envp, int *c)
 		{
 			if (*c == cmd[y])
 				*c = 0;
-			else if (*c == 1)
+			else if (*c == 0)
 				*c = cmd[y];
 		}
 		if (cmd[y] == '$' && *c != '\'')
+		{
+			if (c != 0)
+				cmd[y] = *c;
 			str = get_value(cmd, str, envp, &y);
+		}
 		else if ((*c == 0 && cmd[y] != '\"' && cmd[y] != '\'') || \
 		(*c != 0 && *c != cmd[y]))
 			str = ft_strjoin_char(str, cmd[y]);
@@ -122,6 +102,8 @@ static char	*get_phrase(char **cmd, int *i, char **envp)
 	{
 		if (c == 1)
 			c = 0;
+		else
+			result = ft_strjoin_char(result, ' ');
 		result = get_arg(result, cmd[*i], envp, &c);
 		if (!result)
 			return (NULL);
@@ -147,7 +129,6 @@ int	ft_echo(char *line, char **envp)
 		temp = get_phrase(cmd, &i, envp);
 		if (temp)
 			ft_putstr_fd(temp, STDOUT_FILENO);
-		//ft_printf("-----\ntemp = %s\n cmd[%d] = %s\n", temp, i, cmd[i]);
 		if (temp && cmd[i])
 			write(STDOUT_FILENO, " ", 1);
 		free(temp);

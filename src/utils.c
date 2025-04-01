@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/26 11:47:41 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:46:08 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,28 @@ void	parent_ctrl_c(int sig)
 	(void)sig;
 }
 
-char	*dupcheck(char **env, int i, char *str)
+char	*get_var(char *arg, char **envp)
 {
+	char	*result;
 	char	*temp;
+	int		i;
 
-	if (i > 0 && !env[i - 1])
-		return (NULL);
-	temp = ft_strdup(str);
+	temp = ft_strjoin(arg, "=");
 	if (!temp)
 		return (NULL);
-	return (temp);
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(temp, envp[i], ft_strlen(temp)) == 0)
+		{
+			result = ft_strdup(envp[i] + ft_strlen(temp));
+			free(temp);
+			return (result);
+		}
+		i++;
+	}
+	free(temp);
+	return (NULL);
 }
 
 char	*get_exec(char *cmd)
