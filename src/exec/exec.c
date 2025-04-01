@@ -15,7 +15,8 @@
 #include "pipex.h"
 #include <signal.h>
 
-int	dispatch(char *line, t_shell *data)
+// Execute custom function
+int	ft_custom_exec(char *line, t_shell *data)
 {
 	int		exit_code;
 
@@ -36,34 +37,37 @@ int	dispatch(char *line, t_shell *data)
 	return (exit_code);
 }
 
-static int	fdio_process(t_node	*leaf, t_shell *data)
+// Dup2 the STDOUT to output file for custom function
+// None of the custom function require dup2 STDIN
+static int	ft_custom_fdio(t_node	*leaf, t_shell *data)
 {
 	int	fd;
 	int	exit_code;
 
 	fd = dup(STDOUT_FILENO);
 	if (fd < 0)
-		return (error("Dup failed.\n", NULL), -1);
+		return (ft_perror("Dup failed\n"), -1);
 	if (leaf->fdout)
 	{
 		if (dup2(leaf->fdout, STDOUT_FILENO) == 0)
-			return (close(fd), error("Dup2 failed.\n", NULL), -1);
+			return (close(fd), ft_perror("Dup2 failed\n"), -1);
 	}
-	exit_code = dispatch(leaf->str, data);
+	exit_code = ft_custom_exec(leaf->str, data);
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (close(fd), error("Error.\n", NULL), -1);
+		return (close(fd), ft_perror("Error\n"), -1);
 	close(fd);
 	return (exit_code);
 }
 
-static void	child_process(int fd, t_node *node, t_shell *data)
+static void	exec_child(int fd, t_node *node, t_shell *data)
 {
 	char	**cmd;
 	char	*path;
 
+	ft_custom_split(node->str);
 	cmd = ft_split(node->str, ' ');
 	if (!cmd)
-		exit(EXIT_FAILURE);
+		exit(1);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
 		(free_tab(cmd), free_tab(data->envp), exit(127));
@@ -76,23 +80,23 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 	execve(path, cmd, data->envp);
 	free_tab(cmd);
 	free_tab(data->envp);
-	ft_putstr_fd("Error: command failed\n", 2);
+	ft_perror("Error: command failed\n");
 	exit(126);
 }
 
-static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
+static int	exec_cmd(t_node *node, t_shell *data, int fd)
 {
 	pid_t	pid;
 	int		status;
 
-	status = fdio_process(node, data);
+	status = ft_custom_fdio(node, data);
 	if (status > -1)
 		return (status);
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
-		child_process(fd, node, data);
+		exec_child(fd, node, data);
 	signal(SIGINT, parent_ctrl_c);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, ctrl_c);
@@ -106,7 +110,7 @@ int	ft_execute_tree(t_node *node, t_shell *data, int fd)
 	if (!node)
 		return (0);
 	else if (node->type == CMD)
-		return (ft_exec_cmd(node, data, fd));
+		return (exec_cmd(node, data, fd));
 	else if (node->type == AND)
 		return (ft_exec_and(node, data, fd));
 	else if (node->type == OR)

@@ -128,7 +128,8 @@ void	ft_init_fdio(t_shell *data, t_node *tree);
 //init.c
 t_shell	init(int ac, char **av, char **envp, char **line);
 
-//minishell.c
+//split
+void	ft_custom_split(char *cmd);
 
 //parser
 t_type	get_optype(char *str);

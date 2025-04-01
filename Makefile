@@ -21,16 +21,36 @@ INCDIR = includes
 NAME = minishell
 HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 
-SRC =	function/ft_cd.c function/ft_echo.c function/ft_env.c \
-		function/ft_export.c function/ft_pwd.c function/ft_unset.c \
-		pipe/pipex.c pipe/pipex_utils.c pipe/pipex_init.c pipe/pipex_lib.c \
-		token/tokenize.c token/get_tokenize.c token/tokenize_utils.c \
-		token/parser.c token/parser_utils.c \
-		checker.c checker_utils.c \
-		wildcard/wildcard.c wildcard/wild_tokenize.c wildcard/wild_checker.c \
+SRC =	function/ft_cd.c \
+		function/ft_echo.c \
+		function/ft_env.c \
+		function/ft_export.c \
+		function/ft_pwd.c \
+		function/ft_unset.c \
+		exec/exec_and_or.c \
+		exec/exec_redir.c \
+		exec/exec.c \
+		pipe/pipex_utils.c \
+		pipe/pipex_init.c \
+		pipe/pipex_lib.c \
+		pipe/pipex.c \
+		token/get_tokenize.c \
+		token/tokenize_utils.c \
+		token/tokenize.c \
+		token/parser_utils.c \
+		token/parser.c \
+		wildcard/wild_tokenize.c \
+		wildcard/wild_checker.c \
+		wildcard/wildcard.c \
+		checker_utils.c \
+		checker.c \
 		basics.c \
-		exec/exec.c exec/exec_and_or.c exec/exec_redir.c \
-		utils.c init.c init_redir.c utils_lstfd.c free.c \
+		custom_split.c \
+		utils.c \
+		init.c \
+		init_redir.c \
+		utils_lstfd.c \
+		free.c \
 		minishell.c
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
