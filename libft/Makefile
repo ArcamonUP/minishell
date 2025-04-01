@@ -21,6 +21,7 @@ SRC =	ft_atoi.c \
 	ft_strtrim.c \
 	ft_bzero.c \
 	ft_itoa.c \
+	ft_perror.c \
 	ft_putendl_fd.c \
 	ft_strlcat.c \
 	ft_substr.c \
