@@ -148,7 +148,7 @@ char	*ft_token_file(const char *line);
 char	**ft_tokenize(const char *line);
 
 // Wildcards
-void	get_file(char *find);
+char	**get_file(char *find);
 
 //utils_lstfd.c
 t_lstfd	*ft_lstfd_new(int fd);

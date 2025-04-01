@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildtoken.c                                        :+:      :+:    :+:   */
+/*   wild_tokenize.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 02:00:52 by achu              #+#    #+#             */
-/*   Updated: 2025/04/01 00:21:10 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/01 15:02:10 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-static int	sum_tokenlen(char *find)
+static int	cal_tokenlen(char *find)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ static char	*get_token(char *find)
 	i = 0;
 	if (*find == '*')
 		return (ft_strdup("*"));
-	len = sum_tokenlen(find);
+	len = cal_tokenlen(find);
 	word = malloc((len + 1) * sizeof(char));
 	if (!word)
 		return (NULL);
@@ -49,7 +49,7 @@ static char	*get_token(char *find)
 	return (word);
 }
 
-static int	sum_wildlen(char *find)
+static int	cal_tokenslen(char *find)
 {
 	int	i;
 
@@ -69,14 +69,14 @@ static int	sum_wildlen(char *find)
 }
 
 // TODO: free double
-char	**get_wild(char *find)
+char	**get_tokens(char *find)
 {
 	char	**tokens;
 	int		len;
 	int		i;
 
 	i = 0;
-	len = sum_wildlen(find);
+	len = cal_tokenslen(find);
 	tokens = (char **)malloc((len + 1) * sizeof(char *));
 	if (!tokens)
 		return (NULL);

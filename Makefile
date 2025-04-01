@@ -27,7 +27,7 @@ SRC =	function/ft_cd.c function/ft_echo.c function/ft_env.c \
 		token/tokenize.c token/get_tokenize.c token/tokenize_utils.c \
 		token/parser.c token/parser_utils.c \
 		checker.c checker_utils.c \
-		wildcard/wildcard.c wildcard/wild_tokenize.c wildcard/wild_parser.c \
+		wildcard/wildcard.c wildcard/wild_tokenize.c wildcard/wild_checker.c \
 		basics.c \
 		exec/exec.c exec/exec_and_or.c exec/exec_redir.c \
 		utils.c init.c init_redir.c utils_lstfd.c free.c \

@@ -20,7 +20,7 @@
 
 int	g_exit_status = 0;
 
-void	ft_print_tree(t_node *tree, int depth);
+// void	ft_print_tree(t_node *tree, int depth);
 
 char	*check_and_parse(char *line)
 {
@@ -47,7 +47,14 @@ int	routine(t_shell *data, char *line)
 	if (line)
 		free(line);
 	line = readline("\033[37mminishell$ ");
-	get_file(line);
+	int i = 0;
+	char **wilds = get_file(line);
+	while (wilds[i])
+	{
+		ft_printf("%s ", wilds[i]);
+		i++;
+	}
+	ft_printf("\n");
 	if (!line || ft_strncmp(line, "exit\0", 5) == 0)
 		return (free(line), write(1, "exit\n", 5), 1);
 	line = check_and_parse(line);
