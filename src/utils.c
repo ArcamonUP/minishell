@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/01 15:46:08 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/01 17:53:54 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ char	*get_var(char *arg, char **envp)
 	char	*temp;
 	int		i;
 
+	if (ft_strncmp(arg, "?\0", 2) == 0)
+		return (ft_itoa(g_exit_status));
 	temp = ft_strjoin(arg, "=");
 	if (!temp)
 		return (NULL);

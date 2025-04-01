@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/01 15:47:54 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/01 17:52:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ char	*get_value(char *cmd, char *result, char **envp, int *y)
 
 	(*y)++;
 	temp = *y;
-	while (cmd[*y] && cmd[*y] != ' ' && cmd[*y] != '\"' && cmd[*y] != '\'')
+	while (cmd[*y] && ft_isalnum(cmd[*y]))
 		(*y)++;
 	if ((cmd[*y] == '\'' || cmd[*y] == '\"') && cmd[temp - 1] != cmd[*y])
 		return ((*y)--, result);
 	if (cmd[*y - 1] == ',')
 		(*y)--;
+	if (cmd[*y] == '?')
+		(*y)++;
 	name = ft_substr(cmd, temp, *y - temp);
 	if (!name)
 		return (result);
-	if (!cmd[*y] || cmd[*y] == '\'' || cmd[*y] == '\"' || cmd[*y] == ',')
+	if (!cmd[*y] || !ft_isalnum(cmd[*y]) || cmd[*y - 1] == '?')
 		(*y)--;
 	var = get_var(name, envp);
-	if (!var)
-		return (free(name), result);
 	joined = ft_strjoin(result, var);
 	if (!joined)
 		return (free(var), free(name), result);
@@ -65,8 +65,8 @@ static char	*get_arg(char *str, char *cmd, char **envp, int *c)
 {
 	int		y;
 
-	y = 0;
-	while (cmd[y])
+	y = -1;
+	while (cmd[y++ + 1])
 	{
 		if (cmd[y] == '\"' || cmd[y] == '\'')
 		{
@@ -75,16 +75,16 @@ static char	*get_arg(char *str, char *cmd, char **envp, int *c)
 			else if (*c == 0)
 				*c = cmd[y];
 		}
-		if (cmd[y] == '$' && *c != '\'')
+		if (cmd[y] == '$' && *c != '\'' && cmd[y + 1] && \
+			(ft_isalnum(cmd[y + 1]) || cmd[y + 1] == '?'))
 		{
-			if (c != 0)
+			if (*c != 0)
 				cmd[y] = *c;
 			str = get_value(cmd, str, envp, &y);
 		}
 		else if ((*c == 0 && cmd[y] != '\"' && cmd[y] != '\'') || \
 		(*c != 0 && *c != cmd[y]))
 			str = ft_strjoin_char(str, cmd[y]);
-		y++;
 	}
 	return (str);
 }

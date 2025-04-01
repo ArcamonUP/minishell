@@ -18,6 +18,9 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 
+//Exit status
+extern int	g_exit_status;
+
 typedef struct s_lstfd
 {
 	int				fd;
