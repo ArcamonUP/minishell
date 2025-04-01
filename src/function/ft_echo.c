@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/28 16:27:26 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:47:54 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,134 +14,100 @@
 #include "libft.h"
 #include <stdlib.h>
 
-char	*get_var(char *arg, char **envp)
+char	*get_value(char *cmd, char *result, char **envp, int *y)
 {
-	char	*result;
-	char	*temp;
+	int		temp;
+	char	*name;
+	char	*joined;
+	char	*var;
+
+	(*y)++;
+	temp = *y;
+	while (cmd[*y] && cmd[*y] != ' ' && cmd[*y] != '\"' && cmd[*y] != '\'')
+		(*y)++;
+	if ((cmd[*y] == '\'' || cmd[*y] == '\"') && cmd[temp - 1] != cmd[*y])
+		return ((*y)--, result);
+	if (cmd[*y - 1] == ',')
+		(*y)--;
+	name = ft_substr(cmd, temp, *y - temp);
+	if (!name)
+		return (result);
+	if (!cmd[*y] || cmd[*y] == '\'' || cmd[*y] == '\"' || cmd[*y] == ',')
+		(*y)--;
+	var = get_var(name, envp);
+	if (!var)
+		return (free(name), result);
+	joined = ft_strjoin(result, var);
+	if (!joined)
+		return (free(var), free(name), result);
+	return (free(result), free(var), free(name), joined);
+}
+
+static char	*ft_strjoin_char(char *str, char c)
+{
 	int		i;
+	char	*result;
 
-	temp = ft_strjoin(arg, "=");
-	if (!temp)
-		return (NULL);
+	result = ft_calloc(sizeof(char), ft_strlen(str) + 2);
+	if (!result)
+		return (str);
 	i = 0;
-	while (envp[i])
+	while (str[i])
 	{
-		if (ft_strncmp(temp, envp[i], ft_strlen(temp)) == 0)
-		{
-			result = ft_strdup(envp[i] + ft_strlen(temp));
-			free(temp);
-			return (result);
-		}
+		result[i] = str[i];
 		i++;
 	}
-	free(temp);
-	return (NULL);
+	result[i] = c;
+	return (free(str), result);
 }
 
-static int	get_len(char *line)
-{
-	int	i;
-	int	size;
-	int	c;
-
-	c = 0;
-	size = 0;
-	i = 0;
-	while (line[i] && (line[i] != ' ' || c != 0))
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			if (c == line[i])
-				c = 0;
-			else if (c == 0)
-				c = line[i];
-		}
-		if (line[i] == '$' && c != '\'')
-			return (size);
-		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
-		(c != 0 && c != line[i]))
-			size++;
-		i++;
-	}
-	return (size);
-}
-
-static char	*get_value(char *line, int i, int c)
+static char	*get_arg(char *str, char *cmd, char **envp, int *c)
 {
 	int		y;
-	char	*arg;
 
 	y = 0;
-	arg = ft_calloc(sizeof(char), get_len(line) + 1);
-	if (!arg)
-		return (NULL);
-	while (line[i] && (line[i] != ' ' || c != 0))
+	while (cmd[y])
 	{
-		if (line[i] == '\"' || line[i] == '\'')
+		if (cmd[y] == '\"' || cmd[y] == '\'')
 		{
-			if (c == line[i])
-				c = 0;
-			else if (c == 0)
-				c = line[i];
+			if (*c == cmd[y])
+				*c = 0;
+			else if (*c == 0)
+				*c = cmd[y];
 		}
-		if (line[i] == '$' && c != '\'')
-			return (arg);
-		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
-		(c != 0 && c != line[i]))
-			arg[y++] = line[i];
-		i++;
+		if (cmd[y] == '$' && *c != '\'')
+		{
+			if (c != 0)
+				cmd[y] = *c;
+			str = get_value(cmd, str, envp, &y);
+		}
+		else if ((*c == 0 && cmd[y] != '\"' && cmd[y] != '\'') || \
+		(*c != 0 && *c != cmd[y]))
+			str = ft_strjoin_char(str, cmd[y]);
+		y++;
 	}
-	return (arg);
+	return (str);
 }
 
-char	*get_check(char *arg, char **envp)
+static char	*get_phrase(char **cmd, int *i, char **envp)
 {
-	int		i;
-	char	*temp;
+	int		c;
 	char	*result;
 
-	i = 0;
-	while (arg[i] && arg[i] != ' ' && arg[i] != '"')
-		i++;
-	temp = ft_calloc(sizeof(char), i + 2);
-	if (!temp)
-		return (NULL);
-	while (i-- > 0)
-		temp[i] = arg[i];
-	result = get_var(temp, envp);
-	free(temp);
-	return (result);
-}
-
-static char	*get_phrase(char *arg, char **envp)
-{
-	int		i;
-	char	*result;
-	char	*temp1;
-	char	*temp2;
-
-	i = 0;
 	result = ft_calloc(1, 1);
-	while (arg[i])
+	if (!result)
+		return (NULL);
+	c = 1;
+	while (cmd[*i] && c != 0)
 	{
-		temp1 = get_value(arg, i, 0);
-		if (!temp1)
-			return (free(result), NULL);
-		i = i + ft_strlen(temp1);
-		temp2 = ft_strjoin(result, temp1);
-		(free(result), free(temp1));
-		if (!temp2)
-			return (NULL);
-		if (!arg[i])
-			return (temp2);
-		temp1 = get_check(arg + i, envp);
-		if (!temp1)
-			return (free(temp2), NULL);
-		i = i + ft_strlen(temp1);
-		result = ft_strjoin(temp2, temp1);
-		(free(temp2), free(temp1));
+		if (c == 1)
+			c = 0;
+		else
+			result = ft_strjoin_char(result, ' ');
+		result = get_arg(result, cmd[*i], envp, &c);
 		if (!result)
 			return (NULL);
+		(*i)++;
 	}
 	return (result);
 }
@@ -160,19 +126,14 @@ int	ft_echo(char *line, char **envp)
 		i = 2;
 	while (cmd[i])
 	{
-		if (cmd[i][0] == '$')
-			temp = get_var(cmd[i++] + 1, envp);
-		else
-			temp = get_phrase(cmd[i++], envp);
+		temp = get_phrase(cmd, &i, envp);
 		if (temp)
 			ft_putstr_fd(temp, STDOUT_FILENO);
 		if (temp && cmd[i])
-			write(1, " ", STDOUT_FILENO);
+			write(STDOUT_FILENO, " ", 1);
 		free(temp);
 	}
 	if (!cmd[1] || ft_strncmp(cmd[1], "-n", 2) != 0)
-		write(1, "\n", STDOUT_FILENO);
+		write(STDOUT_FILENO, "\n", 1);
 	return (free_tab(cmd), 0);
 }
-
-//Pour l'instant : ne fonctionne pas. A fix.
