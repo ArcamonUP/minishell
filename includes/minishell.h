@@ -69,7 +69,6 @@ typedef struct s_node
 int		ft_cd(char *line, char **envp);
 
 //ft_echo.c
-char	*get_var(char *arg, char **envp);
 int		ft_echo(char *line, char **envp);
 
 //ft_env.c
@@ -87,6 +86,7 @@ int		ft_unset(char *line, char ***envp);
 //basics.c
 char	**cp_tab(char **tab);
 int		ft_tablen(char **tab);
+char	*dupcheck(char **env, int i, char *str);
 void	print_sorted_tab(char **tab);
 
 //checker_utils.c
@@ -158,7 +158,7 @@ void	ft_lstfd_clear(t_lstfd **list);
 //utils.c
 void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
-char	*dupcheck(char **env, int i, char *str);
+char	*get_var(char *arg, char **envp);
 char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);
 

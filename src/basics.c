@@ -43,6 +43,18 @@ int	ft_tablen(char **tab)
 	return (i);
 }
 
+char	*dupcheck(char **env, int i, char *str)
+{
+	char	*temp;
+
+	if (i > 0 && !env[i - 1])
+		return (NULL);
+	temp = ft_strdup(str);
+	if (!temp)
+		return (NULL);
+	return (temp);
+}
+
 void	print_sorted_tab(char **tab)
 {
 	int		i;
