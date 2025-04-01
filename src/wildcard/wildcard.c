@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 23:20:20 by achu              #+#    #+#             */
-/*   Updated: 2025/04/01 00:19:33 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/01 14:42:01 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ void	get_file(char *find)
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (is_wildcard(entry->d_name, tokens))
+		if (entry->d_name[0] == '.' && ft_strncmp(tokens[0], ".", 1) != 0)
+			entry = readdir(dir);
+		else if (is_wildcard(entry->d_name, tokens))
 			ft_printf("%s\n", entry->d_name);
 		entry = readdir(dir);
 	}
