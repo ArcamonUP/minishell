@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/02 12:22:20 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/02 14:15:15 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,8 @@
 #include "libft.h"
 #include "pipex.h"
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <signal.h>
 #include <unistd.h>
-
-void	ctrl_c(int sig)
-{
-	(void)sig;
-	g_exit_status = 130;
-	write(1, "^C\n", 3);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	parent_ctrl_c(int sig)
-{
-	(void)sig;
-}
 
 char	*get_var(char *arg, char **envp)
 {
@@ -87,6 +70,8 @@ char	*get_path(char *cmd, char **envp)
 	int		i;
 
 	i = 0;
+	if (access(cmd, F_OK) == 0)
+		return (ft_strdup(cmd));
 	while (envp[i] && ft_strncmp("PATH=", envp[i], 5) != 0)
 		i++;
 	if (!envp[i])
@@ -99,10 +84,7 @@ char	*get_path(char *cmd, char **envp)
 		result = ft_strjoin(temp, cmd);
 		free(temp);
 		if (access(result, F_OK) == 0)
-		{
-			free_tab(path);
-			return (result);
-		}
+			return (free_tab(path), result);
 		(free(result), i++);
 	}
 	return (free_tab(path), get_exec(cmd));

@@ -100,6 +100,9 @@ int		wait_next(char **line, int *i, int *y, char c);
 //checker.c
 char	*checker(char **line);
 
+//exit.c
+int		handle_exit(char *line);
+
 //exec_and_or.c
 int		ft_exec_and(t_node *tree, t_shell *data, int fd);
 int		ft_exec_or(t_node *tree, t_shell *data, int fd);
@@ -138,6 +141,12 @@ t_node	*ft_node_new(char *str, t_type type);
 t_node	*ft_node_parent(char *str, t_node *left, t_node *right);
 t_node	*ft_parse_shell(char **tokens);
 
+//signals.c
+void	ctrl_c(int sig);
+void	parent_ctrl_c(int sig);
+void	parent_ctrl_backslash(int sig);
+void	ctrl_backslash(int sig);
+
 //tokenize_utils.c
 int		is_operator(const char c);
 char	*ft_strndup(char *src, int len);
@@ -155,8 +164,6 @@ void	ft_lstfd_add_back(t_lstfd **alst, t_lstfd *new);
 void	ft_lstfd_clear(t_lstfd **list);
 
 //utils.c
-void	ctrl_c(int sig);
-void	parent_ctrl_c(int sig);
 char	*get_var(char *arg, char **envp);
 char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);

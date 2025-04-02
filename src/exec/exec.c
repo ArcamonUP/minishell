@@ -63,7 +63,7 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 
 	cmd = ft_split(node->str, ' ');
 	if (!cmd || !cmd[0])
-		exit(EXIT_FAILURE);
+		exit(0);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
 		(free_tab(cmd), free_tab(data->envp), exit(127));
@@ -88,12 +88,14 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	status = fdio_process(node, data);
 	if (status > -1)
 		return (status);
+	signal(SIGQUIT, ctrl_backslash);
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
 		child_process(fd, node, data);
 	signal(SIGINT, parent_ctrl_c);
+	signal(SIGQUIT, parent_ctrl_backslash);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, ctrl_c);
 	if (WIFEXITED(status))

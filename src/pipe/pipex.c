@@ -55,6 +55,7 @@ static pid_t	pre_exec(char *cmd, t_pipex_data data)
 
 	if (pipe(fd) == -1)
 		return (-1);
+	signal(SIGQUIT, ctrl_backslash);
 	p = fork();
 	if (p == -1)
 		return (-1);
@@ -92,6 +93,7 @@ static int	last_exec(t_pipex_data data, int fd)
 	if (p == 0)
 		exec(data.cmd[i], data, NULL);
 	signal(SIGINT, parent_ctrl_c);
+	signal(SIGQUIT, parent_ctrl_backslash);
 	wait_children(data, p, &status);
 	signal(SIGINT, ctrl_c);
 	free_tab(data.cmd);
