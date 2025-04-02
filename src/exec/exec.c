@@ -62,8 +62,8 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 	char	*path;
 
 	cmd = ft_split(node->str, ' ');
-	if (!cmd)
-		exit(EXIT_FAILURE);
+	if (!cmd || !cmd[0])
+		exit(0);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
 		(free_tab(cmd), free_tab(data->envp), exit(127));
@@ -74,10 +74,10 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 	if (fd > -1)
 		close(fd);
 	execve(path, cmd, data->envp);
+	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
 	free_tab(cmd);
 	free_tab(data->envp);
-	ft_putstr_fd("Error: command failed\n", 2);
-	exit(126);
+	exit(127);
 }
 
 static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
@@ -88,14 +88,19 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	status = fdio_process(node, data);
 	if (status > -1)
 		return (status);
+	signal(SIGQUIT, ctrl_backslash);
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
 		child_process(fd, node, data);
 	signal(SIGINT, parent_ctrl_c);
+	signal(SIGQUIT, parent_ctrl_backslash);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, ignore);
+	if (g_exit_status == 131 || g_exit_status == 130)
+		return (g_exit_status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);

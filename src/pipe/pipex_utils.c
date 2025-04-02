@@ -20,10 +20,9 @@
 
 void	error(char *msg, char *other)
 {
-	ft_putstr_fd(msg, 2);
+	ft_putstr_fd(msg, STDERR_FILENO);
 	if (other)
-		ft_putstr_fd(other, 2);
-	ft_putstr_fd("\n", 2);
+		ft_putstr_fd(other, STDERR_FILENO);
 }
 
 void	end(t_pipex_data data, int i)
@@ -43,7 +42,7 @@ void	end(t_pipex_data data, int i)
 	error("Error\n", NULL);
 }
 
-void	wait_children(t_pipex_data data, pid_t p)
+void	wait_children(t_pipex_data data, pid_t p, int *status)
 {
 	int	i;
 
@@ -51,7 +50,7 @@ void	wait_children(t_pipex_data data, pid_t p)
 	while (data.pid_tab[i])
 		waitpid(data.pid_tab[i++], NULL, 0);
 	free(data.pid_tab);
-	waitpid(p, NULL, 0);
+	waitpid(p, status, 0);
 }
 
 void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/01 17:52:28 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/02 16:45:04 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ char	*get_value(char *cmd, char *result, char **envp, int *y)
 	temp = *y;
 	while (cmd[*y] && ft_isalnum(cmd[*y]))
 		(*y)++;
-	if ((cmd[*y] == '\'' || cmd[*y] == '\"') && cmd[temp - 1] != cmd[*y])
-		return ((*y)--, result);
-	if (cmd[*y - 1] == ',')
-		(*y)--;
 	if (cmd[*y] == '?')
 		(*y)++;
 	name = ft_substr(cmd, temp, *y - temp);
@@ -37,6 +33,8 @@ char	*get_value(char *cmd, char *result, char **envp, int *y)
 	if (!cmd[*y] || !ft_isalnum(cmd[*y]) || cmd[*y - 1] == '?')
 		(*y)--;
 	var = get_var(name, envp);
+	if (!var)
+		return (free(name), result);
 	joined = ft_strjoin(result, var);
 	if (!joined)
 		return (free(var), free(name), result);
@@ -48,6 +46,8 @@ static char	*ft_strjoin_char(char *str, char c)
 	int		i;
 	char	*result;
 
+	if (c == '\n')
+		return (str);
 	result = ft_calloc(sizeof(char), ft_strlen(str) + 2);
 	if (!result)
 		return (str);
