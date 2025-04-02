@@ -56,9 +56,6 @@ int	routine(t_shell *data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-				int i = 0;
-				ft_print_tree(tree, i);
-				ft_printf("----------------\n");
 	ft_init_fdio(data, tree);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);

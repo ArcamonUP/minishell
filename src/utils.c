@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/01 17:53:54 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/02 12:22:20 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 void	ctrl_c(int sig)
 {
 	(void)sig;
+	g_exit_status = 130;
 	write(1, "^C\n", 3);
 	rl_replace_line("", 0);
 	rl_on_new_line();

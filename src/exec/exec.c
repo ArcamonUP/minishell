@@ -62,7 +62,7 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 	char	*path;
 
 	cmd = ft_split(node->str, ' ');
-	if (!cmd)
+	if (!cmd || !cmd[0])
 		exit(EXIT_FAILURE);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
@@ -74,10 +74,10 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 	if (fd > -1)
 		close(fd);
 	execve(path, cmd, data->envp);
+	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
 	free_tab(cmd);
 	free_tab(data->envp);
-	ft_putstr_fd("Error: command failed\n", 2);
-	exit(126);
+	exit(127);
 }
 
 static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
