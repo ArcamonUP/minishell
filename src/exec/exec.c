@@ -98,6 +98,9 @@ static int	ft_exec_cmd(t_node *node, t_shell *data, int fd)
 	signal(SIGQUIT, parent_ctrl_backslash);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, ignore);
+	if (g_exit_status == 131 || g_exit_status == 130)
+		return (g_exit_status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);

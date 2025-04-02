@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:07:27 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/02 14:16:33 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:17:09 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,24 @@ void	parent_ctrl_c(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
+	g_exit_status = 130;
 }
 
 void	parent_ctrl_backslash(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+	write(1, "Quit (core dumped)\n", 19);
+	g_exit_status = 131;
 }
 
 void	ctrl_backslash(int sig)
 {
 	(void)sig;
-	write(1, "^\\Quit: 3\n", 10);
+	write(1, "^\\", 2);
 	g_exit_status = 131;
+}
+
+void	ignore(int sig)
+{
+	(void)sig;
 }

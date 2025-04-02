@@ -49,6 +49,8 @@ int	routine(t_shell *data, char *line)
 	line = readline("\033[37mminishell$ ");
 	if (!line)
 		return (free(line), write(1, "exit\n", 5), 1);
+	if (line[0] == '\n' || line[0] == '\0')
+		return (free(line), 0);
 	if (ft_strncmp(line, "exit ", 5) == 0 || ft_strncmp(line, "exit\n", 5) == 0 \
 		|| ft_strncmp(line, "exit\0", 5) == 0)
 		return (handle_exit(line));

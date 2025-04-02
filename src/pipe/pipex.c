@@ -92,11 +92,12 @@ static int	last_exec(t_pipex_data data, int fd)
 		i++;
 	if (p == 0)
 		exec(data.cmd[i], data, NULL);
-	signal(SIGINT, parent_ctrl_c);
-	signal(SIGQUIT, parent_ctrl_backslash);
+	(signal(SIGINT, parent_ctrl_c), signal(SIGQUIT, parent_ctrl_backslash));
 	wait_children(data, p, &status);
-	signal(SIGINT, ctrl_c);
+	(signal(SIGQUIT, ignore), signal(SIGINT, ctrl_c));
 	free_tab(data.cmd);
+	if (g_exit_status == 131 || g_exit_status == 130)
+		return (g_exit_status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);

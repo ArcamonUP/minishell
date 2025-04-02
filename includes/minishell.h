@@ -146,6 +146,7 @@ void	ctrl_c(int sig);
 void	parent_ctrl_c(int sig);
 void	parent_ctrl_backslash(int sig);
 void	ctrl_backslash(int sig);
+void	ignore(int sig);
 
 //tokenize_utils.c
 int		is_operator(const char c);
