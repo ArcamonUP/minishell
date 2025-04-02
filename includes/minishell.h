@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <dirent.h>
 # include <sys/wait.h>
 # include <sys/types.h>
 
@@ -158,6 +159,9 @@ char	*ft_token_op(const char *line);
 char	*ft_token_cmd(const char *line);
 char	*ft_token_file(const char *line);
 char	**ft_tokenize(const char *line);
+
+// Wildcards
+char	**get_file(char *find);
 
 //utils_lstfd.c
 t_lstfd	*ft_lstfd_new(int fd);
