@@ -13,7 +13,7 @@
 GREEN=\033[0;32m
 ORANGE=\033[38;5;214m
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -g
 OTHERFLAGS = -lreadline
 SRCDIR = src
 LIBFT = libft
@@ -34,6 +34,7 @@ SRC =	function/ft_cd.c \
 		pipe/pipex_init.c \
 		pipe/pipex_lib.c \
 		pipe/pipex.c \
+		spliter/custom_split.c \
 		token/get_tokenize.c \
 		token/tokenize_utils.c \
 		token/tokenize.c \
