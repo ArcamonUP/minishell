@@ -35,6 +35,7 @@ SRC =	function/ft_cd.c \
 		pipe/pipex_lib.c \
 		pipe/pipex.c \
 		spliter/custom_split.c \
+		spliter/helper.c \
 		token/get_tokenize.c \
 		token/tokenize_utils.c \
 		token/tokenize.c \
@@ -46,7 +47,6 @@ SRC =	function/ft_cd.c \
 		checker_utils.c \
 		checker.c \
 		basics.c \
-		custom_split.c \
 		utils.c \
 		init.c \
 		init_redir.c \

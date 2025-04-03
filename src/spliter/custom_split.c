@@ -6,131 +6,85 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/03 00:30:38 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/03 01:52:14 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-static void	expand_token(char **tokens, int *idx, char *str)
-{
-	int	i;
+int	req_realloc(char	**buffer, size_t *size, size_t need);
 
-	i = *idx;
-	tokens = ft_realloc(tokens, i * sizeof(char *), (i + 2) * sizeof(char *));
-	tokens[i] = strdup(str);
-    tokens[i + 1] = NULL;
-    *idx++;
-}
-
-static char	*do_squote(char **str)
+static char	*do_var(char **str, char **envp)
 {
-	char	buffer[1024];
+	char	*buffer;
+	char	*var;
+	size_t	size;
 	size_t	i;
 
 	i = 0;
-	if (**str && **str == '\'')
+	size = 1024;
+	buffer = (char *)malloc(size * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	if (**str && **str == '$')
 		(*str)++;
-	while (**str && **str != '\'')
+	while (**str && ft_isalnum(**str))
 	{
+		if (!req_realloc(&buffer, &size, i + 1))
+			return (NULL);
 		buffer[i] = **str;
 		(*str)++;
 		i++;
 	}
-	buffer[i] == '\0';
-	if (**str && **str == '\'')
-		(*str)++;
-	return (ft_strdup(buffer));
+	buffer[i] = '\0';
+	var = get_var(buffer, envp);
+	if (!var)
+		return (free(buffer), ft_strdup(""));
+	return (free(buffer), var);
 }
 
 static char	*do_dquote(char **str, char **envp)
 {
-	char	buffer[1024];
+	char	*buffer;
 	char	*var;
+	size_t	size;
 	size_t	i;
 
 	i = 0;
+	size = 1024;
+	buffer = (char *)malloc(size * sizeof(char));
+	if (!buffer)
+		return (NULL);
 	if (**str && **str == '"')
 		(*str)++;
 	while (**str && **str != '"')
 	{
 		if (**str && **str == '$')
 		{
-			var = do_var(*str, envp);
-			ft_strjoin(&buffer[i], var);
-			i += strlen(var);
+			var = do_var(str, envp);
+			if (!req_realloc(&buffer, &size, i + ft_strlen(var) + 1))
+				return (NULL);
+			ft_strcat(&buffer[i], var);
+			i += ft_strlen(var);
+			free(var);
 		}
-		buffer[i] = **str;
+		else
+		{
+			if (!req_realloc(&buffer, &size, i + 1))
+				return (NULL);
+			buffer[i] = **str;
+			i++;		
+		}
 		(*str)++;
-		i++;
 	}
-	buffer[i] == '\0';
+	buffer[i] = '\0';
 	if (**str && **str == '"')
 		(*str)++;
-	return (ft_strdup(buffer));
+	return (buffer);
 }
 
-static char	*do_var(char **str, char **envp)
-{
-	char	buffer[1024];
-	size_t	i;
-
-	i = 0;
-	if (**str && **str == '$')
-		(*str)++;
-	while (**str && ft_isalnum(**str))
-	{
-		buffer[i] = **str;
-		(*str)++;
-		i++;
-	}
-	buffer[i] == '\0';
-	return (get_var(buffer, envp));
-}
-
-static int	add_join(char **buffer, char *join, size_t *i, size_t *size)
-{
-	char	*new_buffer;
-	size_t	new_size;
-	size_t	len;	
-
-	len = ft_strlen(join);
-	if (*i + len + 1 >= *size)
-	{
-		new_size = (*i + len + 1) * 2;
-		new_buffer = ft_realloc(*buffer, *size, new_size);
-		if (!new_buffer)
-			return (0);
-		*buffer = new_buffer;
-		*size = new_size;
-	}
-	ft_strcat(*buffer + *i, join);
-	*i += len;
-	free(join);
-	return (1);
-}
-
-static int	add_char(char **buffer, char c, size_t *i, size_t *size)
-{
-	char	*new_buffer;
-	size_t	new_size;
-
-	if (*i + 1 >= *size)
-	{
-		new_size = *size * 2;
-		new_buffer = ft_realloc(*buffer, *size, new_size);
-		if (!new_buffer)
-			return (0);
-		*buffer = new_buffer;
-		*size = new_size;
-	}
-	(*buffer)[(*i)++] = c;
-	(*buffer)[*i] = '\0';
-	return (1);
-}
-
-static char	*cal_customlen(char *str, char **envp)
+static char	*do_squote(char **str)
 {
 	char	*buffer;
 	size_t	size;
@@ -141,7 +95,56 @@ static char	*cal_customlen(char *str, char **envp)
 	buffer = (char *)malloc(size * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (*str)
+	if (**str && **str == '\'')
+		(*str)++;
+	while (**str && **str != '\'')
+	{
+		if (!req_realloc(&buffer, &size, i + 1))
+			return (NULL);
+		buffer[i] = **str;
+		(*str)++;
+		i++;
+	}
+	buffer[i] = '\0';
+	if (**str && **str == '\'')
+		(*str)++;
+	return (buffer);
+}
+
+static int	add_join(char **buffer, char *join, size_t *i, size_t *size)
+{
+	size_t	len;	
+
+	len = ft_strlen(join);
+	if (!req_realloc(buffer, size, *i + len + 1))
+			return (0);
+	ft_strcat(*buffer + *i, join);
+	*i += len;
+	free(join);
+	return (1);
+}
+
+static int	add_schar(char **buffer, char c, size_t *i, size_t *size)
+{
+	if (!req_realloc(buffer, size, *i + 1))
+		return (0);
+	(*buffer)[(*i)++] = c;
+	(*buffer)[*i] = '\0';
+	return (1);
+}
+
+static char	*craft_arg(char *str, char **envp)
+{
+	char	*buffer;
+	size_t	size;
+	size_t	i;
+
+	i = 0;
+	size = 1024;
+	buffer = (char *)malloc(size * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	while (*str && !ft_isspace(*str))
 	{
 		if (*str && *str == '\'')
 			add_join(&buffer, do_squote(&str), &i, &size);
@@ -150,13 +153,15 @@ static char	*cal_customlen(char *str, char **envp)
 		else if (*str && *str == '$')
 			add_join(&buffer, do_var(&str, envp), &i, &size);
 		else
-			add_char(&buffer, *str, &i, &size);
-		str++;
+		{
+			add_schar(&buffer, *str, &i, &size);
+			str++;
+		}
 	}
 	return (buffer);
 }
 
-void	ft_custom_split(char *cmd)
+void	ft_custom_split(char *cmd, char **envp)
 {
-	//ft_printf("len: %i\n", cal_customlen(cmd));
+	ft_printf("test: %s\n", craft_arg(cmd, envp));
 }
