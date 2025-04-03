@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_perror.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 17:19:52 by achu              #+#    #+#             */
-/*   Updated: 2025/03/31 17:25:25 by achu             ###   ########.fr       */
+/*   Created: 2025/04/03 10:49:51 by kbaridon          #+#    #+#             */
+/*   Updated: 2025/04/03 10:50:09 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "unistd.h"
+#include "libft.h"
+#include <unistd.h>
 
-void    ft_perror(char *str)
+void	ft_perror(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i])
-        i++;
-    write(2, str, i);
+	i = 0;
+	while (str[i])
+		i++;
+	write(2, str, i);
 }

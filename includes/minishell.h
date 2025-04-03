@@ -78,7 +78,7 @@ int		ft_echo(char *line, char **envp);
 int		ft_env(char **envp);
 
 //ft_export.c
-int		ft_export(char *line, char ***envp, int i, int y);
+int		ft_export(char *line, char ***envp, int i);
 
 //ft_pwd.c
 int		ft_pwd(char **envp);

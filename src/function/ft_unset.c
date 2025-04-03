@@ -14,6 +14,30 @@
 #include "libft.h"
 #include <stdlib.h>
 
+int	get_env_size(char **cmd, char ***envp)
+{
+	int		i;
+	int		size;
+	char	*temp;
+
+	size = 0;
+	i = 0;
+	while ((*envp)[i++])
+		size++;
+	i = 1;
+	while (cmd[i])
+	{
+		temp = get_var(cmd[i], *envp);
+		if (temp)
+		{
+			free(temp);
+			size--;
+		}
+		i++;
+	}
+	return (size);
+}
+
 void	unset(char **cmd, char ***result, char **envp)
 {
 	int	i;
@@ -24,7 +48,7 @@ void	unset(char **cmd, char ***result, char **envp)
 	c = 0;
 	while (envp[i])
 	{
-		y = 0;
+		y = 1;
 		while (cmd[y])
 		{
 			if (ft_strncmp(envp[i], cmd[y], ft_strlen(cmd[y])) == 0)
@@ -39,7 +63,6 @@ void	unset(char **cmd, char ***result, char **envp)
 
 int	ft_unset(char *line, char ***envp)
 {
-	int		i;
 	int		size;
 	char	**cmd;
 	char	**result;
@@ -47,12 +70,7 @@ int	ft_unset(char *line, char ***envp)
 	cmd = ft_split(line, ' ');
 	if (!cmd)
 		return (127);
-	size = 0;
-	while ((*envp)[size])
-		size++;
-	i = 1;
-	while (cmd[i++])
-		size--;
+	size = get_env_size(cmd, envp);
 	result = ft_calloc(sizeof(char *), size + 1);
 	if (!result)
 		return (free_tab(cmd), 127);

@@ -64,7 +64,7 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 	else if (ft_strncmp(line, "cd", 2) == 0)
 		exit_code = ft_cd(line, data.envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, &data.envp, 0, 0);
+		exit_code = ft_export(line, &data.envp, 0);
 	else if (ft_strncmp(line, "unset", 5) == 0)
 		exit_code = ft_unset(line, &data.envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
