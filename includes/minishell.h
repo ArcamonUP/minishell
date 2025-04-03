@@ -129,7 +129,7 @@ void	ft_init_fdio(t_shell *data, t_node *tree);
 t_shell	init(int ac, char **av, char **envp, char **line);
 
 //split
-void	ft_custom_split(char *cmd, char **envp);
+char	**ft_custom_split(char *cmd, char **envp);
 
 //parser
 t_type	get_optype(char *str);

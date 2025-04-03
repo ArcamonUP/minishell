@@ -20,7 +20,7 @@
 
 int	g_exit_status = 0;
 
-// void	ft_print_tree(t_node *tree, int depth);
+void	ft_print_tree(t_node *tree, int depth);
 
 char	*check_and_parse(char *line)
 {

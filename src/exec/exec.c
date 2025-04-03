@@ -64,23 +64,22 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 	char	**cmd;
 	char	*path;
 
-	ft_custom_split(node->str, data->envp);
-	// cmd = ft_split(node->str, ' ');
-	// if (!cmd)
-	// 	exit(1);
-	// path = get_path(cmd[0], data->envp);
-	// if (!path)
-	// 	(free_tab(cmd), free_tab(data->envp), exit(127));
-	// if (node->fdin != -1)
-	// 	dup2(node->fdin, STDIN_FILENO);
-	// if (node->fdout != -1)
-	// 	dup2(node->fdout, STDOUT_FILENO);
-	// if (fd > -1)
-	// 	close(fd);
-	// execve(path, cmd, data->envp);
-	// free_tab(cmd);
-	// free_tab(data->envp);
-	// ft_perror("Error: command failed\n");
+	cmd = ft_custom_split(node->str, data->envp);
+	if (!cmd)
+		exit(1);
+	path = get_path(cmd[0], data->envp);
+	if (!path)
+		(free_tab(cmd), free_tab(data->envp), exit(127));
+	if (node->fdin != -1)
+		dup2(node->fdin, STDIN_FILENO);
+	if (node->fdout != -1)
+		dup2(node->fdout, STDOUT_FILENO);
+	if (fd > -1)
+		close(fd);
+	execve(path, cmd, data->envp);
+	free_tab(cmd);
+	free_tab(data->envp);
+	ft_perror("Error: command failed\n");
 	exit(126);
 }
 

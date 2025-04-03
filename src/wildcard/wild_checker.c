@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:46:57 by achu              #+#    #+#             */
-/*   Updated: 2025/04/01 16:33:10 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/03 14:01:59 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_wildcard(char *str, char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (!ft_strncmp(tokens[i], "*", 1))
+		if ((unsigned char)tokens[i][0] == 0xFF)
 		{
 			if (!tokens[i + 1])
 				return (1);

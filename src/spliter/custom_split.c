@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/03 01:52:14 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/03 19:19:17 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 #include "libft.h"
 
 int	req_realloc(char	**buffer, size_t *size, size_t need);
+int	expand_realloc(char	***buffer, size_t size);
+
+static void	pre_asterisk(char *str)
+{
+	int	in_squote;
+	int	in_dquote;
+
+	in_squote = 0;
+	in_dquote = 0;
+	while (*str)
+	{
+		if (*str && *str == '\'')
+			in_squote = !in_squote;
+		else if (*str && *str == '"')
+			in_dquote = !in_dquote;
+		else if (*str == '*' && !in_squote && !in_dquote)
+			*str = (unsigned char)0xFF;
+		str++;
+	}
+}
 
 static char	*do_var(char **str, char **envp)
 {
@@ -74,9 +94,9 @@ static char	*do_dquote(char **str, char **envp)
 			if (!req_realloc(&buffer, &size, i + 1))
 				return (NULL);
 			buffer[i] = **str;
+			(*str)++;
 			i++;		
 		}
-		(*str)++;
 	}
 	buffer[i] = '\0';
 	if (**str && **str == '"')
@@ -124,16 +144,18 @@ static int	add_join(char **buffer, char *join, size_t *i, size_t *size)
 	return (1);
 }
 
-static int	add_schar(char **buffer, char c, size_t *i, size_t *size)
+static int	add_schar(char **buffer, char **str, size_t *i, size_t *size)
 {
 	if (!req_realloc(buffer, size, *i + 1))
 		return (0);
-	(*buffer)[(*i)++] = c;
-	(*buffer)[*i] = '\0';
+	(*buffer)[*i] = **str;
+	(*buffer)[*i + 1] = '\0';
+	(*i)++;
+	(*str)++;
 	return (1);
 }
 
-static char	*craft_arg(char *str, char **envp)
+static char	*craft_arg(char **str, char **envp)
 {
 	char	*buffer;
 	size_t	size;
@@ -144,24 +166,77 @@ static char	*craft_arg(char *str, char **envp)
 	buffer = (char *)malloc(size * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	while (*str && !ft_isspace(*str))
+	while (**str && !ft_isspace(**str))
 	{
-		if (*str && *str == '\'')
-			add_join(&buffer, do_squote(&str), &i, &size);
-		else if (*str && *str == '"')
-			add_join(&buffer, do_dquote(&str, envp), &i, &size);
-		else if (*str && *str == '$')
-			add_join(&buffer, do_var(&str, envp), &i, &size);
+		if (**str && **str == '\'')
+			add_join(&buffer, do_squote(str), &i, &size);
+		else if (**str && **str == '"')
+			add_join(&buffer, do_dquote(str, envp), &i, &size);
+		else if (**str && **str == '$')
+			add_join(&buffer, do_var(str, envp), &i, &size);
 		else
-		{
-			add_schar(&buffer, *str, &i, &size);
-			str++;
-		}
+			add_schar(&buffer, str, &i, &size);
 	}
 	return (buffer);
 }
 
-void	ft_custom_split(char *cmd, char **envp)
+static int	craft_wild(char ***split, size_t *len, char *find)
 {
-	ft_printf("test: %s\n", craft_arg(cmd, envp));
+	char	**files;
+	size_t	i;
+
+	i = 0;
+	files = get_file(find);
+	if (!files)
+		return (0);
+	while (files[i])
+	{
+		if (!expand_realloc(split, *len))
+			return (clear_double(*split), 0);
+		(*split)[*len] = files[i];
+		(*len)++;
+		i++;
+	}
+	return (1);
+}
+
+static char	**craft_split(char *str, char **envp)
+{
+	char	**split;
+	char	*temp;
+	size_t	size;
+
+	size = 0;
+	split = (char **)malloc(size + 125 * sizeof(char *));
+	while (*str)
+	{
+		while (*str && ft_isspace(*str))
+			str++;
+		if (*str && !ft_isspace(*str))
+		{
+			temp = craft_arg(&str, envp);
+			if (!temp)
+				return (clear_double(split), NULL);
+			if (ft_strchr(temp, (unsigned char)0xFF))
+			{
+				craft_wild(&split, &size, temp);	
+				continue;		
+			}
+			if (!expand_realloc(&split, size))
+				return (clear_double(split), NULL);
+			split[size] = temp;
+			size++;
+		}
+	}
+	split[size] = 0;
+	return (split);
+}
+
+char	**ft_custom_split(char *cmd, char **envp)
+{
+	char **test;
+
+	pre_asterisk(cmd);
+	test = craft_split(cmd, envp);
+	return (test);
 }
