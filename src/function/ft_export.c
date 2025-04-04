@@ -73,22 +73,18 @@ int	ft_export(char *line, char ***envp, int i)
 			return (127);
 		return (print_sorted_tab(temp), free_tab(temp), 0);
 	}
-	ft_printf("Salut\n");
-	temp = ft_split(line, ' ');
+	temp = ft_divise(line, *envp, 0);
 	if (!temp)
 		return (127);
-	ft_printf("Salut\n");
+	i--;
 	while (temp[++i])
 	{
-		ft_printf("i = %d\n", i);
 		if (parse_var(temp[i]))
 			continue ;
 		else
 			add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
 	}
-	ft_printf("Salut\n");
-	free_tab(temp);
 	if (!*envp)
-		return (127);
-	return (0);
+		return (free_tab(temp), 127);
+	return (free_tab(temp), 0);
 }

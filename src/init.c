@@ -17,8 +17,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
-
-void	clear_double(char **ptr);
+#include <termios.h>
 
 char	**ft_parse_env(char *envp[])
 {
@@ -90,7 +89,8 @@ char	**create_env(void)
 
 t_shell	init(int ac, char **av, char **envp, char **line)
 {
-	t_shell	data;
+	t_shell			data;
+	struct termios	term;
 
 	((void)ac, (void)av);
 	data.envp = NULL;
@@ -104,6 +104,9 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 	data.fdin = NULL;
 	*line = NULL;
 	data.fdout = NULL;
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= (ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	data.envp = envp;
 	if (!data.envp || !data.envp[0])
 		data.envp = create_env();

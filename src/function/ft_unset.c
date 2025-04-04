@@ -24,7 +24,7 @@ int	get_env_size(char **cmd, char ***envp)
 	i = 0;
 	while ((*envp)[i++])
 		size++;
-	i = 1;
+	i = 0;
 	while (cmd[i])
 	{
 		temp = get_var(cmd[i], *envp);
@@ -48,7 +48,7 @@ void	unset(char **cmd, char ***result, char **envp)
 	c = 0;
 	while (envp[i])
 	{
-		y = 1;
+		y = 0;
 		while (cmd[y])
 		{
 			if (ft_strncmp(envp[i], cmd[y], ft_strlen(cmd[y])) == 0)
@@ -67,7 +67,7 @@ int	ft_unset(char *line, char ***envp)
 	char	**cmd;
 	char	**result;
 
-	cmd = ft_split(line, ' ');
+	cmd = ft_divise(line, *envp, 0);
 	if (!cmd)
 		return (127);
 	size = get_env_size(cmd, envp);

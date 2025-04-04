@@ -46,7 +46,7 @@ int	routine(t_shell *data, char *line)
 
 	if (line)
 		free(line);
-	line = readline("\033[37mminishell$ ");
+	line = readline("\001\033[37m\002minishell$ ");
 	if (!line)
 		return (free(line), write(1, "exit\n", 5), 1);
 	if (line[0] == '\n' || line[0] == '\0')
