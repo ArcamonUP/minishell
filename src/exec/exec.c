@@ -66,7 +66,11 @@ static void	child_process(int fd, t_node *node, t_shell *data)
 		exit(0);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
-		(free_tab(cmd), free_tab(data->envp), exit(127));
+	{
+		(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
+		(free_tab(cmd), free_tab(data->envp));
+		exit(127);
+	}
 	if (node->fdin != -1)
 		dup2(node->fdin, STDIN_FILENO);
 	if (node->fdout != -1)
