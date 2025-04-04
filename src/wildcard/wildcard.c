@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 23:20:20 by achu              #+#    #+#             */
-/*   Updated: 2025/04/01 16:30:28 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/04 13:58:00 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,16 @@
 
 char	**get_tokens(char *find);
 int		is_wildcard(char *str, char **tokens);
+
+static void	rev_astrisk(char *str)
+{
+	while (*str)
+	{
+		if ((unsigned char)*str == 0xFF)
+			*str = '*';
+		str++;
+	}
+}
 
 static int	cal_len(char **tokens)
 {
@@ -35,6 +45,8 @@ static int	cal_len(char **tokens)
 		entry = readdir(dir);
 	}
 	closedir(dir);
+	if (i == 0)
+		return (1);
 	return (i);
 }
 
@@ -61,7 +73,7 @@ static char	**get_wilds(DIR *dir, char **tokens)
 		}
 		entry = readdir(dir);
 	}
-	wilds[i] = 0;
+	wilds[i] = NULL;
 	return (wilds);
 }
 
@@ -69,6 +81,7 @@ char	**get_file(char *find)
 {
 	char	**tokens;
 	char	**wilds;
+	char	*temp;
 	DIR		*dir;
 
 	tokens = get_tokens(find);
@@ -80,6 +93,13 @@ char	**get_file(char *find)
 	wilds = get_wilds(dir, tokens);
 	if (!wilds)
 		return (NULL);
+	if (!*wilds)
+	{
+		temp = ft_strdup(find);
+		rev_astrisk(temp);
+		wilds[0] = temp;
+		wilds[1] = NULL;
+	}
 	clear_double(tokens);
 	closedir(dir);
 	return (wilds);

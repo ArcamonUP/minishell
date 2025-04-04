@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 02:00:52 by achu              #+#    #+#             */
-/*   Updated: 2025/04/01 15:02:10 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/03 13:49:28 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	cal_tokenlen(char *find)
 	i = 0;
 	while (find[i])
 	{
-		if (find[i] == '*')
+		if ((unsigned char)find[i] == 0xFF)
 			return (i);
 		i++;
 	}
@@ -30,12 +30,17 @@ static int	cal_tokenlen(char *find)
 static char	*get_token(char *find)
 {
 	char	*word;
+	char	astk[2];
 	int		len;
 	int		i;
 
 	i = 0;
-	if (*find == '*')
-		return (ft_strdup("*"));
+	if (*find && (unsigned char)*find == 0xFF)
+	{
+		astk[0] = (char)0xFF;
+		astk[1] = '\0';
+		return (ft_strdup(astk));
+	}
 	len = cal_tokenlen(find);
 	word = malloc((len + 1) * sizeof(char));
 	if (!word)
@@ -56,13 +61,13 @@ static int	cal_tokenslen(char *find)
 	i = 0;
 	while (*find)
 	{
-		if (*find && *find == '*')
+		if (*find && (unsigned char)*find == 0xFF)
 			i++;
-		while (*find && *find == '*')
+		while (*find && (unsigned char)*find == 0xFF)
 			find++;
-		if (*find && *find != '*')
+		if (*find && (unsigned char)*find != 0xFF)
 			i++;
-		while (*find && *find != '*')
+		while (*find && (unsigned char)*find != 0xFF)
 			find++;
 	}
 	return (i);
@@ -82,13 +87,13 @@ char	**get_tokens(char *find)
 		return (NULL);
 	while (*find)
 	{
-		if (find && *find == '*')
+		if (find && (unsigned char)*find == 0xFF)
 			tokens[i++] = get_token(find);
-		while (*find && *find == '*')
+		while (*find && (unsigned char)*find == 0xFF)
 			find++;
-		if (*find && *find != '*')
+		if (*find && (unsigned char)*find != 0xFF)
 			tokens[i++] = get_token(find);
-		while (*find && *find != '*')
+		while (*find && (unsigned char)*find != 0xFF)
 			find++;
 	}
 	tokens[i] = 0;

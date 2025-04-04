@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 15:00:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/02 18:37:13 by achu             ###   ########.fr       */
+/*   Created: 2025/04/03 00:07:34 by achu              #+#    #+#             */
+/*   Updated: 2025/04/03 00:16:59 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	*ft_memcpy(void *dst, const void *src, size_t size)
+char	*ft_strcat(char *dest, const char *src)
 {
-	size_t				i;
-	unsigned char		*dest;
-	const unsigned char	*source;
+	char	*temp;
 
-	i = 0;
-	dest = (unsigned char *)dst;
-	source = (const unsigned char *)src;
-	while (i < size)
-	{
-		dest[i] = source[i];
-		i++;
-	}
-	return (dest);
+	temp = dest;
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = '\0';
+	return (temp);
 }

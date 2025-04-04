@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
 /*   Updated: 2025/04/02 14:15:15 by kbaridon         ###   ########.fr       */
