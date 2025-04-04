@@ -24,6 +24,7 @@ HEADERS = $(INCDIR)/minishell.h $(LIBFT)/libft.h $(INCDIR)/pipex.h
 SRC =	function/ft_cd.c \
 		function/ft_echo.c \
 		function/ft_env.c \
+		function/ft_divise.c \
 		function/ft_export.c \
 		function/ft_pwd.c \
 		function/ft_unset.c \
@@ -50,6 +51,8 @@ SRC =	function/ft_cd.c \
 		basics.c \
 		utils.c \
 		init.c \
+		exit.c \
+		signals.c \
 		init_redir.c \
 		utils_lstfd.c \
 		free.c \
