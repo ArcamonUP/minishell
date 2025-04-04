@@ -34,8 +34,9 @@ SRC =	function/ft_cd.c \
 		pipe/pipex_init.c \
 		pipe/pipex_lib.c \
 		pipe/pipex.c \
-		spliter/custom_split.c \
-		spliter/helper.c \
+		argsplit/argsplit_parser.c \
+		argsplit/argsplit_utils.c \
+		argsplit/argsplit.c \
 		token/get_tokenize.c \
 		token/tokenize_utils.c \
 		token/tokenize.c \

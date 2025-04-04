@@ -45,6 +45,7 @@ SRC =	ft_atoi.c \
 	ft_memset.c \
 	ft_realloc.c \
 	ft_split.c \
+	ft_strcpy.c \
 	ft_strcat.c \
 	ft_strchr.c \
 	ft_strdup.c \

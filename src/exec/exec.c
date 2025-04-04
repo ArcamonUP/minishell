@@ -64,7 +64,7 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 	char	**cmd;
 	char	*path;
 
-	cmd = ft_custom_split(node->str, data->envp);
+	cmd = ft_argsplit(node->str, data->envp);
 	if (!cmd)
 		exit(1);
 	path = get_path(cmd[0], data->envp);
