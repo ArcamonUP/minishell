@@ -80,3 +80,23 @@ void	print_sorted_tab(char **tab)
 		i++;
 	}
 }
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char	*result;
+	int		len1;
+	int		len2;
+
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	result = ft_calloc(len1 + len2 + 1, sizeof(char));
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s1, len1 + 1);
+	ft_strlcat(result, s2, len1 + len2 + 1);
+	free(s1);
+	free(s2);
+	return (result);
+}

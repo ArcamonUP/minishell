@@ -15,89 +15,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static int	get_len(char *line)
-{
-	int	i;
-	int	size;
-	int	c;
-
-	c = 0;
-	size = 0;
-	while (line[size] && line[size] != '=')
-		size++;
-	i = size;
-	while (line[i] && (line[i] != ' ' || c != 0))
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			if (c == line[i])
-				c = 0;
-			else if (c == 0)
-				c = line[i];
-		}
-		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
-		(c != 0 && c != line[i]))
-			size++;
-		i++;
-	}
-	return (size);
-}
-
-static char	*get_value(char *line, int i, int c)
-{
-	int		y;
-	char	*arg;
-
-	y = 0;
-	arg = ft_calloc(sizeof(char), get_len(line) + 1);
-	if (!arg)
-		return (NULL);
-	while (line[i] && line[i] != '=')
-		arg[y++] = line[i++];
-	while (line[i] && (line[i] != ' ' || c != 0))
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			if (c == line[i])
-				c = 0;
-			else if (c == 0)
-				c = line[i];
-		}
-		if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
-		(c != 0 && c != line[i]))
-			arg[y++] = line[i];
-		i++;
-	}
-	return (arg);
-}
-
-static char	*get_arg(char *line)
-{
-	int		i;
-	int		y;
-	char	*arg;
-
-	i = 0;
-	while (line[i] && line[i] != '=')
-		i++;
-	if (line[i - 1] == ' ')
-	{
-		y = i;
-		while (line[y] && line[y] != ' ')
-			y++;
-		arg = ft_strndup(line + i, y - i);
-		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		return (free(arg), NULL);
-	}
-	while (line[i] && line[i] != ' ')
-		i--;
-	i++;
-	arg = get_value(line + i, 0, 0);
-	return (arg);
-}
-
 void	add_env(char ***envp, char *arg, int y)
 {
 	int		i;
@@ -119,9 +36,34 @@ void	add_env(char ***envp, char *arg, int y)
 	(*envp) = result;
 }
 
-int	ft_export(char *line, char ***envp, int i, int y)
+int	parse_var(char *var)
 {
-	char	*arg;
+	int	i;
+
+	if (!ft_strchr(var, '='))
+		return (1);
+	i = 0;
+	while (var[i] && var[i] != '=')
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(var, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (1);
+		}
+		i++;
+	}
+	if (var[i] == '=' && i != 0)
+		return (0);
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(var, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	return (1);
+}
+
+int	ft_export(char *line, char ***envp, int i)
+{
 	char	**temp;
 
 	if (!ft_strchr(line, ' '))
@@ -131,19 +73,18 @@ int	ft_export(char *line, char ***envp, int i, int y)
 			return (127);
 		return (print_sorted_tab(temp), free_tab(temp), 0);
 	}
-	arg = get_arg(line);
-	if (!arg)
-		return (1);
-	while (arg[i] && arg[i] != '=')
-		i++;
-	while ((*envp)[y] && ft_strncmp(arg, (*envp)[y], i) != 0)
-		y++;
-	if ((*envp)[y])
+	temp = ft_divise(line, *envp, 0);
+	if (!temp)
+		return (127);
+	i--;
+	while (temp[++i])
 	{
-		free((*envp)[y]);
-		(*envp)[y] = arg;
-		return (0);
+		if (parse_var(temp[i]))
+			continue ;
+		else
+			add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
 	}
-	add_env(envp, arg, y);
-	return (0);
+	if (!*envp)
+		return (free_tab(temp), 127);
+	return (free_tab(temp), 0);
 }

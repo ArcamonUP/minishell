@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 12:05:58 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/04 10:03:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	get_fd_file(t_node *node, char *str, int bonus)
+int	get_fd_file(t_node *node, char *str)
 {
 	int	fd;
 
@@ -25,15 +25,20 @@ int	get_fd_file(t_node *node, char *str, int bonus)
 	{
 		if (node->str && ft_strncmp(node->str, str, ft_strlen(str) + 1) == 0)
 		{
-			if (bonus)
-				fd = open(node->right->str, O_CREAT | O_WRONLY | O_APPEND, \
-					0644);
-			else
+			if (ft_strncmp(node->str, ">\0", 2) == 0)
 				fd = open(node->right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			else if (ft_strncmp(node->str, ">>\0", 3))
+				fd = open(node->right->str, O_CREAT | O_WRONLY | \
+					O_APPEND, 0644);
+			else if (ft_strncmp(node->str, "<\0", 2) == 0)
+				fd = open(node->right->str, O_RDONLY);
 			if (fd == -1)
 				return (error("Error.\n", NULL), -1);
 		}
-		node = node->left;
+		if (ft_strncmp(str, "<", 1) == 0 && ft_strncmp(node->str, str, 1) != 0)
+			node = node->left;
+		else
+			node = node->right;
 	}
 	return (fd);
 }
@@ -124,6 +129,20 @@ char	**init_tab_cmd(t_node *node, t_shell *shell_data)
 	return (result);
 }
 
+int	get_fdin(t_node *node)
+{
+	int	fd;
+
+	fd = -1;
+	while (node)
+	{
+		if (node->type == CMD)
+			return (ft_atoi(node->right->str));
+		node = node->left;
+	}
+	return (fd);
+}
+
 t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
@@ -131,11 +150,14 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.cmd = init_tab_cmd(node, shell_data);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
-	data.fd[0] = get_fd_file(node, "<\0", 0);
-	data.fd[1] = get_fd_file(node, ">\0", 0);
+	data.fd[0] = node->fdin;
+	data.fd[1] = node->fdout;
 	if (data.fd[1] == -1)
 		data.fd[1] = dup(STDOUT_FILENO);
+	if (data.fd[0] == -1)
+		data.fd[0] = dup(STDIN_FILENO);
 	data.s_stdin = dup(STDIN_FILENO);
 	data.s_stdout = dup(STDOUT_FILENO);
+	//Redirections en attente... (does not work)
 	return (data);
 }

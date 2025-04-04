@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: achu <achu@student.42.fr>                  +#+  +:+       +#+         #
+#    By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/02 15:36:26 by kbaridon          #+#    #+#              #
-#    Updated: 2025/03/28 18:05:19 by achu             ###   ########.fr        #
+#    Updated: 2025/04/04 10:46:27 by kbaridon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 GREEN=\033[0;32m
 ORANGE=\033[38;5;214m
 CC = cc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -Werror -g3
 OTHERFLAGS = -lreadline
 SRCDIR = src
 LIBFT = libft

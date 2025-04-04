@@ -33,19 +33,19 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 	{
 		free_tab(data.cmd);
 		free(data.pid_tab);
-		error("no such file or directory: ", args[0]);
+		(error("minishell: ", args[0]), error(": command not found\n", NULL));
 		(free_tab(args), free_tab(data.envp));
 		if (fd)
 			(close(fd[0]), close(fd[1]));
 		if (data.fd[0] != -1)
 			close(data.fd[0]);
 		close(data.fd[1]);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	execve(path, args, data.envp);
-	(free_tab(args), free_tab(data.envp));
-	free(path);
-	exit(EXIT_FAILURE);
+	(error("minishell: ", args[0]), error(": command not found\n", NULL));
+	(free_tab(args), free_tab(data.envp), free(path));
+	exit(127);
 }
 
 static pid_t	pre_exec(char *cmd, t_pipex_data data)
@@ -55,6 +55,7 @@ static pid_t	pre_exec(char *cmd, t_pipex_data data)
 
 	if (pipe(fd) == -1)
 		return (-1);
+	signal(SIGQUIT, ctrl_backslash);
 	p = fork();
 	if (p == -1)
 		return (-1);
@@ -77,6 +78,7 @@ static int	last_exec(t_pipex_data data, int fd)
 {
 	pid_t	p;
 	int		i;
+	int		status;
 
 	dup2(fd, STDOUT_FILENO);
 	p = fork();
@@ -90,10 +92,14 @@ static int	last_exec(t_pipex_data data, int fd)
 		i++;
 	if (p == 0)
 		exec(data.cmd[i], data, NULL);
-	signal(SIGINT, parent_ctrl_c);
-	wait_children(data, p);
-	signal(SIGINT, ctrl_c);
+	(signal(SIGINT, parent_ctrl_c), signal(SIGQUIT, parent_ctrl_backslash));
+	wait_children(data, p, &status);
+	(signal(SIGQUIT, ignore), signal(SIGINT, ctrl_c));
 	free_tab(data.cmd);
+	if (g_exit_status == 131 || g_exit_status == 130)
+		return (g_exit_status);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (0);
 }
 

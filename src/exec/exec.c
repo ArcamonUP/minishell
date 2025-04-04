@@ -27,7 +27,7 @@ int	ft_custom_exec(char *line, t_shell *data)
 	else if (ft_strncmp(line, "cd", 2) == 0)
 		exit_code = ft_cd(line, data->envp);
 	else if (ft_strncmp(line, "export", 6) == 0)
-		exit_code = ft_export(line, &data->envp, 0, 0);
+		exit_code = ft_export(line, &data->envp, 0);
 	else if (ft_strncmp(line, "unset", 5) == 0)
 		exit_code = ft_unset(line, &data->envp);
 	else if (ft_strncmp(line, "env", 3) == 0)
@@ -69,7 +69,11 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 		exit(1);
 	path = get_path(cmd[0], data->envp);
 	if (!path)
-		(free_tab(cmd), free_tab(data->envp), exit(127));
+	{
+		(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
+		(free_tab(cmd), free_tab(data->envp));
+		exit(127);
+	}
 	if (node->fdin != -1)
 		dup2(node->fdin, STDIN_FILENO);
 	if (node->fdout != -1)
@@ -77,10 +81,10 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 	if (fd > -1)
 		close(fd);
 	execve(path, cmd, data->envp);
+	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
 	free_tab(cmd);
 	free_tab(data->envp);
-	ft_perror("Error: command failed\n");
-	exit(126);
+	exit(127);
 }
 
 static int	exec_cmd(t_node *node, t_shell *data, int fd)
@@ -91,14 +95,19 @@ static int	exec_cmd(t_node *node, t_shell *data, int fd)
 	status = ft_custom_fdio(node, data);
 	if (status > -1)
 		return (status);
+	signal(SIGQUIT, ctrl_backslash);
 	pid = fork();
 	if (pid < 0)
 		return (0);
 	else if (pid == 0)
 		exec_child(fd, node, data);
 	signal(SIGINT, parent_ctrl_c);
+	signal(SIGQUIT, parent_ctrl_backslash);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, ignore);
+	if (g_exit_status == 131 || g_exit_status == 130)
+		return (g_exit_status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (1);
