@@ -71,6 +71,9 @@ typedef struct s_node
 //ft_cd.c
 int		ft_cd(char *line, char **envp);
 
+//ft_divise.c
+char	**ft_divise(char *line, char **envp, int y);
+
 //ft_echo.c
 int		ft_echo(char *line, char **envp);
 
@@ -91,6 +94,7 @@ char	**cp_tab(char **tab);
 int		ft_tablen(char **tab);
 char	*dupcheck(char **env, int i, char *str);
 void	print_sorted_tab(char **tab);
+char	*ft_strjoin_free(char *s1, char *s2);
 
 //checker_utils.c
 void	check_error(char *line, int ret);
