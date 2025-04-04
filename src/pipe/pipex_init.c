@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/03 15:14:37 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/04 10:03:28 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,13 +152,12 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.pid_tab = NULL;
 	data.fd[0] = node->fdin;
 	data.fd[1] = node->fdout;
-	ft_printf("%s", node->str);
-	ft_printf("fd out = %d\n", data.fd[1]);
 	if (data.fd[1] == -1)
 		data.fd[1] = dup(STDOUT_FILENO);
 	if (data.fd[0] == -1)
 		data.fd[0] = dup(STDIN_FILENO);
 	data.s_stdin = dup(STDIN_FILENO);
 	data.s_stdout = dup(STDOUT_FILENO);
+	//Redirections en attente... (does not work)
 	return (data);
 }
