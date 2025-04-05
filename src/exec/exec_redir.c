@@ -23,7 +23,7 @@ int	ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
-	while (leaf->type != CMD)
+	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
 	fd = data->fdin->fd;
 	leaf->fdin = fd;
@@ -56,7 +56,7 @@ int	ft_exec_append(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
-	while (leaf->type != CMD)
+	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
 	leaf->fdout = data->fdout->fd;
 	temp = data->fdout->next;
@@ -71,7 +71,7 @@ int	ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
-	while (leaf->type != CMD)
+	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
 	leaf->fdout = data->fdout->fd;
 	temp = data->fdout->next;
