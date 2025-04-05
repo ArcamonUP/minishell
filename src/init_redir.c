@@ -43,38 +43,76 @@ static int	ft_limiter(char *limit)
 }
 
 // Add the fd to the right linked list
-static void	ft_add_fdio(t_shell *data, int fd, t_type op)
+static int	ft_add_fdio(t_shell *data, int fd, t_type op)
 {
 	t_lstfd	*newfd;
 
 	newfd = ft_lstfd_new(fd);
 	if (!newfd)
-		return ;
+		return (0);
 	if (op == HEREDOC || op == INPUT)
 		ft_lstfd_add_back(&data->fdin, newfd);
 	else if (op == APPEND || op == TRUNC)
 		ft_lstfd_add_back(&data->fdout, newfd);
+	return (1);
+}
+
+static char	*req_file(char *str)
+{
+	char	**files;
+	char	*file;
+
+	pre_asterisk(str);
+	files = get_file(str);
+	if (!files)
+		return (NULL);
+	if (ft_strlen_dbl(files) > 1)
+		return (ft_perror("ambiguous redirect"), free_tab(files), NULL);
+	file = ft_strdup(files[0]);
+	free_tab(files);
+	return (file);
+}
+
+static int	is_redir(t_node *tree)
+{
+	if (tree->type == HEREDOC)
+		return (1);
+	else if (tree->type == INPUT)
+		return (1);
+	else if (tree->type == APPEND)
+		return (1);
+	else if (tree->type == TRUNC)
+		return (1);
+	return (0);
 }
 
 // Init the fd of any redirection to
 // his correspondant linked list of fd
-void	ft_init_fdio(t_shell *data, t_node *tree)
+int	ft_init_fdio(t_shell *data, t_node *tree)
 {
 	int		fd;
+	char	*file;
 
-	fd = -1;
 	if (!tree)
-		return ;
+		return (0);
 	ft_init_fdio(data, tree->left);
-	if (tree->type == HEREDOC)
-		fd = ft_limiter(tree->right->str);
-	else if (tree->type == INPUT)
-		fd = open(tree->right->str, O_RDONLY);
-	else if (tree->type == APPEND)
-		fd = open(tree->right->str, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	else if (tree->type == TRUNC)
-		fd = open(tree->right->str, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd != -1)
-		ft_add_fdio(data, fd, tree->type);
+	if (is_redir(tree))
+	{
+		file = req_file(tree->right->str);
+		if (!file)
+			return (-1);
+		if (tree->type == HEREDOC)
+			fd = ft_limiter(tree->right->str);
+		else if (tree->type == INPUT)
+			fd = open(file, O_RDONLY);
+		else if (tree->type == APPEND)
+			fd = open(file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		else if (tree->type == TRUNC)
+			fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		if (fd != -1)
+			ft_add_fdio(data, fd, tree->type);
+		free(file);
+	}
 	ft_init_fdio(data, tree->right);
+	return (1);
 }

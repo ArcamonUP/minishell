@@ -40,7 +40,7 @@ int	ft_exec_input(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
-	while (leaf->type != CMD)
+	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
 	fd = data->fdin->fd;
 	leaf->fdin = fd;

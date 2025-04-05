@@ -133,7 +133,7 @@ char	*get_operator(const char *line, int *i, int count);
 char	*get_cmd(const char *line, int *i, int count);
 
 //init_redir.c
-void	ft_init_fdio(t_shell *data, t_node *tree);
+int	ft_init_fdio(t_shell *data, t_node *tree);
 
 //init.c
 t_shell	init(int ac, char **av, char **envp, char **line);
@@ -177,5 +177,6 @@ void	ft_lstfd_clear(t_lstfd **list);
 char	*get_var(char *arg, char **envp);
 char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);
+void	pre_asterisk(char *str);
 
 #endif
