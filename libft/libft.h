@@ -37,7 +37,7 @@ int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
 int		ft_isspace(int c);
-void    ft_perror(char *str);
+void	ft_perror(char *str);
 char	*ft_strdup(char *src);
 int		ft_atoi(const char *str);
 size_t	ft_strlen_dbl(char **str);
