@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/04 16:32:05 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/05 20:12:48 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,23 +106,8 @@ static char	**get_argsplit(char *str, char **envp)
 char	**ft_argsplit(char *str, char **envp)
 {
 	char	**args;
-	int		in_squote;
-	int		in_dquote;
-	size_t	i;	
 
-	i = 0;
-	in_squote = 0;
-	in_dquote = 0;
-	while (str[i])
-	{
-		if (str[i] && str[i] == '\'')
-			in_squote = !in_squote;
-		else if (str[i] && str[i] == '"')
-			in_dquote = !in_dquote;
-		else if (str[i] == '*' && !in_squote && !in_dquote)
-			str[i] = (unsigned char)0xFF;
-		i++;
-	}
+	pre_asterisk(str);
 	args = get_argsplit(str, envp);
 	if (!args)
 		return (NULL);

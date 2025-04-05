@@ -61,7 +61,8 @@ int	routine(t_shell *data, char *line)
 	if (!temp)
 		return (1);
 	tree = ft_parse_shell(temp);
-	ft_init_fdio(data, tree);
+	if (ft_init_fdio(data, tree) == -1)
+		return (free(line), free_node(tree), free_tab(temp), 1);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
 	(free(line), free_node(tree), free_tab(temp));

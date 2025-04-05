@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/02 14:15:15 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/05 20:12:24 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,25 @@ char	*get_path(char *cmd, char **envp)
 		(free(result), i++);
 	}
 	return (free_tab(path), get_exec(cmd));
+}
+
+void	pre_asterisk(char *str)
+{
+	int		in_squote;
+	int		in_dquote;
+	size_t	i;	
+
+	i = 0;
+	in_squote = 0;
+	in_dquote = 0;
+	while (str[i])
+	{
+		if (str[i] && str[i] == '\'')
+			in_squote = !in_squote;
+		else if (str[i] && str[i] == '"')
+			in_dquote = !in_dquote;
+		else if (str[i] == '*' && !in_squote && !in_dquote)
+			str[i] = (unsigned char)0xFF;
+		i++;
+	}
 }
