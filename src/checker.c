@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 14:42:24 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:22:03 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,7 @@ int	count_all(char **line, int parenthesis, int i, int check)
 int	check_wildcard(char *redir, char *filename)
 {
 	char	**tab;
-	int		i;
 
-	i = -1;
-	while (filename[++i])
-	{
-		if (filename[i] == '*')
-			filename[i] = 0xFF;
-	}
 	pre_asterisk(filename);
 	tab = get_file(filename);
 	if (!tab || !tab[0])
