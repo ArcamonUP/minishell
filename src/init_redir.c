@@ -114,6 +114,5 @@ int	ft_init_fdio(t_shell *data, t_node *tree)
 			ft_add_fdio(data, fd, tree->type);
 		free(file);
 	}
-	ft_init_fdio(data, tree->right);
-	return (1);
+	return (ft_init_fdio(data, tree->right), 1);
 }

@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 13:28:09 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:15:20 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,25 +128,11 @@ char	**init_tab_cmd(t_node *node, t_shell *shell_data)
 	return (result);
 }
 
-void	print_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		ft_putstr_fd(tab[i], 1);
-		write(1, "\n", 1);
-		i++;
-	}
-}
-
 t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
 
 	data.cmd = init_tab_cmd(node, shell_data);
-	print_tab(data.cmd);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
 	data.fd[0] = get_fd_file(node, LEFT);
