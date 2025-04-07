@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/03/18 10:49:02 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:42:24 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,31 @@ int	count_all(char **line, int parenthesis, int i, int check)
 	return (parenthesis != 0);
 }
 
+int	check_wildcard(char *redir, char *filename)
+{
+	char	**tab;
+	int		i;
+
+	i = -1;
+	while (filename[++i])
+	{
+		if (filename[i] == '*')
+			filename[i] = 0xFF;
+	}
+	pre_asterisk(filename);
+	tab = get_file(filename);
+	if (!tab || !tab[0])
+		return (check_error(redir, RET_NOFILE), 1);
+	if (ft_strncmp(redir, "<", 1) == 0 && access(tab[0], F_OK) == -1)
+		return (check_error(tab[0], RET_NOFILE), free_tab(tab), 1);
+	else if (ft_strncmp(redir, "<", 1) == 0 && access(tab[0], R_OK) == -1)
+		return (check_error(tab[0], RET_NOPERMISSIONS), free_tab(tab), 1);
+	else if (ft_strncmp(redir, ">", 1) == 0 && \
+		(access(tab[0], F_OK) == 1 && access(tab[0], W_OK) == -1))
+		return (check_error(tab[0], RET_NOPERMISSIONS), free_tab(tab), 1);
+	return (free_tab(tab), 0);
+}
+
 int	check_possible(char **line, int i)
 {
 	if (ft_strncmp(line[i], "&", 1) == 0 && ft_strncmp(line[i], "&&\0", 3) != 0)
@@ -50,11 +75,13 @@ int	check_possible(char **line, int i)
 	{
 		if (!line[i + 1])
 			return (check_error(line[i], RET_NEWLINE), 1);
+		if (ft_strchr(line[i + 1], '*'))
+			return (check_wildcard(line[i], line[i + 1]));
 		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], F_OK) == -1)
 			return (check_error(line[i + 1], RET_NOFILE), 1);
-		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], R_OK) == -1)
+		else if (ft_strncmp(line[i], "<", 1) && access(line[i + 1], R_OK) == -1)
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
-		if (ft_strncmp(line[i], ">", 1) == 0 && \
+		else if (ft_strncmp(line[i], ">", 1) == 0 && \
 		(access(line[i + 1], F_OK) == 1 && access(line[i + 1], W_OK) == -1))
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
 	}

@@ -6,13 +6,22 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/04 09:57:11 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:15:19 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <stdlib.h>
+
+int	get_c_value(char letter, int c)
+{
+	if (c == 0 && (letter == '\"' || letter == '\''))
+		c = letter;
+	else if (c == letter)
+		c = 0;
+	return (c);
+}
 
 int	ft_echo(char *line, char **envp)
 {

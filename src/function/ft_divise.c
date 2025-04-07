@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 08:06:25 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/04 10:00:41 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:15:37 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,56 +40,31 @@ static char	*get_value(char *cmd, char *result, char **envp, int *y)
 	return (free(result), free(var), free(name), joined);
 }
 
-static char	*ft_strjoin_char(char *str, char c)
-{
-	int		i;
-	char	*result;
-
-	if (c == '\n')
-		return (str);
-	result = ft_calloc(sizeof(char), ft_strlen(str) + 2);
-	if (!result)
-		return (str);
-	i = 0;
-	while (str[i])
-	{
-		result[i] = str[i];
-		i++;
-	}
-	result[i] = c;
-	return (free(str), result);
-}
-
 static char	*get_next(char *line, int *y, char **envp, int c)
 {
-	int		i;
 	char	*result;
 
-	i = *y - 1;
+	(*y)--;
 	result = ft_calloc(1, 1);
-	if (!result)
-		return (NULL);
-	while (line[++i] && (line[i] != ' ' || c != 0))
+	while (line[++(*y)] && (line[*y] != ' ' || c != 0) && result)
 	{
-		if (c == 0 && (line[i] == '\"' || line[i] == '\''))
-			c = line[i];
-		else if (c == line[i])
-			c = 0;
-		if (line[i] == '$' && c != '\'' && line[i + 1] && \
-			(ft_isalnum(line[i + 1]) || line[i + 1] == '?'))
+		c = get_c_value(line[*y], c);
+		if (line[*y] == '$' && c != '\'' && line[*y + 1] && \
+			(ft_isalnum(line[*y + 1]) || line[*y + 1] == '?'))
 		{
 			if (c != 0)
-				line[i] = c;
-			result = get_value(line, result, envp, &i);
-			if (!result)
-				return (NULL);
+				line[*y] = c;
+			result = get_value(line, result, envp, y);
 		}
-		else if ((c == 0 && line[i] != '\"' && line[i] != '\'') || \
-		(c != 0 && c != line[i]))
-			result = ft_strjoin_char(result, line[i]);
+		else if (c == 0 && line[*y] == '*')
+			result = ft_strjoin_char(result, (char)0xFF);
+		else if ((c == 0 && line[*y] != '\"' && line[*y] != '\'') || \
+		(c != 0 && c != line[*y]))
+			result = ft_strjoin_char(result, line[*y]);
 	}
-	*y = i;
-	if (line[i])
+	if (!result)
+		return (NULL);
+	if (line[*y])
 		(*y)++;
 	return (result);
 }
@@ -117,6 +92,31 @@ static char	**add_str(char **tab, char *str)
 	return (result);
 }
 
+char	*get_wildcards(char *str)
+{
+	char	**tab;
+	char	*temp;
+	int		i;
+
+	pre_asterisk(str);
+	tab = get_file(str);
+	if (!tab)
+		return (NULL);
+	free(str);
+	str = ft_strdup(tab[0]);
+	i = 1;
+	while (tab[i])
+	{
+		temp = ft_strjoin_char(str, ' ');
+		str = ft_strjoin(temp, tab[i]);
+		free(temp);
+		if (!str)
+			return (free_tab(tab), NULL);
+		i++;
+	}
+	return (free_tab(tab), str);
+}
+
 char	**ft_divise(char *line, char **envp, int y)
 {
 	char	**result;
@@ -128,7 +128,7 @@ char	**ft_divise(char *line, char **envp, int y)
 	while (*line != ' ')
 		line++;
 	line++;
-	while (line[y])
+	while (line[y] && result)
 	{
 		temp = get_next(line, &y, envp, 0);
 		if (!temp || !temp[0])
@@ -137,12 +137,11 @@ char	**ft_divise(char *line, char **envp, int y)
 				free(temp);
 			continue ;
 		}
+		if (ft_strchr(temp, (unsigned char)0xFF))
+			temp = get_wildcards(temp);
 		result = add_str(result, temp);
-		if (!result)
-			return (NULL);
 	}
 	if (!result[0])
 		return (free_tab(result), NULL);
 	return (result);
-	//Does not handle wildcards (for now)
 }

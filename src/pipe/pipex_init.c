@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/04 10:03:28 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:15:20 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,25 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	get_fd_file(t_node *node, char *str)
+int	get_fd_file(t_node *node, int way)
 {
 	int	fd;
 
 	fd = -1;
 	while (node)
 	{
-		if (node->str && ft_strncmp(node->str, str, ft_strlen(str) + 1) == 0)
+		if (node->str && node->type >= 3 && node->type <= 6)
 		{
-			if (ft_strncmp(node->str, ">\0", 2) == 0)
-				fd = open(node->right->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			else if (ft_strncmp(node->str, ">>\0", 3))
-				fd = open(node->right->str, O_CREAT | O_WRONLY | \
-					O_APPEND, 0644);
-			else if (ft_strncmp(node->str, "<\0", 2) == 0)
+			if (node->type == INPUT)
 				fd = open(node->right->str, O_RDONLY);
-			if (fd == -1)
-				return (error("Error.\n", NULL), -1);
+			else if (node->type == TRUNC)
+				fd = open(node->right->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else if (node->type == APPEND)
+				fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, \
+					0644);
+			return (fd);
 		}
-		if (ft_strncmp(str, "<", 1) == 0 && ft_strncmp(node->str, str, 1) != 0)
+		if (way == LEFT)
 			node = node->left;
 		else
 			node = node->right;
@@ -80,7 +79,8 @@ char	*get_result(t_node *node, t_shell *shell_data)
 
 	if (node->type == CMD)
 		return (ft_strdup(node->str));
-	if (node->type == TRUNC && node->left && node->left->type == CMD)
+	if ((node->type >= 3 && node->type <= 6) && \
+	node->left && node->left->type == CMD)
 		return (ft_strdup(node->left->str));
 	fd = setup_get(&line, node, shell_data);
 	if (fd < 0)
@@ -95,9 +95,8 @@ char	*get_result(t_node *node, t_shell *shell_data)
 		line = result;
 		temp = get_next_line(fd);
 	}
-	close(fd);
-	result = ft_strjoin("echo ", line);
-	return (free(line), result);
+	result = ft_strjoin("echo '", ft_strjoin_char(line, '\''));
+	return (close(fd), result);
 }
 
 char	**init_tab_cmd(t_node *node, t_shell *shell_data)
@@ -129,20 +128,6 @@ char	**init_tab_cmd(t_node *node, t_shell *shell_data)
 	return (result);
 }
 
-int	get_fdin(t_node *node)
-{
-	int	fd;
-
-	fd = -1;
-	while (node)
-	{
-		if (node->type == CMD)
-			return (ft_atoi(node->right->str));
-		node = node->left;
-	}
-	return (fd);
-}
-
 t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 {
 	t_pipex_data	data;
@@ -150,14 +135,14 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.cmd = init_tab_cmd(node, shell_data);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
-	data.fd[0] = node->fdin;
-	data.fd[1] = node->fdout;
+	data.fd[0] = get_fd_file(node, LEFT);
+	data.fd[1] = get_fd_file(node, RIGHT);
 	if (data.fd[1] == -1)
 		data.fd[1] = dup(STDOUT_FILENO);
 	if (data.fd[0] == -1)
 		data.fd[0] = dup(STDIN_FILENO);
 	data.s_stdin = dup(STDIN_FILENO);
 	data.s_stdout = dup(STDOUT_FILENO);
-	//Redirections en attente... (does not work)
+	dup2(data.fd[0], STDIN_FILENO);
 	return (data);
 }

@@ -56,7 +56,7 @@ int	routine(t_shell *data, char *line)
 		return (handle_exit(line));
 	line = check_and_parse(line);
 	if (!line)
-		return (1);
+		return (0);
 	temp = ft_tokenize(line);
 	if (!temp)
 		return (1);
@@ -65,8 +65,7 @@ int	routine(t_shell *data, char *line)
 		return (free(line), free_node(tree), free_tab(temp), 1);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
-	(free(line), free_node(tree), free_tab(temp));
-	return (0);
+	return (free(line), free_node(tree), free_tab(temp), 0);
 }
 
 int	main(int ac, char **av, char **envp)

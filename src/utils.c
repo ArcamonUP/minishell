@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/05 20:12:24 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/07 10:56:01 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,24 @@ void	pre_asterisk(char *str)
 			str[i] = (unsigned char)0xFF;
 		i++;
 	}
+}
+
+char	*ft_strjoin_char(char *str, char c)
+{
+	int		i;
+	char	*result;
+
+	if (c == '\n')
+		return (str);
+	result = ft_calloc(sizeof(char), ft_strlen(str) + 2);
+	if (!result)
+		return (str);
+	i = 0;
+	while (str[i])
+	{
+		result[i] = str[i];
+		i++;
+	}
+	result[i] = c;
+	return (free(str), result);
 }
