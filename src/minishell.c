@@ -56,7 +56,7 @@ int	routine(t_shell *data, char *line)
 		return (handle_exit(line));
 	line = check_and_parse(line);
 	if (!line)
-		return (1);
+		return (0);
 	temp = ft_tokenize(line);
 	if (!temp)
 		return (1);
