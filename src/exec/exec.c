@@ -82,8 +82,8 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 		close(fd);
 	execve(path, cmd, data->envp);
 	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
-	free_tab(cmd);
 	free_tab(data->envp);
+	free_tab(cmd);
 	exit(127);
 }
 

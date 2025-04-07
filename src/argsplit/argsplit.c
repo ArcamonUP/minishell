@@ -6,7 +6,7 @@
 /*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/05 20:12:48 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/07 16:07:44 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,23 @@ static int	add_wild(char ***split, size_t *size, char *find)
 	while (files[i])
 	{
 		if (!expand_realloc(split, *size))
-			return (clear_double(*split), 0);
-		(*split)[*size] = files[i];
+			return (free_tab(files), free_tab(*split), 0);
+		(*split)[*size] = ft_strdup(files[i]);
 		(*size)++;
 		i++;
 	}
+	free_tab(files);
+	free(find);
 	return (1);
 }
 
 static int	add_argsplit(char ***split, size_t *size, char *new)
 {
 	if (!expand_realloc(split, *size))
-		return (clear_double(*split), 0);
-	(*split)[*size] = new;
+		return (free_tab(*split), 0);
+	(*split)[*size] = ft_strdup(new);
 	(*size)++;
+	free(new);
 	return (1);
 }
 

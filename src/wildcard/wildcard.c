@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 23:20:20 by achu              #+#    #+#             */
-/*   Updated: 2025/04/07 10:20:06 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:42:02 by achu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,15 @@ char	**get_file(char *find)
 	char	*temp;
 	DIR		*dir;
 
-	tokens = get_tokens(find);
-	if (!tokens)
-		return (NULL);
 	dir = opendir(".");
 	if (!dir)
 		return (ft_perror("Cannot open . dir\n"), NULL);
+	tokens = get_tokens(find);
+	if (!tokens)
+		return (closedir(dir), NULL);
 	wilds = get_wilds(dir, tokens);
+	free_tab(tokens);
+	closedir(dir);
 	if (!wilds)
 		return (NULL);
 	if (!*wilds)
@@ -100,7 +102,5 @@ char	**get_file(char *find)
 		wilds[0] = temp;
 		wilds[1] = NULL;
 	}
-	clear_double(tokens);
-	closedir(dir);
 	return (wilds);
 }
