@@ -58,6 +58,12 @@ typedef enum e_ret
 	RET_NEWLINE = 6,
 }	t_ret;
 
+typedef enum e_way
+{
+	LEFT,
+	RIGHT,
+}	t_way;
+
 typedef struct s_node
 {
 	t_type			type;
@@ -75,6 +81,7 @@ int		ft_cd(char *line, char **envp);
 char	**ft_divise(char *line, char **envp, int y);
 
 //ft_echo.c
+int		get_c_value(char letter, int c);
 int		ft_echo(char *line, char **envp);
 
 //ft_env.c
@@ -178,5 +185,6 @@ char	*get_var(char *arg, char **envp);
 char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);
 void	pre_asterisk(char *str);
+char	*ft_strjoin_char(char *str, char c);
 
 #endif

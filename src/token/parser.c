@@ -53,7 +53,7 @@ t_node	*ft_parse_cmd(char ***tokens)
 	{
 		(*tokens)++;
 		node = ft_parse_and_or(tokens);
-		if (!**tokens && (ft_strncmp(")", **tokens, 1) != 0))
+		if (!**tokens || (ft_strncmp(")", **tokens, 1) != 0))
 			return (NULL);
 		(*tokens)++;
 		return (node);

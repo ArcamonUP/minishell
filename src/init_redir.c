@@ -93,6 +93,7 @@ int	ft_init_fdio(t_shell *data, t_node *tree)
 	int		fd;
 	char	*file;
 
+	fd = -1;
 	if (!tree)
 		return (0);
 	ft_init_fdio(data, tree->left);
