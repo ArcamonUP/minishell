@@ -62,6 +62,8 @@ OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
 
 all:	$(NAME)
 
+bonus:	$(NAME)
+
 $(NAME):	$(OBJS)
 	@if [ ! -f $(LIBFT)/libft.a ]; then \
 	echo "$(ORANGE)Compiling libft..."; \
@@ -91,4 +93,4 @@ fclean:	clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re

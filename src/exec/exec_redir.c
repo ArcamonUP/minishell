@@ -79,3 +79,20 @@ int	ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd)
 	leaf->fdin = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
+
+int	is_buildin(char *line)
+{
+	if (ft_strncmp(line, "echo", 4) == 0)
+		return (1);
+	else if (ft_strncmp(line, "pwd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(line, "cd", 2) == 0)
+		return (1);
+	else if (ft_strncmp(line, "export", 6) == 0)
+		return (1);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		return (1);
+	else if (ft_strncmp(line, "env", 3) == 0)
+		return (1);
+	return (0);
+}
