@@ -56,6 +56,7 @@ SRC =	function/ft_cd.c \
 		init_redir.c \
 		utils_lstfd.c \
 		free.c \
+		banner.c \
 		minishell.c
 
 OBJS = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))

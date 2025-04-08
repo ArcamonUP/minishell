@@ -82,6 +82,7 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 
 	((void)ac, (void)av);
+	print_banner();
 	data = init(ac, av, envp, &line);
 	if (!data.envp)
 		return (1);
