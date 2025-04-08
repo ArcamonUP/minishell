@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argsplit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/07 16:07:44 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/08 13:49:18 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int		expand_realloc(char	***buffer, size_t size);
 int		add_join(char **buffer, char *join, size_t *i, size_t *size);
 int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
-char	*do_var(char **str, char **envp);
+char	*do_var(char **str, char **envp, size_t i);
 char	*do_dquote(char **str, char **envp);
 char	*do_squote(char **str);
 
@@ -70,7 +70,7 @@ static char	*get_arg(char **str, char **envp)
 		else if (**str && **str == '"')
 			add_join(&buffer, do_dquote(str, envp), &size, &i);
 		else if (**str && **str == '$')
-			add_join(&buffer, do_var(str, envp), &size, &i);
+			add_join(&buffer, do_var(str, envp, 0), &size, &i);
 		else
 			add_schar(&buffer, str, &size, &i);
 	}
