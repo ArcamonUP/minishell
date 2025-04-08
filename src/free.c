@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:07:53 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 15:34:39 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/08 11:22:10 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_tab(char **tab)
 	int	i;
 
 	i = 0;
-	if (!tab || !*tab)
+	if (!tab)
 		return ;
 	while (tab[i])
 	{

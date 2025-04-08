@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:14 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/02/24 12:47:44 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:28:39 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ char	*handle_missings(char *to_parse)
 	line = readline("> ");
 	if (!line)
 		return (NULL);
-	temp = add_char(to_parse, '\n');
-	if (!temp)
-		return (free(line), NULL);
+	temp = ft_strjoin_char(to_parse, '\n');
 	to_parse = temp;
 	if (!to_parse)
 		return (free(line), NULL);
@@ -81,25 +79,31 @@ char	*handle_missings(char *to_parse)
 	return (temp);
 }
 
-char	*add_char(char *str, char c)
+char	*missing_elements(char **line)
 {
-	char	*result;
-	int		size;
+	char	*to_parse;
+	char	*temp;
 	int		i;
 
-	i = 0;
-	size = ft_strlen(str) + 1;
-	result = ft_calloc(size + 1, sizeof(char));
-	if (!result)
-		return (free(str), NULL);
-	while (str[i])
+	to_parse = ft_strdup(line[0]);
+	if (!to_parse)
+		return (NULL);
+	i = 1;
+	while (line[i])
 	{
-		result[i] = str[i];
+		temp = ft_strjoin_char(to_parse, ' ');
+		if (!temp)
+			return (NULL);
+		to_parse = ft_strjoin(temp, line[i]);
+		free(temp);
+		if (!to_parse)
+			return (NULL);
 		i++;
 	}
-	result[i] = c;
-	result[i + 1] = '\0';
-	return (result);
+	temp = handle_missings(to_parse);
+	if (!temp)
+		return (NULL);
+	return (temp);
 }
 
 int	wait_next(char **line, int *i, int *y, char c)
