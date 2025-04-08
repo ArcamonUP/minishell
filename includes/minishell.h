@@ -133,6 +133,7 @@ void	free_node(t_node *node);
 void	free_tab(char **tab);
 void	clear_double(char **ptr);
 void	ft_tabnfree(char **tab, int i);
+int		empty_line(char *line);
 
 //get_tokenize.c
 char	*get_redir(const char *line, int *i, int count);

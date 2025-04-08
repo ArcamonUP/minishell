@@ -47,7 +47,7 @@ int	routine(t_shell *data, char *line)
 	line = readline("\001\033[37m\002minishell$ ");
 	if (!line)
 		return (free(line), write(1, "exit\n", 5), 1);
-	if (line[0] == '\n' || line[0] == '\0')
+	if (empty_line(line))
 		return (free(line), 0);
 	if (ft_strncmp(line, "exit ", 5) == 0 || ft_strncmp(line, "exit\n", 5) == 0 \
 		|| ft_strncmp(line, "exit\0", 5) == 0)

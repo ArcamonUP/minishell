@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:31:41 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/08 12:47:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:21:22 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_echo(char *line, char **envp)
 	char	**cmd;
 
 	cmd = ft_divise(line, envp, 0);
-	if (!cmd || !cmd[0])
+	if (!cmd)
 		return (127);
 	i = 0;
 	if (cmd[0] && ft_strncmp(cmd[0], "-n\0", 3) == 0)
