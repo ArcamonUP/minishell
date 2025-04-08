@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 16:22:03 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/08 13:14:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,32 +101,6 @@ int	check_bords(char **line, int i)
 	ft_strncmp(line[i + 1], ")\0", 2) == 0)
 		return (1);
 	return (0);
-}
-
-char	*missing_elements(char **line)
-{
-	char	*to_parse;
-	char	*temp;
-	int		i;
-
-	to_parse = line[0];
-	i = 1;
-	while (line[i])
-	{
-		temp = add_char(to_parse, ' ');
-		if (!temp)
-			return (NULL);
-		to_parse = ft_strjoin(temp, line[i]);
-		free(temp);
-		if (!to_parse)
-			return (NULL);
-		i++;
-	}
-	temp = handle_missings(to_parse);
-	free(to_parse);
-	if (!temp)
-		return (NULL);
-	return (temp);
 }
 
 char	*checker(char **line)

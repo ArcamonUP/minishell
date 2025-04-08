@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:49:10 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 10:56:01 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 11:45:07 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_path(char *cmd, char **envp)
 	int		i;
 
 	i = 0;
-	if (access(cmd, F_OK) == 0)
+	if (access(cmd, F_OK) == 0 && ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	while (envp[i] && ft_strncmp("PATH=", envp[i], 5) != 0)
 		i++;

@@ -67,19 +67,18 @@ char	*get_cmd(const char *line, int *i, int count)
 		return (NULL);
 	while (line[*i] && !is_operator(line[*i]))
 	{
-		if (line[*i] && line[*i] == '"')
+		if (line[*i] && line[*i] == '"' && (*i)++)
 		{
-			(*i)++;
 			while (line[*i] && line[*i] != '"')
 				(*i)++;
 		}
-		else if (line[*i] && line[*i] == '\'')
+		else if (line[*i] && line[*i] == '\'' && (*i)++)
 		{
-			(*i)++;
 			while (line[*i] && line[*i] != '\'')
 				(*i)++;
 		}
-		(*i)++;
+		else
+			(*i)++;
 	}
 	return (result);
 }

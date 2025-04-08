@@ -81,10 +81,10 @@ int	ft_export(char *line, char ***envp, int i)
 	{
 		if (parse_var(temp[i]))
 			continue ;
-		else
-			add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
+		add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
 	}
+	free_tab(temp);
 	if (!*envp)
-		return (free_tab(temp), 127);
-	return (free_tab(temp), 0);
+		return (127);
+	return (0);
 }
