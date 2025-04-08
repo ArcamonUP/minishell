@@ -37,19 +37,38 @@ int	ft_custom_exec(char *line, t_shell *data)
 	return (exit_code);
 }
 
+static int	is_buildin(char *line)
+{
+	if (ft_strncmp(line, "echo", 4) == 0)
+		return (1);
+	else if (ft_strncmp(line, "pwd", 3) == 0)
+		return (1);
+	else if (ft_strncmp(line, "cd", 2) == 0)
+		return (1);
+	else if (ft_strncmp(line, "export", 6) == 0)
+		return (1);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		return (1);
+	else if (ft_strncmp(line, "env", 3) == 0)
+		return (1);
+	return (0);
+}
+
 // Dup2 the STDOUT to output file for custom function
 // None of the custom function require dup2 STDIN
-static int	ft_custom_fdio(t_node	*leaf, t_shell *data)
+static int	ft_custom_fdio(t_node *leaf, t_shell *data)
 {
 	int	fd;
 	int	exit_code;
 
+	if (!is_buildin(leaf->str))
+		return (-1);
 	fd = dup(STDOUT_FILENO);
 	if (fd < 0)
 		return (ft_perror("Dup failed\n"), -1);
-	if (leaf->fdout)
+	if (leaf->fdout && leaf->fdout->fd)
 	{
-		if (dup2(leaf->fdout, STDOUT_FILENO) == 0)
+		if (dup2(leaf->fdout->fd, STDOUT_FILENO) == 0)
 			return (close(fd), ft_perror("Dup2 failed\n"), -1);
 	}
 	exit_code = ft_custom_exec(leaf->str, data);
@@ -74,14 +93,16 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 		(free_tab(cmd), free_tab(data->envp));
 		exit(127);
 	}
-	if (node->fdin != -1)
-		dup2(node->fdin, STDIN_FILENO);
-	if (node->fdout != -1)
-		dup2(node->fdout, STDOUT_FILENO);
+	if (node->fdin && node->fdin->fd != -1)
+		dup2(node->fdin->fd, STDIN_FILENO);
+	if (node->fdout && node->fdout->fd != -1)
+		dup2(node->fdout->fd, STDOUT_FILENO);
 	if (fd > -1)
 		close(fd);
 	execve(path, cmd, data->envp);
 	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
+	ft_lstfd_clear(&node->fdin);
+	ft_lstfd_clear(&node->fdout);
 	free_tab(data->envp);
 	free_tab(cmd);
 	exit(127);

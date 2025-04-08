@@ -18,35 +18,33 @@
 // checking from his left node, right then left, store the heredoc
 int	ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd)
 {
-	int		fd;
 	t_node	*leaf;
 	t_lstfd	*temp;
 
 	leaf = tree;
+	temp = data->fdin;
 	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
-	fd = data->fdin->fd;
-	leaf->fdin = fd;
-	temp = data->fdin->next;
-	free(data->fdin);
-	data->fdin = temp;
+	while (temp && temp->visited == 1)
+		temp = temp->next;
+	temp->visited = 1;
+	leaf->fdin = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
 int	ft_exec_input(t_node *tree, t_shell *data, int pipe_fd)
 {
-	int		fd;
 	t_node	*leaf;
 	t_lstfd	*temp;
 
 	leaf = tree;
+	temp = data->fdin;
 	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
-	fd = data->fdin->fd;
-	leaf->fdin = fd;
-	temp = data->fdin->next;
-	free(data->fdin);
-	data->fdin = temp;
+	while (temp && temp->visited == 1)
+		temp = temp->next;
+	temp->visited = 1;
+	leaf->fdin = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
@@ -56,12 +54,13 @@ int	ft_exec_append(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
+	temp = data->fdout;
 	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
-	leaf->fdout = data->fdout->fd;
-	temp = data->fdout->next;
-	free(data->fdout);
-	data->fdout = temp;
+	while (temp && temp->visited == 1)
+		temp = temp->next;
+	temp->visited = 1;
+	leaf->fdin = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
@@ -71,11 +70,12 @@ int	ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd)
 	t_lstfd	*temp;
 
 	leaf = tree;
+	temp = data->fdout;
 	while (leaf->left && leaf->type != CMD)
 		leaf = leaf->left;
-	leaf->fdout = data->fdout->fd;
-	temp = data->fdout->next;
-	free(data->fdout);
-	data->fdout = temp;
+	while (temp && temp->visited == 1)
+		temp = temp->next;
+	temp->visited = 1;
+	leaf->fdin = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }

@@ -63,6 +63,8 @@ int	routine(t_shell *data, char *line)
 		return (free(line), free_node(tree), free_tab(temp), 1);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
+	ft_lstfd_clear(&data->fdin);
+	ft_lstfd_clear(&data->fdout);
 	return (free(line), free_node(tree), free_tab(temp), 0);
 }
 
