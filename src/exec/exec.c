@@ -37,23 +37,6 @@ int	ft_custom_exec(char *line, t_shell *data)
 	return (exit_code);
 }
 
-static int	is_buildin(char *line)
-{
-	if (ft_strncmp(line, "echo", 4) == 0)
-		return (1);
-	else if (ft_strncmp(line, "pwd", 3) == 0)
-		return (1);
-	else if (ft_strncmp(line, "cd", 2) == 0)
-		return (1);
-	else if (ft_strncmp(line, "export", 6) == 0)
-		return (1);
-	else if (ft_strncmp(line, "unset", 5) == 0)
-		return (1);
-	else if (ft_strncmp(line, "env", 3) == 0)
-		return (1);
-	return (0);
-}
-
 // Dup2 the STDOUT to output file for custom function
 // None of the custom function require dup2 STDIN
 static int	ft_custom_fdio(t_node *leaf, t_shell *data)
@@ -103,8 +86,7 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
 	ft_lstfd_clear(&node->fdin);
 	ft_lstfd_clear(&node->fdout);
-	free_tab(data->envp);
-	free_tab(cmd);
+	(free_tab(data->envp), free_tab(cmd));
 	exit(127);
 }
 

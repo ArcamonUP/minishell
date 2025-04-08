@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:07:53 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/08 11:22:10 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:14:36 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,18 @@ void	ft_tabnfree(char **tab, int i)
 		i++;
 	}
 	free(tab);
+}
+
+int	empty_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (line[i] == '\0' || line[i] == '\n')
+		return (1);
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+		i++;
+	if (line[i] == '\0')
+		return (1);
+	return (0);
 }

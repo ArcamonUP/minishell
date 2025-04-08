@@ -125,6 +125,7 @@ int		ft_exec_heredoc(t_node *tree, t_shell *data, int pipe_fd);
 int		ft_exec_input(t_node *tree, t_shell *data, int pipe_fd);
 int		ft_exec_append(t_node *tree, t_shell *data, int pipe_fd);
 int		ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd);
+int		is_buildin(char *line);
 
 //exec.c
 int		ft_execute_tree(t_node *node, t_shell *data, int fd);
@@ -134,6 +135,7 @@ void	free_node(t_node *node);
 void	free_tab(char **tab);
 void	clear_double(char **ptr);
 void	ft_tabnfree(char **tab, int i);
+int		empty_line(char *line);
 
 //get_tokenize.c
 char	*get_redir(const char *line, int *i, int count);
@@ -141,7 +143,7 @@ char	*get_operator(const char *line, int *i, int count);
 char	*get_cmd(const char *line, int *i, int count);
 
 //init_redir.c
-int	ft_init_fdio(t_shell *data, t_node *tree);
+int		ft_init_fdio(t_shell *data, t_node *tree);
 
 //init.c
 t_shell	init(int ac, char **av, char **envp, char **line);
@@ -153,7 +155,7 @@ char	**ft_argsplit(char *str, char **envp);
 t_type	get_optype(char *str);
 t_node	*ft_node_new(char *str, t_type type);
 t_node	*ft_node_parent(char *str, t_node *left, t_node *right);
-t_node	*ft_parse_shell(char **tokens);
+t_node	*ft_parse_and_or(char ***tokens);
 
 //signals.c
 void	ctrl_c(int sig);

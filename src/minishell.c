@@ -37,17 +37,26 @@ char	*check_and_parse(char *line)
 	return (line);
 }
 
-int	routine(t_shell *data, char *line)
+t_node	*ft_parse_shell(char **tokens)
+{
+	t_node	*node;
+
+	node = ft_parse_and_or(&tokens);
+	if (!node)
+		return (NULL);
+	return (node);
+}
+
+int	routine(t_shell *data, char *line, char **temp)
 {
 	t_node	*tree;
-	char	**temp;
 
 	if (line)
 		free(line);
 	line = readline("\001\033[37m\002minishell$ ");
 	if (!line)
 		return (free(line), write(1, "exit\n", 5), 1);
-	if (line[0] == '\n' || line[0] == '\0')
+	if (empty_line(line))
 		return (free(line), 0);
 	if (ft_strncmp(line, "exit ", 5) == 0 || ft_strncmp(line, "exit\n", 5) == 0 \
 		|| ft_strncmp(line, "exit\0", 5) == 0)
@@ -63,8 +72,7 @@ int	routine(t_shell *data, char *line)
 		return (free(line), free_node(tree), free_tab(temp), 1);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
-	ft_lstfd_clear(&data->fdin);
-	ft_lstfd_clear(&data->fdout);
+	(ft_lstfd_clear(&data->fdin), ft_lstfd_clear(&data->fdout));
 	return (free(line), free_node(tree), free_tab(temp), 0);
 }
 
@@ -80,7 +88,7 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		if (routine(&data, line))
+		if (routine(&data, line, NULL))
 			break ;
 	}
 	if (line)
