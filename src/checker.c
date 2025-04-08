@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:21:13 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/08 13:14:35 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:43:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	check_wildcard(char *redir, char *filename)
 	else if (ft_strncmp(redir, "<", 1) == 0 && access(tab[0], R_OK) == -1)
 		return (check_error(tab[0], RET_NOPERMISSIONS), free_tab(tab), 1);
 	else if (ft_strncmp(redir, ">", 1) == 0 && \
-		(access(tab[0], F_OK) == 1 && access(tab[0], W_OK) == -1))
+		(access(tab[0], F_OK) == 0 && access(tab[0], W_OK) == -1))
 		return (check_error(tab[0], RET_NOPERMISSIONS), free_tab(tab), 1);
 	return (free_tab(tab), 0);
 }
@@ -72,10 +72,11 @@ int	check_possible(char **line, int i)
 			return (check_wildcard(line[i], line[i + 1]));
 		if (ft_strncmp(line[i], "<", 1) == 0 && access(line[i + 1], F_OK) == -1)
 			return (check_error(line[i + 1], RET_NOFILE), 1);
-		else if (ft_strncmp(line[i], "<", 1) && access(line[i + 1], R_OK) == -1)
+		else if (ft_strncmp(line[i], "<", 1) == 0 && \
+		access(line[i + 1], R_OK) == -1)
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
 		else if (ft_strncmp(line[i], ">", 1) == 0 && \
-		(access(line[i + 1], F_OK) == 1 && access(line[i + 1], W_OK) == -1))
+		(access(line[i + 1], F_OK) == 0 && access(line[i + 1], W_OK) == -1))
 			return (check_error(line[i + 1], RET_NOPERMISSIONS), 1);
 	}
 	if (ft_strncmp(line[i], "<<\0", 3) == 0)
