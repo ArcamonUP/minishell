@@ -148,13 +148,3 @@ t_node	*ft_parse_and_or(char ***tokens)
 	}
 	return (node);
 }
-
-t_node	*ft_parse_shell(char **tokens)
-{
-	t_node	*node;
-
-	node = ft_parse_and_or(&tokens);
-	if (!node)
-		return (NULL);
-	return (node);
-}
