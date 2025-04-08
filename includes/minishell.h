@@ -52,11 +52,11 @@ typedef enum e_type
 typedef enum e_ret
 {
 	RET_PARENTHESIS = 1,
-	RET_OPERATOR = 2,
-	RET_NOTIMPLEMENTED = 3,
-	RET_NOFILE = 4,
-	RET_NOPERMISSIONS = 5,
-	RET_NEWLINE = 6,
+	RET_OPERATOR,
+	RET_NOTIMPLEMENTED,
+	RET_NOFILE,
+	RET_NOPERMISSIONS,
+	RET_NEWLINE,
 }	t_ret;
 
 typedef enum e_way
@@ -107,7 +107,7 @@ char	*ft_strjoin_free(char *s1, char *s2);
 //checker_utils.c
 void	check_error(char *line, int ret);
 char	*handle_missings(char *to_parse);
-char	*add_char(char *str, char c);
+char	*missing_elements(char **line);
 int		wait_next(char **line, int *i, int *y, char c);
 
 //checker.c
@@ -187,5 +187,13 @@ char	*get_exec(char *cmd);
 char	*get_path(char *cmd, char **envp);
 void	pre_asterisk(char *str);
 char	*ft_strjoin_char(char *str, char c);
+
+//argsplit
+int		expand_realloc(char	***buffer, size_t size);
+int		add_join(char **buffer, char *join, size_t *i, size_t *size);
+int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
+char	*do_var(char **str, char **envp);
+char	*do_dquote(char **str, char **envp);
+char	*do_squote(char **str);
 
 #endif

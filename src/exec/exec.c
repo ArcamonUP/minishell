@@ -124,9 +124,10 @@ static int	exec_cmd(t_node *node, t_shell *data, int fd)
 		exec_child(fd, node, data);
 	signal(SIGINT, parent_ctrl_c);
 	signal(SIGQUIT, parent_ctrl_backslash);
+	if (ft_strncmp("./minishell", node->str, 12) == 0)
+		(signal(SIGINT, ignore), signal(SIGQUIT, ignore));
 	waitpid(pid, &status, 0);
-	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, ignore);
+	(signal(SIGINT, ctrl_c), signal(SIGQUIT, ignore));
 	if (g_exit_status == 131 || g_exit_status == 130)
 		return (g_exit_status);
 	if (WIFEXITED(status))

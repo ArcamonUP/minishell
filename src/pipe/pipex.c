@@ -26,7 +26,7 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 
 	dispatch_pipex(cmd, data, fd);
 	path = NULL;
-	args = ft_pipex_split(cmd, ' ');
+	args = ft_argsplit(cmd, data.envp);
 	if (args)
 		path = get_path(args[0], data.envp);
 	if (!args || !path)
