@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 13:51:14 by achu              #+#    #+#             */
-/*   Updated: 2025/04/08 13:59:32 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:04:57 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "libft.h"
 
 int		req_realloc(char **buffer, size_t *size, size_t need);
-int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
 int		add_var(char **buffer, char *var, size_t *size, size_t *i);
 
 static void	req_step(char **str, char find)
@@ -46,12 +45,11 @@ char	*get_name(char **str)
 	return (buffer);
 }
 
-char	*do_var(char **str, char **envp, size_t i)
+char	*do_var(char **str, char **envp)
 {
 	char	*buffer;
 	char	*var;
 
-	(void)i;
 	req_step(str, '$');
 	if (**str && **str == '?')
 	{
@@ -108,7 +106,7 @@ char	*do_dquote(char **str, char **envp)
 	{
 		if (**str && **str == '$')
 		{
-			var = do_var(str, envp, 0);
+			var = do_var(str, envp);
 			if (!add_var(&buffer, var, &size, &i))
 				return (free(buffer), free(var), NULL);
 		}
