@@ -25,6 +25,7 @@ extern int	g_exit_status;
 typedef struct s_lstfd
 {
 	int				fd;
+	int				visited;
 	struct s_lstfd	*next;
 }	t_lstfd;
 
@@ -70,8 +71,8 @@ typedef struct s_node
 	char			*str;
 	struct s_node	*left;
 	struct s_node	*right;
-	int				fdin;
-	int				fdout;
+	t_lstfd			*fdin;
+	t_lstfd			*fdout;
 }	t_node;
 
 //ft_cd.c

@@ -20,6 +20,7 @@ t_lstfd	*ft_lstfd_new(int fd)
 	if (!new)
 		return (NULL);
 	new->fd = fd;
+	new->visited = 0;
 	new->next = NULL;
 	return (new);
 }
@@ -51,7 +52,8 @@ void	ft_lstfd_clear(t_lstfd **list)
 	while (*list && list)
 	{
 		temp = (*list)->next;
+		close((*list)->fd);
+		free(*list);
 		*list = temp;
-		free(list);
 	}
 }
