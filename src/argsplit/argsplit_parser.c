@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 13:51:14 by achu              #+#    #+#             */
-/*   Updated: 2025/04/08 11:40:15 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:04:57 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "libft.h"
 
 int		req_realloc(char **buffer, size_t *size, size_t need);
-int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
 int		add_var(char **buffer, char *var, size_t *size, size_t *i);
 
 static void	req_step(char **str, char find)
@@ -23,10 +22,9 @@ static void	req_step(char **str, char find)
 		(*str)++;
 }
 
-char	*do_var(char **str, char **envp)
+char	*get_name(char **str)
 {
 	char	*buffer;
-	char	*var;
 	size_t	size;
 	size_t	i;
 
@@ -35,7 +33,6 @@ char	*do_var(char **str, char **envp)
 	buffer = (char *)malloc(size * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	req_step(str, '$');
 	while (**str && ft_isalnum(**str))
 	{
 		if (!req_realloc(&buffer, &size, i + 1))
@@ -45,6 +42,22 @@ char	*do_var(char **str, char **envp)
 		i++;
 	}
 	buffer[i] = '\0';
+	return (buffer);
+}
+
+char	*do_var(char **str, char **envp)
+{
+	char	*buffer;
+	char	*var;
+
+	req_step(str, '$');
+	if (**str && **str == '?')
+	{
+		buffer = ft_strdup("?");
+		(*str)++;
+	}
+	else
+		buffer = get_name(str);
 	var = get_var(buffer, envp);
 	if (!var)
 		return (free(buffer), ft_strdup(""));

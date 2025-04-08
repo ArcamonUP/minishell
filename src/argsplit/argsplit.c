@@ -3,22 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   argsplit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: achu <achu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 17:46:05 by achu              #+#    #+#             */
-/*   Updated: 2025/04/07 16:07:44 by achu             ###   ########.fr       */
+/*   Updated: 2025/04/08 14:03:16 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-
-int		expand_realloc(char	***buffer, size_t size);
-int		add_join(char **buffer, char *join, size_t *i, size_t *size);
-int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
-char	*do_var(char **str, char **envp);
-char	*do_dquote(char **str, char **envp);
-char	*do_squote(char **str);
 
 static int	add_wild(char ***split, size_t *size, char *find)
 {
