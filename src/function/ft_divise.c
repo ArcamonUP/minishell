@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 08:06:25 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 11:15:37 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:18:47 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,10 @@ char	**ft_divise(char *line, char **envp, int y)
 	result = ft_calloc(2, sizeof(char *));
 	if (!result)
 		return (NULL);
-	while (*line != ' ')
+	while (*line && *line != ' ')
 		line++;
-	line++;
+	if (*line)
+		line++;
 	while (line[y] && result)
 	{
 		temp = get_next(line, &y, envp, 0);
@@ -141,7 +142,5 @@ char	**ft_divise(char *line, char **envp, int y)
 			temp = get_wildcards(temp);
 		result = add_str(result, temp);
 	}
-	if (!result[0])
-		return (free_tab(result), NULL);
 	return (result);
 }
