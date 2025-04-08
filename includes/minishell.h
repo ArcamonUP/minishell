@@ -188,12 +188,15 @@ char	*get_path(char *cmd, char **envp);
 void	pre_asterisk(char *str);
 char	*ft_strjoin_char(char *str, char c);
 
-//argsplit
+//Argsplit
 int		expand_realloc(char	***buffer, size_t size);
 int		add_join(char **buffer, char *join, size_t *i, size_t *size);
 int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
 char	*do_var(char **str, char **envp);
 char	*do_dquote(char **str, char **envp);
 char	*do_squote(char **str);
+
+//Fancy
+void	print_banner(void);
 
 #endif
