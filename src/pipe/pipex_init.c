@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/07 14:15:20 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/11 12:51:40 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	t_pipex_data	data;
 
 	data.cmd = init_tab_cmd(node, shell_data);
+	if (!data.cmd)
+		return (data);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
 	data.fd[0] = get_fd_file(node, LEFT);

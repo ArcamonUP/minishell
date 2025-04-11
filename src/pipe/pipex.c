@@ -25,26 +25,26 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 	char	*path;
 
 	dispatch_pipex(cmd, data, fd);
-	path = NULL;
 	args = ft_argsplit(cmd, data.envp);
 	if (args)
 		path = get_path(args[0], data.envp);
 	if (!args || !path)
 	{
-		free_tab(data.cmd);
-		free(data.pid_tab);
+		(free_tab(data.cmd), free_tab(args), free_tab(data.envp));
 		(error("minishell: ", args[0]), error(": command not found\n", NULL));
-		(free_tab(args), free_tab(data.envp));
+		(close(data.fd[0]), close(data.fd[1]));
 		if (fd)
-			(close(fd[0]), close(fd[1]));
-		if (data.fd[0] != -1)
-			close(data.fd[0]);
-		close(data.fd[1]);
-		exit(127);
+			close(fd[1]);
+		(close(data.s_stdin), close(data.s_stdout), close(fd[1]));
+		(free(data.pid_tab), exit(127));
 	}
 	execve(path, args, data.envp);
 	(error("minishell: ", args[0]), error(": command not found\n", NULL));
 	(free_tab(args), free_tab(data.envp), free(path));
+	(close(data.fd[0]), close(data.fd[1]));
+	if (fd)
+		close(fd[1]);
+	(close(data.s_stdin), close(data.s_stdout));
 	exit(127);
 }
 
@@ -65,11 +65,8 @@ static pid_t	pre_exec(char *cmd, t_pipex_data data)
 		dup2(fd[1], STDOUT_FILENO);
 		exec(cmd, data, fd);
 	}
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-	}
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	return (p);
 }
@@ -118,8 +115,7 @@ static int	do_cmd(t_pipex_data data)
 		i++;
 	}
 	y = last_exec(data, data.fd[1]);
-	if (data.fd[0] != -1)
-		close(data.fd[0]);
+	close(data.fd[0]);
 	close(data.fd[1]);
 	dup2(data.s_stdin, STDIN_FILENO);
 	dup2(data.s_stdout, STDOUT_FILENO);

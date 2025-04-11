@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 08:06:25 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/08 14:18:47 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/11 12:08:35 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static char	*get_next(char *line, int *y, char **envp, int c)
 
 	(*y)--;
 	result = ft_calloc(1, 1);
-	while (line[++(*y)] && (line[*y] != ' ' || c != 0) && result)
+	while (line[++(*y)] && (!(line[*y] == ' ' || line[*y] == '\t' ) || c != 0) \
+	&& result)
 	{
 		c = get_c_value(line[*y], c);
 		if (line[*y] == '$' && c != '\'' && line[*y + 1] && \
@@ -62,8 +63,6 @@ static char	*get_next(char *line, int *y, char **envp, int c)
 		(c != 0 && c != line[*y]))
 			result = ft_strjoin_char(result, line[*y]);
 	}
-	if (!result)
-		return (NULL);
 	if (line[*y])
 		(*y)++;
 	return (result);
@@ -125,7 +124,7 @@ char	**ft_divise(char *line, char **envp, int y)
 	result = ft_calloc(2, sizeof(char *));
 	if (!result)
 		return (NULL);
-	while (*line && *line != ' ')
+	while (*line && *line != ' ' && *line != '\t')
 		line++;
 	if (*line)
 		line++;
