@@ -23,7 +23,7 @@ int	ft_custom_exec(char *line, t_shell *data)
 	if (is_word(line, "echo"))
 		exit_code = ft_echo(line, data->envp);
 	else if (is_word(line, "pwd"))
-		exit_code = ft_pwd(data->envp);
+		exit_code = ft_pwd();
 	else if (is_word(line, "cd"))
 		exit_code = ft_cd(line, data->envp);
 	else if (is_word(line, "export"))
