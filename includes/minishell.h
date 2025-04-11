@@ -182,6 +182,7 @@ char	**get_file(char *find);
 t_lstfd	*ft_lstfd_new(int fd);
 void	ft_lstfd_add_back(t_lstfd **alst, t_lstfd *new);
 void	ft_lstfd_clear(t_lstfd **list);
+int		is_word(char *str, char *word);
 
 //utils.c
 char	*get_var(char *arg, char **envp);

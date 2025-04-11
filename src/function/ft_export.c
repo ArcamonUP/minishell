@@ -15,12 +15,63 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+int	already_exist(char **envp, char *arg)
+{
+	int	i;
+	int	size;
+
+	i = 0;
+	size = 0;
+	while (arg[size] && arg[size] != '=')
+		size++;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], arg, size - 1) == 0 && envp[i][size] == '=')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+void	remove_env(char ***envp, char *arg, int y)
+{
+	int		i;
+	int		x;
+	char	**result;
+
+	i = already_exist(*envp, arg);
+	if (i == -1)
+		return ;
+	result = ft_calloc(sizeof(char *), y);
+	if (!result)
+		return ;
+	x = -1;
+	y = 0;
+	while ((*envp)[++x])
+	{
+		if (x == i)
+			continue ;
+		result[y] = ft_strdup((*envp)[x]);
+		if (!result[y])
+			return (free_tab(result), (void)0);
+		y++;
+	}
+	free_tab((*envp));
+	(*envp) = result;
+}
+
 void	add_env(char ***envp, char *arg, int y)
 {
 	int		i;
 	char	**result;
 
-	result = ft_calloc(sizeof(char *), y + 2);
+	if (already_exist(*envp, arg) != -1)
+	{
+		remove_env(envp, arg, y);
+		result = ft_calloc(sizeof(char *), y + 1);
+	}
+	else
+		result = ft_calloc(sizeof(char *), y + 2);
 	if (!result)
 		return ;
 	i = 0;
@@ -40,8 +91,6 @@ int	parse_var(char *var)
 {
 	int	i;
 
-	if (!ft_strchr(var, '='))
-		return (1);
 	i = 0;
 	while (var[i] && var[i] != '=')
 	{
@@ -66,22 +115,24 @@ int	ft_export(char *line, char ***envp, int i)
 {
 	char	**temp;
 
-	if (!ft_strchr(line, ' '))
+	temp = ft_divise(line, *envp, 0);
+	if (!temp)
+		return (127);
+	if (!temp[0])
 	{
+		free_tab(temp);
 		temp = cp_tab(*envp);
 		if (!temp)
 			return (127);
 		return (print_sorted_tab(temp), free_tab(temp), 0);
 	}
-	temp = ft_divise(line, *envp, 0);
-	if (!temp)
-		return (127);
 	i--;
 	while (temp[++i])
 	{
-		if (parse_var(temp[i]))
-			continue ;
-		add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
+		if (!ft_strchr(temp[i], '='))
+			remove_env(envp, temp[i], ft_tablen(*envp));
+		else if (!parse_var(temp[i]))
+			add_env(envp, ft_strdup(temp[i]), ft_tablen(*envp));
 	}
 	free_tab(temp);
 	if (!*envp)
