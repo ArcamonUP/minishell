@@ -92,7 +92,7 @@ int		ft_env(char **envp);
 int		ft_export(char *line, char ***envp, int i);
 
 //ft_pwd.c
-int		ft_pwd(char **envp);
+int		ft_pwd(void);
 
 //ft_unset.c
 int		ft_unset(char *line, char ***envp);

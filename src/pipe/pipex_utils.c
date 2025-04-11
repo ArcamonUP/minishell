@@ -60,7 +60,7 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 	if (is_word(line, "echo"))
 		exit_code = ft_echo(line, data.envp);
 	else if (is_word(line, "pwd"))
-		exit_code = ft_pwd(data.envp);
+		exit_code = ft_pwd();
 	else if (is_word(line, "cd"))
 		exit_code = ft_cd(line, data.envp);
 	else if (is_word(line, "export"))

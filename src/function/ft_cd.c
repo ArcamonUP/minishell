@@ -14,13 +14,13 @@
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 
-void	update_env(char **envp, char *old_pwd)
+void	update_env(char **envp, char *arg, char *old_pwd, int i)
 {
 	char	*pwd;
-	int		i;
 
-	i = 0;
 	while (envp[i] && ft_strncmp("PWD=", envp[i], 4) != 0)
 		i++;
 	if (!envp[i])
@@ -28,7 +28,12 @@ void	update_env(char **envp, char *old_pwd)
 	free(envp[i]);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return ;
+	{
+		ft_putstr_fd("chdir: error retrieving current directo", STDERR_FILENO);
+		ft_putstr_fd("ry: getcwd: cannot access parent ", STDERR_FILENO);
+		ft_putstr_fd("directories: No such file or directory\n", STDERR_FILENO);
+		pwd = ft_strdup(arg);
+	}
 	envp[i] = ft_strjoin("PWD=", pwd);
 	free(pwd);
 	i = 0;
@@ -38,7 +43,28 @@ void	update_env(char **envp, char *old_pwd)
 		return ;
 	free(envp[i]);
 	envp[i] = ft_strjoin("OLDPWD=", old_pwd);
-	free(old_pwd);
+}
+
+void	print_error(char *arg)
+{
+	if (errno == ENOENT)
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	}
+	else if (errno == EACCES)
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+	}
+	else if (errno == ENOTDIR)
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
+	}
 }
 
 int	ft_cd(char *line, char **envp)
@@ -46,22 +72,20 @@ int	ft_cd(char *line, char **envp)
 	char	**cmd;
 	char	*old_pwd;
 
-	cmd = ft_split(line, ' ');
+	cmd = ft_divise(line, envp, 0);
 	if (!cmd)
 		return (127);
-	old_pwd = get_var("PWD", envp);
-	if (cmd[2])
+	if (cmd[1])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		return (free_tab(cmd), 1);
 	}
-	else if (chdir(cmd[1]) == -1)
+	if (chdir(cmd[0]) == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(cmd[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		print_error(cmd[0]);
 		return (free_tab(cmd), 1);
 	}
-	update_env(envp, old_pwd);
-	return (free_tab(cmd), 0);
+	old_pwd = get_var("PWD", envp);
+	update_env(envp, cmd[0], old_pwd, 0);
+	return (free_tab(cmd), free(old_pwd), 0);
 }
