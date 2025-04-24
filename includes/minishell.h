@@ -92,7 +92,7 @@ int		ft_env(char **envp);
 int		ft_export(char *line, char ***envp, int i);
 
 //ft_pwd.c
-int		ft_pwd(char **envp);
+int		ft_pwd(void);
 
 //ft_unset.c
 int		ft_unset(char *line, char ***envp);
@@ -182,6 +182,7 @@ char	**get_file(char *find);
 t_lstfd	*ft_lstfd_new(int fd);
 void	ft_lstfd_add_back(t_lstfd **alst, t_lstfd *new);
 void	ft_lstfd_clear(t_lstfd **list);
+int		is_word(char *str, char *word);
 
 //utils.c
 char	*get_var(char *arg, char **envp);

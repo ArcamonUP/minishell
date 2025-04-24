@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 
 t_lstfd	*ft_lstfd_new(int fd)
 {
@@ -56,4 +57,15 @@ void	ft_lstfd_clear(t_lstfd **list)
 		free(*list);
 		*list = temp;
 	}
+}
+
+int	is_word(char *str, char *word)
+{
+	int	size;
+
+	size = ft_strlen(word);
+	if (ft_strncmp(str, word, size) == 0 && \
+	(str[size] == '\t' || str[size] == ' ' || str[size] == '\0'))
+		return (1);
+	return (0);
 }
