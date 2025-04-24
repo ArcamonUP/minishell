@@ -29,7 +29,7 @@ t_node	*ft_parse_leadcmd(char ***tokens)
 	right = ft_node_new(file, FILENAME);
 	if (!right)
 		return (NULL);
-	if (**tokens)
+	if (**tokens && !is_redir(**tokens))
 	{
 		node = ft_node_new(**tokens, CMD);
 		if (!node)
@@ -49,18 +49,18 @@ t_node	*ft_parse_cmd(char ***tokens)
 {
 	t_node	*node;
 
-	if (**tokens && (ft_strncmp("(", **tokens, 1) == 0))
+	if (**tokens && is_redir(**tokens))
+	{
+		node = ft_parse_leadcmd(tokens);
+		return (node);
+	}
+	else if (**tokens && (ft_strncmp("(", **tokens, 1) == 0))
 	{
 		(*tokens)++;
 		node = ft_parse_and_or(tokens);
 		if (!**tokens || (ft_strncmp(")", **tokens, 1) != 0))
 			return (NULL);
 		(*tokens)++;
-		return (node);
-	}
-	else if (**tokens && is_redir(**tokens))
-	{
-		node = ft_parse_leadcmd(tokens);
 		return (node);
 	}
 	else if (**tokens)
