@@ -60,7 +60,7 @@ int	ft_exec_append(t_node *tree, t_shell *data, int pipe_fd)
 	while (temp && temp->visited == 1)
 		temp = temp->next;
 	temp->visited = 1;
-	leaf->fdin = temp;
+	leaf->fdout = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
@@ -76,7 +76,7 @@ int	ft_exec_trunc(t_node *tree, t_shell *data, int pipe_fd)
 	while (temp && temp->visited == 1)
 		temp = temp->next;
 	temp->visited = 1;
-	leaf->fdin = temp;
+	leaf->fdout = temp;
 	return (ft_execute_tree(tree->left, data, pipe_fd));
 }
 
