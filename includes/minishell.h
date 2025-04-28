@@ -144,6 +144,7 @@ char	*get_cmd(const char *line, int *i, int count);
 
 //init_redir.c
 int		ft_init_fdio(t_shell *data, t_node *tree);
+int		ft_limiter(char *limit);
 
 //init.c
 t_shell	init(int ac, char **av, char **envp, char **line);
