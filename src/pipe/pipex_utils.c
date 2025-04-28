@@ -18,6 +18,27 @@
 #include "pipex.h"
 #include "minishell.h"
 
+int	get_heredoc_fd(t_shell *data)
+{
+	int		fd;
+	t_shell	*temp;
+
+	temp = data;
+	fd = -1;
+	while (data->fdin)
+	{
+		if (data->fdin->visited == 0)
+		{
+			fd = data->fdin->fd;
+			data->fdin->visited = 1;
+			break ;
+		}
+		data->fdin = data->fdin->next;
+	}
+	data = temp;
+	return (fd);
+}
+
 void	error(char *msg, char *other)
 {
 	ft_putstr_fd(msg, STDERR_FILENO);

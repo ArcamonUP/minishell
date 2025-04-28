@@ -16,7 +16,7 @@
 
 // Write the content of the standard input until
 // the limiter is found and return the fd
-static int	ft_limiter(char *limit)
+int	ft_limiter(char *limit)
 {
 	int		len;
 	int		fd[2];
