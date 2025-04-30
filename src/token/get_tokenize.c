@@ -59,25 +59,26 @@ char	*get_cmd(const char *line, int *i, int count)
 {
 	char	*result;
 
-	if (count)
-		result = NULL;
-	else
+	result = NULL;
+	if (!count)
 		result = ft_token_cmd(line + *i);
 	if (!count && !result)
 		return (NULL);
 	while (line[*i] && !is_operator(line[*i]))
 	{
-		if (line[*i] && line[*i] == '"' && (*i)++)
+		if (line[*i] && line[*i] == '"')
 		{
+			(*i)++;
 			while (line[*i] && line[*i] != '"')
 				(*i)++;
 		}
-		else if (line[*i] && line[*i] == '\'' && (*i)++)
+		else if (line[*i] && line[*i] == '\'')
 		{
+			(*i)++;
 			while (line[*i] && line[*i] != '\'')
 				(*i)++;
 		}
-		else
+		if (line[*i])
 			(*i)++;
 	}
 	return (result);

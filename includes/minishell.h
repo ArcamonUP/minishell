@@ -200,7 +200,4 @@ char	*do_var(char **str, char **envp);
 char	*do_dquote(char **str, char **envp);
 char	*do_squote(char **str);
 
-//Fancy
-void	print_banner(void);
-
 #endif

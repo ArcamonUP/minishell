@@ -69,6 +69,8 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 	cmd = ft_argsplit(node->str, data->envp);
 	if (!cmd)
 		exit(1);
+	if (!cmd[0] || empty_line(cmd[0]))
+		(free_tab(cmd), free_tab(data->envp), exit(0));
 	path = get_path(cmd[0], data->envp);
 	if (!path)
 	{
@@ -84,10 +86,8 @@ static void	exec_child(int fd, t_node *node, t_shell *data)
 		close(fd);
 	execve(path, cmd, data->envp);
 	(error("minishell: ", cmd[0]), error(": command not found\n", NULL));
-	ft_lstfd_clear(&node->fdin);
-	ft_lstfd_clear(&node->fdout);
-	(free_tab(data->envp), free_tab(cmd));
-	exit(127);
+	(ft_lstfd_clear(&node->fdin), ft_lstfd_clear(&node->fdout));
+	(free_tab(data->envp), free_tab(cmd), exit(127));
 }
 
 static int	exec_cmd(t_node *node, t_shell *data, int fd)
