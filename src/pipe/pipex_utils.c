@@ -93,11 +93,7 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 	else
 		return ;
 	(free_tab(data.cmd), free_tab(data.envp));
-	if (fd)
-		(close(fd[0]), close(fd[1]));
-	if (data.fd[0] != -1)
-		close(data.fd[0]);
-	if (data.fd[1] != -1)
-		close(data.fd[1]);
+	(close(data.fd[0]), close(data.fd[1]));
+	(close(data.s_stdin), close(data.s_stdout), close(fd[1]));
 	exit(exit_code);
 }
