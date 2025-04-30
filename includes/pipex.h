@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:56 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/28 14:00:01 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:17:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ typedef struct t_pipex_data
 	int		fd[2];
 	int		s_stdout;
 	int		s_stdin;
+	t_node	*node;
+	char	**tab;
 }	t_pipex_data;
 
 //pipex_init.c

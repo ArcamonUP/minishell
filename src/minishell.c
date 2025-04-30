@@ -47,7 +47,7 @@ t_node	*ft_parse_shell(char **tokens)
 	return (node);
 }
 
-int	routine(t_shell *data, char *line, char **temp)
+int	routine(t_shell *data, char *line)
 {
 	t_node	*tree;
 
@@ -64,16 +64,16 @@ int	routine(t_shell *data, char *line, char **temp)
 	line = check_and_parse(line);
 	if (!line)
 		return (0);
-	temp = ft_tokenize(line);
-	if (!temp)
+	data->tab = ft_tokenize(line);
+	if (!data->tab)
 		return (1);
-	tree = ft_parse_shell(temp);
+	tree = ft_parse_shell(data->tab);
 	if (ft_init_fdio(data, tree) == -1)
-		return (free(line), free_node(tree), free_tab(temp), 1);
+		return (free(line), free_node(tree), free_tab(data->tab), 0);
 	g_exit_status = ft_execute_tree(tree, data, -1);
 	add_history(line);
 	(ft_lstfd_clear(&data->fdin), ft_lstfd_clear(&data->fdout));
-	return (free(line), free_node(tree), free_tab(temp), 0);
+	return (free(line), free_node(tree), free_tab(data->tab), 0);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	while (1)
 	{
-		if (routine(&data, line, NULL))
+		if (routine(&data, line))
 			break ;
 	}
 	if (line)

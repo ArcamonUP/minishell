@@ -92,8 +92,9 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 		exit_code = ft_env(data.envp);
 	else
 		return ;
-	(free_tab(data.cmd), free_tab(data.envp));
-	(close(data.fd[0]), close(data.fd[1]));
+	exec_free(data.cmd, data.envp, data.node);
+	(free_tab(data.tab), close(data.fd[0]), close(data.fd[1]));
 	(close(data.s_stdin), close(data.s_stdout), close(fd[1]));
+	free_pidtab((void **)data.pid_tab);
 	exit(exit_code);
 }

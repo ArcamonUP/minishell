@@ -13,33 +13,38 @@
 #include "minishell.h"
 #include "libft.h"
 #include <fcntl.h>
+#include <signal.h>	
+#include <readline/readline.h>
 
 // Write the content of the standard input until
 // the limiter is found and return the fd
-int	ft_limiter(char *limit)
+static int	ft_limiter(char *limit, int len)
 {
-	int		len;
 	int		fd[2];
 	char	*line;
 
 	if (pipe(fd) < 0)
 		return (1);
-	len = ft_strlen(limit);
 	while (1)
 	{
-		ft_printf("> ");
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
+		if (!line)
+		{
+			ft_putstr_fd("warning: here-document delimited by ", STDERR_FILENO);
+			ft_putstr_fd("end-of-file (wanted `", STDERR_FILENO);
+			write(STDERR_FILENO, limit, len);
+			write(STDERR_FILENO, "`)\n", 3);
+			break ;
+		}
 		if (ft_strncmp(line, limit, len) == 0 && (line[len] == '\0' || \
 		line[len] == '\n'))
 		{
 			free(line);
 			break ;
 		}
-		write(fd[1], line, ft_strlen(line));
-		free(line);
+		(write(fd[1], line, ft_strlen(line)), free(line));
 	}
-	close(fd[1]);
-	return (fd[0]);
+	return (close(fd[1]), fd[0]);
 }
 
 // Add the fd to the right linked list
@@ -57,19 +62,32 @@ static int	ft_add_fdio(t_shell *data, int fd, t_type op)
 	return (1);
 }
 
-static char	*req_file(char *str)
+static char	*req_file(char *str, char **files)
 {
-	char	**files;
 	char	*file;
+	DIR		*dir;
 
 	pre_asterisk(str);
 	files = get_file(str);
 	if (!files)
 		return (NULL);
 	if (ft_strlen_dbl(files) > 1)
-		return (ft_perror("ambiguous redirect"), free_tab(files), NULL);
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(str, STDERR_FILENO);
+		ft_putstr_fd(": ambiguous redirect\n", STDERR_FILENO);
+		return (free_tab(files), NULL);
+	}
 	file = ft_strdup(files[0]);
 	free_tab(files);
+	dir = opendir(file);
+	if (dir)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(file, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		return (closedir(dir), free(file), NULL);
+	}
 	return (file);
 }
 
@@ -99,11 +117,11 @@ int	ft_init_fdio(t_shell *data, t_node *tree)
 	ft_init_fdio(data, tree->left);
 	if (is_redir(tree))
 	{
-		file = req_file(tree->right->str);
+		file = req_file(tree->right->str, NULL);
 		if (!file)
 			return (-1);
 		if (tree->type == HEREDOC)
-			fd = ft_limiter(tree->right->str);
+			fd = ft_limiter(tree->right->str, ft_strlen(tree->right->str));
 		else if (tree->type == INPUT)
 			fd = open(file, O_RDONLY);
 		else if (tree->type == APPEND)

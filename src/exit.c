@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 13:42:21 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/02 13:52:25 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:31:49 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	handle_str_case(char **tab)
 	write(STDERR_FILENO, "exit\nminishell: exit: ", 22);
 	write(STDERR_FILENO, tab[1], ft_strlen(tab[1]));
 	write(STDERR_FILENO, ": numeric argument required\n", 29);
-	return (free_tab(tab), 1);
+	return (free_tab(tab), g_exit_status);
 }
 
 int	handle_exit(char *line)
@@ -44,9 +44,9 @@ int	handle_exit(char *line)
 	free(line);
 	if (!temp || !temp[0] || !temp[1])
 	{
-		g_exit_status = 1;
 		if (temp && temp[0] && !temp[1])
-			g_exit_status = 0;
+			return (write(STDERR_FILENO, "exit\n", 5), free_tab(temp), 1);
+		g_exit_status = 1;
 		return (write(STDERR_FILENO, "exit\n", 5), free_tab(temp), 1);
 	}
 	if (temp[1] && ft_is_str_digit(temp[1]) && temp[2])

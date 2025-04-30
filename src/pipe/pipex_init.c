@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/28 13:59:45 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:18:01 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,7 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.s_stdin = dup(STDIN_FILENO);
 	data.s_stdout = dup(STDOUT_FILENO);
 	dup2(data.fd[0], STDIN_FILENO);
+	data.node = node;
+	data.tab = shell_data->tab;
 	return (data);
 }
