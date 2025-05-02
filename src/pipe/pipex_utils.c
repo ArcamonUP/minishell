@@ -18,6 +18,27 @@
 #include "pipex.h"
 #include "minishell.h"
 
+int	get_heredoc_fd(t_shell *data)
+{
+	int		fd;
+	t_shell	*temp;
+
+	temp = data;
+	fd = -1;
+	while (data->fdin)
+	{
+		if (data->fdin->visited == 0)
+		{
+			fd = data->fdin->fd;
+			data->fdin->visited = 1;
+			break ;
+		}
+		data->fdin = data->fdin->next;
+	}
+	data = temp;
+	return (fd);
+}
+
 void	error(char *msg, char *other)
 {
 	ft_putstr_fd(msg, STDERR_FILENO);
@@ -71,12 +92,9 @@ void	dispatch_pipex(char *line, t_pipex_data data, int fd[2])
 		exit_code = ft_env(data.envp);
 	else
 		return ;
-	(free_tab(data.cmd), free_tab(data.envp));
-	if (fd)
-		(close(fd[0]), close(fd[1]));
-	if (data.fd[0] != -1)
-		close(data.fd[0]);
-	if (data.fd[1] != -1)
-		close(data.fd[1]);
+	exec_free(data.cmd, data.envp, data.node);
+	(free_tab(data.tab), close(data.fd[0]), close(data.fd[1]));
+	(close(data.s_stdin), close(data.s_stdout), close(fd[1]));
+	free_pidtab((void **)data.pid_tab);
 	exit(exit_code);
 }

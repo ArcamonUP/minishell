@@ -26,7 +26,7 @@ int	already_exist(char **envp, char *arg)
 		size++;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], arg, size - 1) == 0 && envp[i][size] == '=')
+		if (ft_strncmp(envp[i], arg, size) == 0)
 			return (i);
 		i++;
 	}

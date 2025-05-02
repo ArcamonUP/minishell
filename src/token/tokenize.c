@@ -58,7 +58,7 @@ int	ft_quote_count(const char *line)
 			while (line[len] && line[len] != '\'')
 				len++;
 		}
-		else
+		if (line[len])
 			len++;
 	}
 	return (len);

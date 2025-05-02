@@ -32,6 +32,7 @@ typedef struct s_lstfd
 typedef struct s_shell
 {
 	char	**envp;
+	char	**tab;
 	t_lstfd	*fdin;
 	t_lstfd	*fdout;
 }	t_shell;
@@ -117,6 +118,8 @@ char	*checker(char **line);
 int		handle_exit(char *line);
 
 //exec_and_or.c
+void	free_pidtab(void **tab);
+void	exec_free(char **cmd, char **envp, t_node *node);
 int		ft_exec_and(t_node *tree, t_shell *data, int fd);
 int		ft_exec_or(t_node *tree, t_shell *data, int fd);
 
@@ -198,8 +201,5 @@ int		add_schar(char **buffer, char **str, size_t *size, size_t *i);
 char	*do_var(char **str, char **envp);
 char	*do_dquote(char **str, char **envp);
 char	*do_squote(char **str);
-
-//Fancy
-void	print_banner(void);
 
 #endif

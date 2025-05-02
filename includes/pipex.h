@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 17:23:56 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/03 14:52:08 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:17:44 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ typedef struct t_pipex_data
 	int		fd[2];
 	int		s_stdout;
 	int		s_stdin;
+	t_node	*node;
+	char	**tab;
 }	t_pipex_data;
 
 //pipex_init.c
@@ -33,6 +35,7 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data);
 char			**ft_pipex_split(char *str, char c);
 
 //pipex_utils.c
+int				get_heredoc_fd(t_shell *data);
 void			error(char *msg, char *other);
 void			end(t_pipex_data data, int i);
 void			wait_children(t_pipex_data data, pid_t p, int *status);

@@ -107,6 +107,7 @@ t_shell	init(int ac, char **av, char **envp, char **line)
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag |= (ICANON | ECHO);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	data.tab = NULL;
 	data.envp = envp;
 	if (!data.envp || !data.envp[0])
 		data.envp = create_env();

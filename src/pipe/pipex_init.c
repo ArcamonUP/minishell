@@ -6,7 +6,7 @@
 /*   By: kbaridon <kbaridon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:19:51 by kbaridon          #+#    #+#             */
-/*   Updated: 2025/04/11 12:51:40 by kbaridon         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:18:01 by kbaridon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int	get_fd_file(t_node *node, int way)
+int	get_fd_file(t_node *node, int way, t_shell *data)
 {
 	int	fd;
 
@@ -32,6 +32,8 @@ int	get_fd_file(t_node *node, int way)
 			else if (node->type == APPEND)
 				fd = open(node->right->str, O_WRONLY | O_CREAT | O_APPEND, \
 					0644);
+			else if (node->type == HEREDOC)
+				fd = get_heredoc_fd(data);
 			return (fd);
 		}
 		if (way == LEFT)
@@ -137,8 +139,8 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 		return (data);
 	data.envp = shell_data->envp;
 	data.pid_tab = NULL;
-	data.fd[0] = get_fd_file(node, LEFT);
-	data.fd[1] = get_fd_file(node, RIGHT);
+	data.fd[0] = get_fd_file(node, LEFT, shell_data);
+	data.fd[1] = get_fd_file(node, RIGHT, shell_data);
 	if (data.fd[1] == -1)
 		data.fd[1] = dup(STDOUT_FILENO);
 	if (data.fd[0] == -1)
@@ -146,5 +148,7 @@ t_pipex_data	init_pipex(t_node *node, t_shell *shell_data)
 	data.s_stdin = dup(STDIN_FILENO);
 	data.s_stdout = dup(STDOUT_FILENO);
 	dup2(data.fd[0], STDIN_FILENO);
+	data.node = node;
+	data.tab = shell_data->tab;
 	return (data);
 }

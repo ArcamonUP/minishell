@@ -30,22 +30,22 @@ static void	exec(char *cmd, t_pipex_data data, int fd[2])
 		path = get_path(args[0], data.envp);
 	if (!args || !path)
 	{
-		(free_tab(data.cmd), free_tab(args), free_tab(data.envp));
+		(exec_free(data.cmd, data.envp, data.node), free_tab(args));
 		(error("minishell: ", args[0]), error(": command not found\n", NULL));
 		(close(data.fd[0]), close(data.fd[1]));
 		if (fd)
 			close(fd[1]);
 		(close(data.s_stdin), close(data.s_stdout), close(fd[1]));
-		(free(data.pid_tab), exit(127));
+		(free_pidtab((void **)data.pid_tab), free_tab(data.tab), exit(127));
 	}
 	execve(path, args, data.envp);
 	(error("minishell: ", args[0]), error(": command not found\n", NULL));
-	(free_tab(args), free_tab(data.envp), free(path));
-	(close(data.fd[0]), close(data.fd[1]));
+	(free_tab(args), exec_free(data.cmd, data.envp, data.node), free(path));
+	(free_tab(data.tab), close(data.fd[0]), close(data.fd[1]));
 	if (fd)
 		close(fd[1]);
 	(close(data.s_stdin), close(data.s_stdout));
-	exit(127);
+	(free_pidtab((void **)data.pid_tab), exit(127));
 }
 
 static pid_t	pre_exec(char *cmd, t_pipex_data data)
